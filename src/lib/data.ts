@@ -385,6 +385,8 @@ export type Client = {
   summary: string;
   focus: string;
   tags: string[];
+  /** External website. The card becomes clickable only when this is set. */
+  website?: string;
 };
 
 export const clients: Client[] = [
@@ -397,6 +399,7 @@ export const clients: Client[] = [
     summary: "Two gated communities covering villas and apartments in East Hyderabad.",
     focus: "Real estate branding and lead generation",
     tags: ["Meta Ads", "Google Ads", "SEO", "Video Shoots", "CRM", "Website & GMB"],
+    website: "https://srigdha.com/",
   },
   {
     slug: "amma-eye-care-hospitals",
@@ -408,6 +411,7 @@ export const clients: Client[] = [
       "Digital visibility support for the Kokapet and LB Nagar locations, including Google Search and Maps presence.",
     focus: "Branding and appointment bookings",
     tags: ["Local SEO", "Google Maps", "Meta Ads", "Google Ads", "CRM", "Website & GMB"],
+    website: "https://ammaeyecarehospital.com/",
   },
   {
     slug: "mangatrai-by-darpan",
@@ -419,6 +423,7 @@ export const clients: Client[] = [
       "Long-term social media structure and digital marketing support for a pearls and jewellery brand.",
     focus: "E-commerce sales, audience growth and store visits",
     tags: ["Social Media", "E-commerce", "Meta Ads", "SEO", "Video Shoots", "CRM"],
+    website: "https://www.mangatrai.com/",
   },
   {
     slug: "the-park-hotels",
@@ -429,6 +434,7 @@ export const clients: Client[] = [
     summary: "Digital marketing support for hospitality visibility and customer engagement.",
     focus: "Hotel bookings and table reservations",
     tags: ["Branding", "Meta Ads", "Google Ads", "SEO", "Video Shoots", "Website & GMB"],
+    // website: "https://",
   },
   {
     slug: "feijoa-skin-hair-clinic",
@@ -439,6 +445,7 @@ export const clients: Client[] = [
     summary: "Brand and digital marketing support to attract relevant audiences and enquiries.",
     focus: "Branding and appointment bookings",
     tags: ["Lead Generation", "Social Media", "Meta Ads", "SEO", "CRM", "Website & GMB"],
+    // website: "https://",
   },
   {
     slug: "kinnera-farms",
@@ -449,6 +456,7 @@ export const clients: Client[] = [
     summary: "Digital brand support to strengthen online presence and e-commerce activity.",
     focus: "Branding and e-commerce sales",
     tags: ["Branding", "E-commerce", "Meta Ads", "Google Ads", "SEO", "CRM"],
+    // website: "https://",
   },
   {
     slug: "obedience-dog-training",
@@ -459,6 +467,7 @@ export const clients: Client[] = [
     summary: "Digital marketing to strengthen brand visibility and generate relevant enquiries.",
     focus: "Branding and lead generation",
     tags: ["Lead Generation", "Social Media", "Meta Ads", "Google Ads", "SEO", "Website & GMB"],
+    // website: "https://",
   },
 ];
 

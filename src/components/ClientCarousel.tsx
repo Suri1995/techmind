@@ -1,11 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type KeyboardEvent, type MouseEvent } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { motion } from "framer-motion";
 import type { Client } from "@/lib/data";
 import ClientCard from "./ClientCard";
 import { IconArrowRight } from "./icons";
+
+/** Opens a client's website in a new tab. Used only when `client.website` is set. */
+function openSite(url: string) {
+  window.open(url, "_blank", "noopener,noreferrer");
+}
 
 /** Draggable, snap-aligned carousel with a progress rail. */
 export default function ClientCarousel({ clients }: { clients: Client[] }) {
@@ -46,16 +51,51 @@ export default function ClientCarousel({ clients }: { clients: Client[] }) {
         aria-label="Client partnerships"
       >
         <div className="flex gap-6 pb-4 pr-6">
-          {clients.map((client, i) => (
-            <div
-              key={client.slug}
-              aria-roledescription="slide"
-              aria-label={`${i + 1} of ${clients.length}`}
-              className="min-w-0 shrink-0 grow-0 basis-[88%] sm:basis-[46%] lg:basis-[32%]"
-            >
-              <ClientCard client={client} />
-            </div>
-          ))}
+          {clients.map((client, i) => {
+            const site = client.website;
+
+            // Only clients with a website are clickable. A drag never counts as a
+            // click (Embla suppresses the click that follows a drag), and clicks on
+            // links/buttons inside the card keep their own behaviour.
+            const linkProps = site
+              ? {
+                  role: "link" as const,
+                  tabIndex: 0,
+                  "aria-label": `Visit ${client.name} website (opens in a new tab)`,
+                  onClick: (e: MouseEvent<HTMLDivElement>) => {
+                    if ((e.target as HTMLElement).closest("a, button")) return;
+                    openSite(site);
+                  },
+                  onKeyDown: (e: KeyboardEvent<HTMLDivElement>) => {
+                    if (e.target !== e.currentTarget) return;
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      openSite(site);
+                    }
+                  },
+                }
+              : {};
+
+            return (
+              <div
+                key={client.slug}
+                aria-roledescription="slide"
+                aria-label={`${i + 1} of ${clients.length}`}
+                className="min-w-0 shrink-0 grow-0 basis-[88%] sm:basis-[46%] lg:basis-[32%]"
+              >
+                <div
+                  {...linkProps}
+                  className={
+                    site
+                      ? "h-full cursor-pointer rounded-3xl transition-transform duration-300 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/30"
+                      : "h-full"
+                  }
+                >
+                  <ClientCard client={client} />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 

@@ -34,7 +34,6 @@ const mobileLinks = [
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
@@ -48,26 +47,17 @@ export default function Header() {
     document.body.style.overflow = open ? "hidden" : "";
   }, [open]);
 
+  // Header always stays visible; scrolling only toggles the compact/blurred style.
   useEffect(() => {
-    let last = window.scrollY;
     function onScroll() {
-      const y = window.scrollY;
-      setScrolled(y > 12);
-      // Tuck the header away while reading down, bring it back on any upward scroll.
-      if (Math.abs(y - last) > 6) {
-        setHidden(y > last && y > 480);
-        last = y;
-      }
+      setScrolled(window.scrollY > 12);
     }
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // The header is `fixed`, so it's lifted out of document flow — this keeps a
-  // spacer in flow at exactly its rendered height so page content never sits
-  // underneath it, and it stays correct even as the header's own height
-  // changes (utility strip collapsing, nav row shrinking on scroll, resize).
+  // Measured height is only used to position the mobile menu overlay.
   useEffect(() => {
     const node = headerRef.current;
     if (!node) return;
@@ -81,16 +71,8 @@ export default function Header() {
 
   return (
     <>
-      <header
-        ref={headerRef}
-        className={`fixed inset-x-0 top-0 z-50 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          hidden && !open ? "-translate-y-full" : "translate-y-0"
-        }`}
-      >
-        {/* Utility strip — About / Blog / Careers. Collapses out of the way on
-            scroll. Safe to animate its height here: the header is `fixed`
-            (pinned to the viewport), so this never fights scroll position —
-            unlike a `sticky` element, there's no scroll-offset to recompute. */}
+      <header ref={headerRef} className="fixed inset-x-0 top-0 z-50">
+        {/* Utility strip — Blog / Careers. Collapses out of the way on scroll. */}
         <motion.div
           className="hidden overflow-hidden bg-gradient-to-r from-[#031416] to-[#123a3c] text-paper/65 lg:block"
           animate={{ height: scrolled ? 0 : 38 }}
@@ -294,9 +276,9 @@ export default function Header() {
         </AnimatePresence>
       </header>
 
-      {/* Reserves the header's real, live-measured height in normal document
-          flow so page content is never hidden underneath the fixed header. */}
-      <div style={{ height: headerHeight }} aria-hidden="true" />
+      {/* Constant-height spacer (expanded header size) so page content never
+          sits under the fixed header and doesn't jump when it compacts. */}
+      <div className="h-[4.5rem] md:h-20 lg:h-[calc(5rem+38px)]" aria-hidden="true" />
     </>
   );
 }
