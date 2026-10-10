@@ -324,53 +324,8 @@ export const services: Service[] = [
     related: ["web-applications", "seo", "google-ads"],
   },
   {
-    slug: "web-applications",
-    number: "07",
-    name: "Web Applications",
-    short:
-      "Custom web applications, portals and internal tools that automate work and streamline how your business runs.",
-    tagline: "Software built around the way your business actually works.",
-    description: [
-      "Some business needs go beyond a website. You may need a customer portal, a booking system, a dashboard for your team or a tool that replaces a tangle of spreadsheets. That is where a custom web application comes in.",
-      "We design and build web applications that are secure, fast and easy to use, starting with the workflow you need to improve. Because our team also understands marketing, we build in the lead capture, analytics and automation that connect your application to growth.",
-    ],
-    bestFor: [
-      "Businesses managing bookings, orders or enquiries manually",
-      "Teams working across spreadsheets, messages and disconnected tools",
-      "Brands that want customer accounts, portals or loyalty features",
-      "Companies that need a CRM or dashboard shaped to their process",
-    ],
-    included: [
-      { title: "Requirement discovery", text: "We study the workflow, users and goals, then turn them into a clear scope and a sensible first release." },
-      { title: "UX and interface design", text: "Screens designed for the people who will use them every day, with clarity and speed prioritised over decoration." },
-      { title: "Custom development", text: "Modern, maintainable code with user accounts, roles and permissions built in from the start." },
-      { title: "Integrations", text: "Connections to payment gateways, WhatsApp, email, SMS, CRM tools and the other systems you already use." },
-      { title: "Dashboards and reporting", text: "Live views of leads, bookings, orders or activity, so decisions rest on current information." },
-      { title: "Security and hosting", text: "Secure authentication, data protection practices, backups and reliable cloud hosting." },
-    ],
-    process: [
-      { title: "Discover the workflow", text: "We map how work happens today and where time or leads are being lost." },
-      { title: "Scope and design", text: "A focused first version is defined, with interface designs reviewed before development." },
-      { title: "Build in stages", text: "Working features are delivered in short cycles so you can test and give feedback early." },
-      { title: "Launch and improve", text: "Deployment, training and ongoing support, with improvements planned from real usage." },
-    ],
-    channels: ["Customer portals", "Booking systems", "CRM", "Dashboards", "Internal tools", "Workflow automation", "APIs", "Payments"],
-    outcomes: [
-      "Less manual work and fewer lost enquiries",
-      "One place for your team to manage customers and activity",
-      "Systems that connect marketing to day-to-day operations",
-      "A product you own and can grow over time",
-    ],
-    faqs: [
-      { q: "What is the difference between a website and a web application?", a: "A website mainly presents information. A web application lets users log in, take actions and manage data, such as booking appointments, tracking orders or viewing reports." },
-      { q: "Can you build a CRM for our business?", a: "Yes. We can build a CRM shaped to your sales process, or connect your marketing to a CRM you already use." },
-      { q: "Can we start small and add features later?", a: "Yes, and we recommend it. We scope a focused first version, then expand based on how your team actually uses it." },
-    ],
-    related: ["website-app-development", "performance-marketing", "seo"],
-  },
-  {
     slug: "performance-marketing",
-    number: "08",
+    number: "07",
     name: "Complete Performance Marketing",
     short:
       "Connect paid media, creative, tracking, conversion goals, and optimization.",
