@@ -385,7 +385,6 @@ export type Client = {
   summary: string;
   focus: string;
   tags: string[];
-  story: string[];
 };
 
 export const clients: Client[] = [
@@ -398,10 +397,6 @@ export const clients: Client[] = [
     summary: "Two gated communities covering villas and apartments in East Hyderabad.",
     focus: "Real estate branding and lead generation",
     tags: ["Meta Ads", "Google Ads", "SEO", "Video Shoots", "CRM", "Website & GMB"],
-    story: [
-      "Buying a home is a considered, high-value decision. Prospective buyers research for weeks, compare communities and look for signals of trust before they ever pick up the phone. For two gated communities in East Hyderabad, that meant the brand needed to look credible and the enquiry journey needed to be effortless.",
-      "Our work combines branding with a steady lead generation system: paid campaigns on Meta and Google to reach buyers, video content that shows the communities properly, search and Google Business Profile work to be found locally, and CRM follow-up so every enquiry is picked up and tracked.",
-    ],
   },
   {
     slug: "amma-eye-care-hospitals",
@@ -413,10 +408,6 @@ export const clients: Client[] = [
       "Digital visibility support for the Kokapet and LB Nagar locations, including Google Search and Maps presence.",
     focus: "Branding and appointment bookings",
     tags: ["Local SEO", "Google Maps", "Meta Ads", "Google Ads", "CRM", "Website & GMB"],
-    story: [
-      "Healthcare is a local decision. Patients search for a clinic near them, check the location on Maps, read what others say and then book. For a hospital with two locations, being visible and trustworthy in those moments matters more than anything else.",
-      "We support the Kokapet and LB Nagar locations with local SEO, Google Maps and Google Business Profile optimisation, alongside Meta and Google campaigns that encourage appointment bookings, with a CRM to manage the enquiries that follow.",
-    ],
   },
   {
     slug: "mangatrai-by-darpan",
@@ -428,10 +419,6 @@ export const clients: Client[] = [
       "Long-term social media structure and digital marketing support for a pearls and jewellery brand.",
     focus: "E-commerce sales, audience growth and store visits",
     tags: ["Social Media", "E-commerce", "Meta Ads", "SEO", "Video Shoots", "CRM"],
-    story: [
-      "Jewellery is bought on emotion and trust. The best marketing for it is visual, consistent and patient, which is why this is our longest-running partnership. Over five years we have helped structure how the brand shows up on social media and how that attention connects to the store and the online shop.",
-      "The work spans a planned social media presence, product and brand video shoots, paid campaigns on Meta, search optimisation and e-commerce support, with CRM follow-up so interest turns into store visits and sales.",
-    ],
   },
   {
     slug: "the-park-hotels",
@@ -442,10 +429,6 @@ export const clients: Client[] = [
     summary: "Digital marketing support for hospitality visibility and customer engagement.",
     focus: "Hotel bookings and table reservations",
     tags: ["Branding", "Meta Ads", "Google Ads", "SEO", "Video Shoots", "Website & GMB"],
-    story: [
-      "Guests choose hotels and restaurants with their eyes first. Photography, video, reviews and search results all shape whether someone books a room or reserves a table. Visibility alone is not enough; the experience has to be shown well.",
-      "Our work supports hotel bookings and table reservations through branding, video content that captures the property, paid campaigns on Meta and Google, search optimisation, and a strong website and Google Business Profile presence.",
-    ],
   },
   {
     slug: "feijoa-skin-hair-clinic",
@@ -456,10 +439,6 @@ export const clients: Client[] = [
     summary: "Brand and digital marketing support to attract relevant audiences and enquiries.",
     focus: "Branding and appointment bookings",
     tags: ["Lead Generation", "Social Media", "Meta Ads", "SEO", "CRM", "Website & GMB"],
-    story: [
-      "Skin and hair care is a personal, trust-driven choice. People want to see credibility, understand what treatments involve and feel comfortable before booking a consultation.",
-      "We support the clinic with a branded social media presence, lead generation campaigns on Meta, search and local optimisation, and CRM follow-up so every enquiry is answered and every consultation request is tracked toward a booking.",
-    ],
   },
   {
     slug: "kinnera-farms",
@@ -470,10 +449,6 @@ export const clients: Client[] = [
     summary: "Digital brand support to strengthen online presence and e-commerce activity.",
     focus: "Branding and e-commerce sales",
     tags: ["Branding", "E-commerce", "Meta Ads", "Google Ads", "SEO", "CRM"],
-    story: [
-      "Farm and lifestyle brands sell a story as much as a product: where it comes from, how it is made and why it is worth choosing. Online, that story has to be told clearly and connected to an easy way to buy.",
-      "We help Kinnera Farms build a distinctive brand presence and support its e-commerce activity with paid campaigns on Meta and Google, search optimisation, and CRM follow-up that brings customers back.",
-    ],
   },
   {
     slug: "obedience-dog-training",
@@ -484,14 +459,9 @@ export const clients: Client[] = [
     summary: "Digital marketing to strengthen brand visibility and generate relevant enquiries.",
     focus: "Branding and lead generation",
     tags: ["Lead Generation", "Social Media", "Meta Ads", "Google Ads", "SEO", "Website & GMB"],
-    story: [
-      "Pet owners look for trainers they can trust with a member of the family. They search locally, compare options and look for proof that the trainer understands both dogs and people.",
-      "Our work builds the brand's visibility through social media, paid campaigns on Meta and Google, local search and Google Business Profile, and a website that turns interest into enquiries from owners who are a good fit.",
-    ],
   },
 ];
 
-export const getClient = (slug: string) => clients.find((c) => c.slug === slug);
 export const sectors = Array.from(new Set(clients.map((c) => c.sector)));
 export const industries = sectors;
 

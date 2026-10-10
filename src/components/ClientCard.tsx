@@ -1,15 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { IconArrowRight } from "./icons";
 import type { Client } from "@/lib/data";
 
 /** Navy header band, partnership badge, focus line and service tags. */
 export default function ClientCard({ client, className = "" }: { client: Client; className?: string }) {
   return (
-    <Link
-      href={`/clients/${client.slug}`}
-      draggable={false}
+    <article
       className={`card-lift spot-card group flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-paper-raised ${className}`}
     >
       <div className="hero-dark relative flex h-28 items-end justify-between px-6 pb-4 text-[0.7rem] font-semibold uppercase tracking-[0.16em]">
@@ -44,6 +41,6 @@ export default function ClientCard({ client, className = "" }: { client: Client;
           ))}
         </ul>
       </div>
-    </Link>
+    </article>
   );
 }
