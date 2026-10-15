@@ -17,9 +17,6 @@ export default function ClientCard({ client, className = "" }: { client: Client;
       <div className="flex flex-1 flex-col p-6">
         <div className="flex items-start justify-between gap-3">
           <h3 className="font-display text-xl text-ink transition-colors group-hover:text-teal-deep">{client.name}</h3>
-          <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-ink-soft transition-all duration-300 group-hover:border-teal-deep group-hover:bg-teal-deep group-hover:text-paper group-hover:[transform:rotate(-45deg)]">
-            <IconArrowRight className="h-3.5 w-3.5" />
-          </span>
         </div>
         <span
           className={`mt-3 inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
