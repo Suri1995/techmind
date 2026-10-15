@@ -17,7 +17,7 @@ export default function SectionNav({ items }: { items: { id: string; label: stri
   }, [items]);
 
   return (
-    <nav aria-label="On this page" className="sticky top-16 z-30 border-b border-line glass-surface py-3">
+    <nav aria-label="On this page" className="sticky top-16 z-30 border-b border-line bg-white/95 py-3">
       <div className="wrap flex gap-2 overflow-x-auto text-sm [scrollbar-width:none]">
         {items.map((i) => (
           <a

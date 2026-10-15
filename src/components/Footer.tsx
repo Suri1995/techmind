@@ -178,6 +178,71 @@ function ColumnHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* MapCard: dark, teal-tinted live map with address + directions CTA   */
+/* ------------------------------------------------------------------ */
+const MAP_EMBED_URL =
+  "https://www.google.com/maps?q=17.3624822,78.5684163&z=16&output=embed";
+const MAP_DIRECTIONS_URL =
+  "https://www.google.com/maps/dir//Tech+Mind+Digital+Marketing+Agency,+Road+No.+2,+Mamatha+Nagar,+Nagole,+Hyderabad,+Telangana+500068/@17.388187,78.5448963,6731m/data=!3m1!1e3!4m9!4m8!1m0!1m5!1m1!1s0x3bcb9fce49e6704b:0x4f43457b059c1a63!2m2!1d78.5684163!2d17.3624822!3e9";
+
+function MapCard() {
+  return (
+    <a
+      href={MAP_DIRECTIONS_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Get directions to ${company.name}, ${company.address}`}
+      className="group/map relative block overflow-hidden rounded-2xl bg-[#071518] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)] ring-1 ring-inset ring-white/10 transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[0_24px_60px_-18px_rgba(20,184,166,0.35)] hover:ring-teal/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
+    >
+      {/* map */}
+      <div className="relative h-40 overflow-hidden">
+        {/* iframe is shifted up to crop Google's place card; bottom stays for attribution */}
+        <iframe
+          title={`Map showing ${company.name}`}
+          src={MAP_EMBED_URL}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          tabIndex={-1}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 -top-[90px] h-[calc(100%+90px)] w-full border-0 opacity-80 transition-all duration-700 [filter:invert(92%)_hue-rotate(180deg)_saturate(0.55)_brightness(0.85)_contrast(0.95)] group-hover/map:scale-105 group-hover/map:opacity-100"
+        />
+
+        {/* teal tint + soft vignette so the map blends into the footer */}
+        <div className="pointer-events-none absolute inset-0 bg-teal/20 mix-blend-color" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#071518]/50 via-transparent to-[#071518]/30" />
+
+        {/* radar pulse on the pin location */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-[calc(50%-45px)] -translate-x-1/2 -translate-y-1/2"
+        >
+          <span className="block h-10 w-10 rounded-full bg-teal/30 motion-safe:animate-ping" />
+        </span>
+
+        {/* floating badge */}
+        <span className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full bg-[#071518]/70 px-3 py-1.5 text-[11px] font-medium text-paper ring-1 ring-inset ring-white/15 backdrop-blur-md">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-teal opacity-75 motion-safe:animate-ping" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-teal" />
+          </span>
+          Our office
+        </span>
+      </div>
+
+      {/* address + CTA */}
+      <div className="flex items-start gap-3 border-t border-white/10 bg-gradient-to-b from-white/[0.05] to-transparent p-4">
+        <div className="min-w-0 flex-1">
+          <span className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-teal">
+            Get directions
+            <IconArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/map:translate-x-1" />
+          </span>
+        </div>
+      </div>
+    </a>
+  );
+}
+
 /* Icon chip used in the contact column */
 const chip =
   "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-white/[0.08] to-white/[0.02] text-teal shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-inset ring-white/10 transition-all duration-300 group-hover/row:bg-teal/15 group-hover/row:ring-teal/50";
@@ -248,14 +313,15 @@ export default function Footer() {
         style={{ background: spotlight }}
       />
 
-      {/* ---------------- 3. Main grid ---------------- */}
+      {/* ---------------- 3. Main grid ----------------
+          lg+: 300px brand | 1fr Company | 1fr Services | 320px Get in touch */}
       <motion.div
-        className="wrap relative grid gap-12 py-20 sm:grid-cols-2 lg:grid-cols-12 lg:gap-10"
+        className="wrap relative grid gap-12 py-20 sm:grid-cols-2 lg:grid-cols-[300px_minmax(0,1fr)_minmax(0,1fr)_320px] lg:gap-10"
         variants={container}
         {...reveal}
       >
         {/* Brand */}
-        <motion.div variants={item} className="sm:col-span-2 lg:col-span-4">
+        <motion.div variants={item} className="sm:col-span-2 lg:col-span-1">
           <Image
             src="/techmind-logo.png"
             alt={company.name}
@@ -263,7 +329,7 @@ export default function Footer() {
             height={52}
             className="h-9 w-auto brightness-0 invert md:h-10"
           />
-          <p className="mt-6 max-w-sm text-[15px] leading-[1.75] text-slate-on-ink">
+          <p className="mt-6 max-w-full text-[15px] leading-[1.75] text-slate-on-ink">
             Complete digital marketing solutions that help businesses strengthen visibility,
             generate enquiries, build customer relationships, and grow online.
           </p>
@@ -286,7 +352,7 @@ export default function Footer() {
         {/* Company */}
         <motion.div
           variants={item}
-          className="lg:col-span-2 lg:border-l lg:border-white/[0.07] lg:pl-8"
+          className="lg:border-l lg:border-white/[0.07] lg:pl-8"
         >
           <ColumnHeading>Company</ColumnHeading>
           <ul className="mt-6 flex flex-col gap-3.5 pl-4">
@@ -301,7 +367,7 @@ export default function Footer() {
         {/* Services */}
         <motion.div
           variants={item}
-          className="lg:col-span-3 lg:border-l lg:border-white/[0.07] lg:pl-8"
+          className="lg:border-l lg:border-white/[0.07] lg:pl-8"
         >
           <ColumnHeading>Services</ColumnHeading>
           <ul className="mt-6 flex flex-col gap-3.5 pl-4">
@@ -316,15 +382,12 @@ export default function Footer() {
         {/* Contact */}
         <motion.div
           variants={item}
-          className="lg:col-span-3 lg:border-l lg:border-white/[0.07] lg:pl-8"
+          className="lg:border-l lg:border-white/[0.07] lg:pl-8"
         >
           <ColumnHeading>Get in touch</ColumnHeading>
           <ul className="mt-6 flex flex-col gap-5 text-sm leading-relaxed text-slate-on-ink">
-            <li className="group/row flex items-start gap-3.5">
-              <span className={chip}>
-                <IconPin className="h-4 w-4" />
-              </span>
-              <span className="pt-1.5">{company.address}</span>
+            <li>
+              <MapCard />
             </li>
             <li className="group/row flex items-center gap-3.5">
               <span className={chip}>
@@ -343,15 +406,17 @@ export default function Footer() {
               </span>
               <a
                 href={`mailto:${company.email}`}
-                className="break-all transition-colors hover:text-paper focus-visible:text-paper focus-visible:outline-none"
+                title={company.email}
+                aria-label={`Email us at ${company.email}`}
+                className="min-w-0 flex-1 whitespace-nowrap transition-colors hover:text-paper focus-visible:text-paper focus-visible:outline-none"
               >
-                {company.email}
+                Email us
               </a>
               <button
                 type="button"
                 onClick={copyEmail}
                 aria-label="Copy email address"
-                className="relative ml-auto flex h-8 min-w-[4.25rem] items-center justify-center overflow-hidden rounded-full bg-white/[0.03] px-3 text-xs font-medium text-paper/80 ring-1 ring-inset ring-white/10 transition-all duration-300 hover:bg-teal/10 hover:text-teal hover:ring-teal/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
+                className="relative flex h-8 min-w-[4.25rem] shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/[0.03] px-3 text-xs font-medium text-paper/80 ring-1 ring-inset ring-white/10 transition-all duration-300 hover:bg-teal/10 hover:text-teal hover:ring-teal/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
               >
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.span

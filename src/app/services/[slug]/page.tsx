@@ -191,7 +191,6 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
                   <ServiceArt slug={r.slug} className="h-full w-full transition-transform duration-700 group-hover:scale-105" />
                 </div>
                 <div className="p-6">
-                  <span className="text-xs font-bold uppercase tracking-[0.16em] text-teal-deep">Service {r.number}</span>
                   <h3 className="mt-2 font-display text-xl text-ink group-hover:text-teal-deep">{r.name}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-slate">{r.short}</p>
                 </div>

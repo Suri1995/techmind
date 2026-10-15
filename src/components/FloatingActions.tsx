@@ -69,13 +69,6 @@ export default function FloatingActions() {
         </motion.button>
 
         <div className="flex items-center gap-3 self-end">
-          <Link
-            href="/contact"
-            className="btn-shine hidden items-center gap-2 rounded-full bg-ink px-5 py-3 text-sm font-semibold text-paper shadow-[var(--shadow-lift)] transition-colors hover:bg-teal-deep md:inline-flex"
-          >
-            Discuss Your Project
-            <IconArrowRight className="h-4 w-4" />
-          </Link>
           <motion.a
             href={`tel:${company.phone.replace(/\s/g, "")}`}
             aria-label={`Call ${company.phone}`}

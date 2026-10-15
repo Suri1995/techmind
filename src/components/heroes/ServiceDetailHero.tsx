@@ -50,16 +50,6 @@ export default function ServiceDetailHero({ service }: { service: Service }) {
               { href: `/services/${service.slug}`, label: service.name },
             ]}
           />
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease }}
-            className="flex items-center gap-3 text-sm font-semibold text-aqua"
-          >
-            <span className="font-display text-3xl text-amber">{service.number}</span>
-            <span className="h-px w-10 bg-aqua/50" />
-            Service
-          </motion.div>
           <h1 className="mt-4 font-display text-[2.4rem] leading-[1.06] sm:text-5xl md:text-[3.5rem]">
             <WordReveal text={service.name} delay={0.1} stagger={0.06} />
           </h1>

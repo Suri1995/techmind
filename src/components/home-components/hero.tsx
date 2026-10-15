@@ -97,7 +97,7 @@ export default function Hero() {
                 className="inline-flex items-center gap-2 rounded-full border border-line bg-paper-raised/70 px-7 py-4 text-sm font-semibold text-ink-soft backdrop-blur transition-colors hover:border-teal-deep hover:text-teal-deep"
               >
                 Explore Our Work
-                <IconArrowRight className="h-4 w-4 rotate-90" />
+                <IconArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </Reveal>

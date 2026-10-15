@@ -1,11 +1,11 @@
 export const company = {
   name: "Tech.Mind",
   tagline: "Strategy | Creativity | Performance",
-  phone: "+91 90000 12345",
-  email: "hello@techmind.in",
+  phone: "+91 9948891742",
+  email: "digitalmarketing@techmindinfo.in",
   address:
-    "Level 4, Cyber Gateway, Hitech City, Madhapur, Hyderabad, Telangana 500081",
-  mapsQuery: "Hitech City, Hyderabad, Telangana",
+    "Road No. 2, Mamatha Nagar, Nagole, Hyderabad, Telangana 500068",
+  mapsQuery: "Nagole, Hyderabad, Telangana",
 };
 
 /* ------------------------------------------------------------------ */

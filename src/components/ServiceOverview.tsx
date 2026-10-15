@@ -17,13 +17,9 @@ export default function ServiceOverview({ service, index }: { service: Service; 
             aria-label={`Explore ${service.name}`}
           >
             <ServiceArt slug={service.slug} className="h-full w-full transition-transform duration-[1200ms] ease-out group-hover:scale-105" />
-            <span className="absolute left-5 top-5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-paper backdrop-blur-md">
-              Service {service.number}
-            </span>
           </Link>
         </Reveal>
         <Reveal delay={0.1}>
-          <span className="text-sm font-bold uppercase tracking-[0.18em] text-teal-deep">{service.number}</span>
           <h2 className="mt-2 font-display text-3xl text-ink md:text-4xl">{service.name}</h2>
           <p className="mt-3 font-display text-lg leading-snug text-teal-deep">{service.tagline}</p>
           <p className="mt-4 leading-relaxed text-slate">{service.description[0]}</p>
@@ -45,9 +41,9 @@ export default function ServiceOverview({ service, index }: { service: Service; 
             </Link>
             <Link
               href={`/contact?service=${service.slug}`}
-              className="link-underline text-sm font-semibold text-ink-soft hover:text-teal-deep"
+              className="btn-shine inline-flex items-center gap-2 rounded-full bg-paper px-8 py-4 text-sm font-semibold text-ink shadow-[var(--shadow-glow)] transition-colors hover:bg-teal hover:text-white"
             >
-              Submit requirements ↗
+              Submit requirements <IconArrowRight className="h-4 w-4 rotate-315" />
             </Link>
           </div>
         </Reveal>

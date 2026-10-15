@@ -19,7 +19,7 @@ export default function ServiceNav({ services }: { services: Service[] }) {
   }, [services]);
 
   return (
-    <nav aria-label="Jump to service" className="sticky top-16 z-30 border-b border-line glass-surface py-3">
+    <nav aria-label="Jump to service" className="sticky top-16 z-30 border-b border-line bg-white/95 py-4">
       <div className="wrap flex gap-2 overflow-x-auto text-sm [scrollbar-width:none]">
         {services.map((service) => (
           <a
@@ -31,7 +31,7 @@ export default function ServiceNav({ services }: { services: Service[] }) {
                 : "border-line text-slate hover:border-teal-deep hover:text-teal-deep"
             }`}
           >
-            {service.number} {service.name.replace("Cinema Graphics & Video Editing", "Video & Graphics").replace("Complete Performance Marketing", "Performance Marketing")}
+             {service.name.replace("Cinema Graphics & Video Editing", "Video & Graphics").replace("Complete Performance Marketing", "Performance Marketing")}
           </a>
         ))}
       </div>
