@@ -18,7 +18,7 @@ export default function ClientsSection() {
             />
           </Reveal>
           <Reveal delay={0.1}>
-            <Link href="/clients" className="link-underline inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-ink-soft hover:text-teal-deep">
+            <Link href="/clients" className="flex shrink-0 border-2 border-ink-soft hover:bg-ink-soft p-3 rounded-2xl items-center gap-2 text-sm font-semibold hover:text-white text-teal-deep">
               View all clients
               <IconArrowRight className="h-4 w-4" />
             </Link>
