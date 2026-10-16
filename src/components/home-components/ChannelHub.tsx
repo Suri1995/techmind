@@ -70,7 +70,6 @@ export default function ChannelHub() {
                   : "border-line bg-paper-raised text-ink-soft hover:border-teal-deep"
               }`}
             >
-              <span className={on ? "text-amber" : "text-teal-deep"}>{s.number}</span>
               <span className="hidden sm:inline">{s.name.replace("Cinema Graphics & Video Editing", "Video & Graphics").replace("Complete Performance Marketing", "Performance").replace("Website & App Development", "Websites & Apps")}</span>
             </Link>
           </motion.div>
