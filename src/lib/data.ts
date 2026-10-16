@@ -434,7 +434,7 @@ export const clients: Client[] = [
     summary: "Digital marketing support for hospitality visibility and customer engagement.",
     focus: "Hotel bookings and table reservations",
     tags: ["Branding", "Meta Ads", "Google Ads", "SEO", "Video Shoots", "Website & GMB"],
-    // website: "https://",
+    website: "https://www.theparkhotels.com/",
   },
   {
     slug: "feijoa-skin-hair-clinic",
@@ -456,7 +456,7 @@ export const clients: Client[] = [
     summary: "Digital brand support to strengthen online presence and e-commerce activity.",
     focus: "Branding and e-commerce sales",
     tags: ["Branding", "E-commerce", "Meta Ads", "Google Ads", "SEO", "CRM"],
-    // website: "https://",
+    website: "https://kinnerafarms.com/",
   },
   {
     slug: "obedience-dog-training",
@@ -467,7 +467,7 @@ export const clients: Client[] = [
     summary: "Digital marketing to strengthen brand visibility and generate relevant enquiries.",
     focus: "Branding and lead generation",
     tags: ["Lead Generation", "Social Media", "Meta Ads", "Google Ads", "SEO", "Website & GMB"],
-    // website: "https://",
+    website: "https://obediencemasters.com/",
   },
 ];
 
