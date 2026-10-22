@@ -189,6 +189,35 @@ function art(slug: string) {
           <circle cx="332" cy="134" r="5" fill={G} />
         </g>
       );
+    case "political-ads":
+      return (
+        <g>
+          <path d="M200 46v194M200 70l-92 32v58l92 32zM200 70l92 32v58l-92 32z" fill={T} fillOpacity="0.22" stroke={A} strokeWidth="2.5" strokeLinejoin="round" />
+          <path d="M108 102l-24-18v104l24-18M292 102l24-18v104l-24-18" fill={G} fillOpacity="0.3" stroke={G} strokeWidth="2" />
+          {[0, 1, 2].map((i) => <circle key={i} cx={148 + i * 26} cy={135} r={i === 1 ? 8 : 5} fill={i === 1 ? G : A} />)}
+          <path d="M120 252h160" stroke="#fff" strokeOpacity="0.3" strokeWidth="3" strokeLinecap="round" />
+        </g>
+      );
+    case "e-commerce":
+      return (
+        <g>
+          <path d="M82 76h236l-24 142H108z" fill={T} fillOpacity="0.25" stroke={A} strokeWidth="2.5" strokeLinejoin="round" />
+          <path d="M60 52h34l18 112h172" fill="none" stroke="#fff" strokeOpacity="0.65" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="142" cy="242" r="13" fill={G} /><circle cx="270" cy="242" r="13" fill={G} />
+          <path d="M124 106h142M130 132h110" stroke="#fff" strokeOpacity="0.45" strokeWidth="7" strokeLinecap="round" />
+          <rect x="170" y="158" width="70" height="26" rx="13" fill={G} />
+        </g>
+      );
+    case "lead-generation":
+      return (
+        <g>
+          <circle cx="200" cy="132" r="48" fill={T} fillOpacity="0.3" stroke={A} strokeWidth="2.5" />
+          <circle cx="200" cy="116" r="15" fill="#fff" fillOpacity="0.85" />
+          <path d="M172 164a28 24 0 0156 0" fill="#fff" fillOpacity="0.85" />
+          {[ [72, 72], [328, 72], [72, 230], [328, 230] ].map(([x, y], i) => <g key={i}><line x1="200" y1="132" x2={x} y2={y} stroke={i % 2 ? G : A} strokeOpacity="0.6" strokeDasharray="5 7" /><circle cx={x} cy={y} r="18" fill="#fff" fillOpacity="0.1" stroke={i % 2 ? G : A} strokeWidth="2" /></g>)}
+          <path d="M162 260h76" stroke={G} strokeWidth="6" strokeLinecap="round" />
+        </g>
+      );
     case "performance-marketing":
     default:
       return (
