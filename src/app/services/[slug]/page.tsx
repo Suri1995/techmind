@@ -5,6 +5,7 @@ import ServiceDetailHero from "@/components/heroes/ServiceDetailHero";
 import SectionNav from "@/components/SectionNav";
 import SectionHeading from "@/components/SectionHeading";
 import ServiceArt from "@/components/ServiceArt";
+import ServiceName from "@/components/ServiceName";
 import FAQ from "@/components/home-components/faq";
 import Reveal, { RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { IconArrowRight, IconCheck } from "@/components/icons";
@@ -207,25 +208,57 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
           <div className="mesh-blob two" />
         </div>
         <div className="noise-overlay" />
-        <Reveal className="wrap relative">
+        <Reveal className="wrap relative max-w-7xl">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber">Ready when you are</p>
-          <h2 className="mt-4 max-w-3xl font-display text-3xl leading-tight md:text-5xl">
-            Share a few details about your {service.name} requirements.
+
+          <h2 className="mt-4 max-w-4xl font-display text-3xl leading-[1.25] md:text-5xl md:leading-[1.2]">
+            Share a few details about your{" "}
+            <ServiceName tone="dark">{service.name}</ServiceName> requirements.
           </h2>
-          <p className="mt-4 max-w-xl text-slate-on-ink">Our team can follow up with the right next steps. Plans are tailored to your business goals, audience, and budget.</p>
+
+          <p className="mt-4 max-w-2xl text-slate-on-ink">
+            Our team can follow up with the right next steps. Plans are tailored to your business goals, audience, and budget.
+          </p>
+
           <div className="mt-8 flex flex-wrap items-center gap-5">
-            <Link href={`/contact?service=${service.slug}`} className="btn-shine inline-flex items-center gap-2 rounded-full bg-teal px-8 py-4 text-sm font-semibold text-ink shadow-[var(--shadow-glow)] transition-colors hover:bg-paper">
+            <Link
+              href={`/contact?service=${service.slug}`}
+              className="btn-shine group inline-flex items-center gap-2 rounded-full bg-teal px-8 py-4 text-sm font-semibold text-ink shadow-[var(--shadow-glow)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-paper focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-aqua/40"
+            >
               Submit requirements
-              <IconArrowRight className="h-4 w-4 -rotate-45" />
+              <IconArrowRight className="h-4 w-4 -rotate-45 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </Link>
           </div>
+
           <div className="mt-14 grid gap-4 border-t border-white/10 pt-8 sm:grid-cols-2">
-            {[{ label: "Previous service", s: prev, dir: "prev" }, { label: "Next service", s: next, dir: "next" }].map(({ label, s, dir }) => (
-              <Link key={dir} href={`/services/${s.slug}`} className={`group flex items-center gap-4 rounded-2xl glass-dark p-5 transition-colors hover:border-aqua/50 ${dir === "next" ? "sm:flex-row-reverse sm:text-right" : ""}`}>
-                <IconArrowRight className={`h-5 w-5 shrink-0 text-aqua transition-transform ${dir === "prev" ? "rotate-180 group-hover:-translate-x-1" : "group-hover:translate-x-1"}`} />
-                <span>
+            {[
+              { label: "Previous service", s: prev, dir: "prev" },
+              { label: "Next service", s: next, dir: "next" },
+            ].map(({ label, s, dir }) => (
+              <Link
+                key={dir}
+                href={`/services/${s.slug}`}
+                className={`group relative flex items-center gap-4 overflow-hidden rounded-2xl glass-dark p-5 transition-all duration-300 hover:-translate-y-1 hover:border-aqua/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-aqua/60 ${
+                  dir === "next" ? "sm:flex-row-reverse sm:text-right" : ""
+                }`}
+              >
+                {/* sweep of light on hover */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/[0.07] to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+                />
+                <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.05] transition-colors duration-300 group-hover:border-aqua/60 group-hover:bg-aqua">
+                  <IconArrowRight
+                    className={`h-5 w-5 text-aqua transition-all duration-300 group-hover:text-ink ${
+                      dir === "prev" ? "rotate-180 group-hover:-translate-x-0.5" : "group-hover:translate-x-0.5"
+                    }`}
+                  />
+                </span>
+                <span className="relative">
                   <span className="block text-xs uppercase tracking-wide text-slate-on-ink">{label}</span>
-                  <span className="mt-1 block font-display text-lg">{s.name}</span>
+                  <span className="mt-1 block font-display text-lg transition-colors duration-300 group-hover:text-aqua">
+                    {s.name}
+                  </span>
                 </span>
               </Link>
             ))}

@@ -109,7 +109,7 @@ export default function ServicesHero() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
       <div
-        className="wrap relative grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14"
+        className="wrap relative grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-5"
         onPointerEnter={(e) => e.pointerType === "mouse" && tour.setHold(true)}
         onPointerLeave={() => tour.setHold(false)}
       >
@@ -127,7 +127,7 @@ export default function ServicesHero() {
             initial={reduce ? false : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.7, ease }}
-            className="mt-6 max-w-md text-lg leading-relaxed text-slate-on-ink"
+            className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-on-ink"
           >
             Complete digital marketing solutions under one roof, from paid media, search and creative to websites and web applications.
           </motion.p>
@@ -405,7 +405,7 @@ function Orbit({
       onPointerEnter={onEnter}
       onPointerMove={onMove}
       onPointerLeave={onLeave}
-      className="glass-dark dotted-surface relative isolate mx-auto hidden aspect-square w-full max-w-[620px] overflow-hidden rounded-[28px] [--line:rgba(255,255,255,0.08)] lg:block"
+      className="glass-dark dotted-surface relative isolate mx-auto hidden aspect-square w-full max-w-[520px] overflow-hidden rounded-[28px] [--line:rgba(255,255,255,0.08)] lg:block"
     >
       {/* ambient light + cursor spotlight */}
       <div className="absolute inset-[22%] rounded-full bg-teal/20 blur-3xl" aria-hidden />
