@@ -413,7 +413,7 @@ html {
   position: absolute;
   right: 0;
   bottom: 4.5rem;
-  width: min(22rem, calc(100vw - 2rem));
+  width: min(18rem, calc(100vw - 2rem));
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 1.5rem;

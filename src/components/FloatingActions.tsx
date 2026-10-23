@@ -101,15 +101,13 @@ function ContactPopup({ kind, phone, onClose }: { kind: ContactKind; phone: stri
       <header>
         <div>
           <strong>{isPhone ? "Call Tech.Mind" : "Chat with Tech.Mind"}</strong>
-          <span>{isPhone ? "Choose an option to call" : "Choose a branch to chat"}</span>
         </div>
-        <button type="button" onClick={onClose} aria-label="Close contact popup">×</button>
       </header>
       <div className="contact-popup-body">
         {isPhone ? (
           <a href={`tel:${phone.replace(/\\s/g, "")}`} className="contact-option">
             <span className="contact-option-icon"><PhoneGlyph className="h-5 w-5" /></span>
-            <span><strong>{phone}</strong><small>Main line</small></span>
+            <span><strong>{phone}</strong></span>
           </a>
         ) : (
           <>
