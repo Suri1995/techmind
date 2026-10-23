@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { company } from "@/lib/data";
-import { IconArrowRight, IconPhone } from "./icons";
+import { IconArrowRight, IconPhone, IconWhatsApp } from "./icons";
 import CommandPalette from "./CommandPalette";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -69,6 +69,17 @@ export default function FloatingActions() {
         </motion.button>
 
         <div className="flex items-center gap-3 self-end">
+          <motion.a
+            href={`https://wa.me/${company.phone.replace(/\D/g, "")}`}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Chat with us on WhatsApp"
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.94 }}
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-line bg-paper-raised text-[#25d366] shadow-[var(--shadow-soft)] transition-colors hover:border-[#25d366]"
+          >
+            <IconWhatsApp className="h-5 w-5" />
+          </motion.a>
           <motion.a
             href={`tel:${company.phone.replace(/\s/g, "")}`}
             aria-label={`Call ${company.phone}`}
