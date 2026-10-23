@@ -8,19 +8,21 @@ import Process from "@/components/home-components/process";
 import Services from "@/components/home-components/services";
 import Stats from "@/components/home-components/stats";
 import WhyTechMind from "@/components/home-components/whyTechMind";
+import Testimonials from "@/components/testimonials";
 
 export default function Home() {
   return (
     <>
       <Hero />
       <IndustryMarquee />
-      <Stats />
       <Services />
-      <Process />
       <ClientsSection />
+      <Stats />
+      <Process />
       <WhyTechMind />
       <Planner />
       <FAQ />
+      <Testimonials/>
       <CTA />
     </>
   );

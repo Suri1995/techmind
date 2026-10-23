@@ -236,7 +236,7 @@ export const services: Service[] = [
   {
     slug: "video-editing",
     number: "05",
-    name: "Cinema Graphics & Video Editing",
+    name: "Cinema Autography & Video Editing",
     short:
       "Produce promotional edits, reels, motion graphics, and branded video content.",
     tagline: "Video and motion work that gives your marketing a look people remember.",

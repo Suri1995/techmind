@@ -75,6 +75,25 @@ export function IconArrowRight({ className }: IconProps) {
   );
 }
 
+export function IconArrowDown({ className }: IconProps) {
+  return (
+    <svg 
+      viewBox="0 0 24 24" 
+      className={className} 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="1.75" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    >
+      {/* Shaft: perfectly centered */}
+      <path d="M12 5v14" />
+      {/* Arrowhead: 45-degree angles pointing down */}
+      <path d="M6 13l6 6 6-6" />
+    </svg>
+  );
+}
+
 export function IconPlane({ className }: IconProps) {
   return (
     <svg viewBox="0 0 32 32" className={className} {...base}>

@@ -14,21 +14,75 @@ import {
 } from "framer-motion";
 import { company, services } from "@/lib/data";
 import FooterNewsletter from "./FooterNewsletter";
-import {
-  IconArrowRight,
-  IconMail,
-  IconPhone,
-  IconPin,
-  IconLinkedIn,
-  IconTwitter,
-  IconInstagram,
-} from "./icons";
+import { IconArrowDown, IconArrowRight, IconMail, IconPhone } from "./icons";
+
+/* ------------------------------------------------------------------ */
+/* Brand social icons (full colour, 24x24)                             */
+/* ------------------------------------------------------------------ */
+type IconProps = { className?: string };
+
+function BrandLinkedIn({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+      {/* white behind the path so the "in" reads white, like the real logo */}
+      <rect x="2.2" y="2.2" width="19.6" height="19.6" rx="2" fill="#fff" />
+      <path
+        fill="#0A66C2"
+        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+      />
+    </svg>
+  );
+}
+
+function BrandFacebook({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+      <circle cx="12" cy="12" r="11.6" fill="#fff" />
+      <path
+        fill="#1877F2"
+        d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+      />
+    </svg>
+  );
+}
+
+function BrandInstagram({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+      <defs>
+        <radialGradient id="tm-ig" cx="0.3" cy="1.05" r="1.15">
+          <stop offset="0" stopColor="#FEDA77" />
+          <stop offset="0.25" stopColor="#F58529" />
+          <stop offset="0.5" stopColor="#DD2A7B" />
+          <stop offset="0.75" stopColor="#8134AF" />
+          <stop offset="1" stopColor="#515BD4" />
+        </radialGradient>
+      </defs>
+      <rect x="0.5" y="0.5" width="23" height="23" rx="6.5" fill="url(#tm-ig)" />
+      <rect x="4.6" y="4.6" width="14.8" height="14.8" rx="4.4" fill="none" stroke="#fff" strokeWidth="1.8" />
+      <circle cx="12" cy="12" r="3.6" fill="none" stroke="#fff" strokeWidth="1.8" />
+      <circle cx="16.5" cy="7.5" r="1.05" fill="#fff" />
+    </svg>
+  );
+}
+
+function BrandYouTube({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+      <rect x="0.6" y="4" width="22.8" height="16" rx="4.6" fill="#FF0000" />
+      <path fill="#fff" d="M9.7 8.9v6.2l5.4-3.1z" />
+    </svg>
+  );
+}
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
+/* Number of services shown before the "Show more" button reveals the rest */
+const INITIAL_SERVICE_COUNT = 6;
+
 const shortName = (name: string) =>
   name
-    .replace("Cinema Graphics & Video Editing", "Video & Graphics")
+    .replace("Cinema Autography & Video Editing", "Video & Graphics")
     .replace("Complete Performance Marketing", "Performance Marketing");
 
 const companyLinks = [
@@ -45,11 +99,32 @@ const serviceLinks = services.map((s) => ({
   label: shortName(s.name),
 }));
 
-// Replace the "#" hrefs with your real profile URLs.
+// Social profiles
 const socials = [
-  { icon: IconLinkedIn, label: "LinkedIn", href: "#" },
-  { icon: IconTwitter, label: "Twitter / X", href: "#" },
-  { icon: IconInstagram, label: "Instagram", href: "#" },
+  {
+    icon: BrandLinkedIn,
+    label: "LinkedIn",
+    color: "#0A66C2",
+    href: "https://www.linkedin.com/in/tech-mind-6a972643b/",
+  },
+  {
+    icon: BrandFacebook,
+    label: "Facebook",
+    color: "#1877F2",
+    href: "https://www.facebook.com/tech.mind5/",
+  },
+  {
+    icon: BrandInstagram,
+    label: "Instagram",
+    color: "#DD2A7B",
+    href: "https://www.instagram.com/tech_mind_3/",
+  },
+  {
+    icon: BrandYouTube,
+    label: "YouTube",
+    color: "#FF0000",
+    href: "https://www.youtube.com/@TECHMIND_DMA",
+  },
 ];
 
 const container: Variants = {
@@ -251,6 +326,8 @@ export default function Footer() {
   const reduce = useReducedMotion();
   const footerRef = useRef<HTMLElement>(null);
   const [copied, setCopied] = useState(false);
+  // Tracks whether the full services list is expanded
+  const [showAllServices, setShowAllServices] = useState(false);
 
   // Cursor spotlight that follows the pointer across the footer
   const mx = useMotionValue(-400);
@@ -270,6 +347,10 @@ export default function Footer() {
   const reveal = reduce
     ? {}
     : { initial: "hidden", whileInView: "visible", viewport: { once: true, amount: 0.15 } };
+
+  const visibleServices = showAllServices
+    ? serviceLinks
+    : serviceLinks.slice(0, INITIAL_SERVICE_COUNT);
 
   return (
     <footer
@@ -327,22 +408,25 @@ export default function Footer() {
             alt={company.name}
             width={180}
             height={52}
-            className="h-9 w-auto brightness-0 invert md:h-10"
+            className="h-12 w-auto md:h-16 bg-amber-50 rounded-2xl"
           />
           <p className="mt-6 max-w-full text-[15px] leading-[1.75] text-slate-on-ink">
             Complete digital marketing solutions that help businesses strengthen visibility,
             generate enquiries, build customer relationships, and grow online.
           </p>
-          <div className="mt-8 flex gap-3">
-            {socials.map(({ icon: Icon, label, href }) => (
+          <div className="mt-8 flex flex-wrap gap-3">
+            {socials.map(({ icon: Icon, label, color, href }) => (
               <Magnetic key={label} strength={0.5}>
                 <a
                   href={href}
-                  aria-label={label}
-                  className="group/social relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-white/[0.03] text-slate-on-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-inset ring-white/10 backdrop-blur-sm transition-all duration-300 hover:text-[#031416] hover:shadow-[0_8px_28px_-6px_rgba(20,184,166,0.7)] hover:ring-teal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Follow us on ${label}`}
+                  title={label}
+                  style={{ "--c": color } as React.CSSProperties}
+                  className="group/social relative flex h-11 w-11 items-center justify-center rounded-full bg-white/[0.04] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-inset ring-white/10 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/[0.08] hover:shadow-[0_10px_28px_-6px_var(--c)] hover:ring-[color:var(--c)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
                 >
-                  <span className="absolute inset-0 translate-y-full rounded-full bg-gradient-to-br from-teal to-[#5eead4] transition-transform duration-300 ease-out group-hover/social:translate-y-0" />
-                  <Icon className="relative h-4 w-4" />
+                  <Icon className="h-[22px] w-[22px] transition-transform duration-300 group-hover/social:scale-110" />
                 </a>
               </Magnetic>
             ))}
@@ -371,12 +455,43 @@ export default function Footer() {
         >
           <ColumnHeading>Services</ColumnHeading>
           <ul className="mt-6 flex flex-col gap-3.5 pl-4">
-            {serviceLinks.map((l) => (
-              <li key={l.href}>
-                <FooterLink href={l.href}>{l.label}</FooterLink>
-              </li>
-            ))}
+            <AnimatePresence initial={false}>
+              {visibleServices.map((l) => (
+                <motion.li
+                  key={l.href}
+                  layout
+                  initial={reduce ? false : { opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.25, ease: EASE }}
+                  className="overflow-hidden"
+                >
+                  <FooterLink href={l.href}>{l.label}</FooterLink>
+                </motion.li>
+              ))}
+            </AnimatePresence>
           </ul>
+
+          {serviceLinks.length > INITIAL_SERVICE_COUNT && (
+            <button
+  type="button"
+  onClick={() => setShowAllServices((v) => !v)}
+  aria-expanded={showAllServices}
+  className="group/more mt-5 ml-4 inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-teal transition-colors hover:text-paper focus-visible:text-paper focus-visible:outline-none"
+>
+  {showAllServices
+    ? "Show less"
+    : `Show more (${serviceLinks.length - INITIAL_SERVICE_COUNT})`}
+    
+  <IconArrowDown
+    className={`h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+      showAllServices 
+        ? "-rotate-180" 
+        : "group-hover/more:translate-y-1"
+    }`}
+  />
+</button>
+          )}
         </motion.div>
 
         {/* Contact */}

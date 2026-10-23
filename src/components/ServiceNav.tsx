@@ -31,7 +31,7 @@ export default function ServiceNav({ services }: { services: Service[] }) {
                 : "border-line text-slate hover:border-teal-deep hover:text-teal-deep"
             }`}
           >
-             {service.name.replace("Cinema Graphics & Video Editing", "Video & Graphics").replace("Complete Performance Marketing", "Performance Marketing")}
+             {service.name.replace("Cinema Autography & Video Editing", "Video & Graphics").replace("Complete Performance Marketing", "Performance Marketing")}
           </a>
         ))}
       </div>
