@@ -28,29 +28,30 @@ function PhoneGlyph({ className }: { className?: string }) {
 }
 
 /* One dock button: glossy circle that opens into a labelled pill on hover/focus */
+type ContactKind = "phone" | "whatsapp";
+
 type DockProps = {
-  href: string;
-  external?: boolean;
+  kind: ContactKind;
   label: string;
-  sub: string;
   aria: string;
   gradient: string;
   glow: string;
   icon: React.ReactNode;
   delay: number;
+  active: boolean;
+  onClick: () => void;
 };
 
-function DockButton({ href, external, label, sub, aria, gradient, glow, icon, delay }: DockProps) {
+function DockButton({ label, aria, gradient, glow, icon, delay, active, onClick }: DockProps) {
   const reduce = useReducedMotion();
 
   return (
     <motion.div
-      className="relative h-14 w-14 shrink-0 hover:z-20 focus-within:z-20"
+      className={`relative h-14 w-14 shrink-0 hover:z-20 focus-within:z-20 ${active ? "contact-active-button" : ""}`}
       initial={reduce ? false : { opacity: 0, scale: 0.5, y: 24 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 240, damping: 18, delay }}
     >
-      {/* radar rings anchored to the icon circle */}
       {!reduce &&
         [0, 1].map((i) => (
           <motion.span
@@ -63,35 +64,70 @@ function DockButton({ href, external, label, sub, aria, gradient, glow, icon, de
           />
         ))}
 
-      <motion.a
-        href={href}
-        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      <motion.button
+        type="button"
         aria-label={aria}
+        aria-expanded={active}
+        onClick={onClick}
         whileTap={{ scale: 0.95 }}
         style={{
           boxShadow: `inset 0 1px 0 rgba(255,255,255,.4), inset 0 -8px 16px rgba(0,0,0,.12), 0 14px 34px -10px ${glow}`,
         }}
-        className={`group absolute right-0 top-0 flex h-14 w-14 flex-row-reverse items-center overflow-hidden rounded-full text-white transition-[width] duration-500 [transition-timing-function:cubic-bezier(.22,1,.36,1)] hover:w-[12.5rem] focus-visible:w-[12.5rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#071518] ${gradient}`}
+        className={`group absolute right-0 top-0 flex h-14 w-14 flex-row-reverse items-center overflow-hidden rounded-full text-white transition-[width] duration-500 [transition-timing-function:cubic-bezier(.22,1,.36,1)] hover:w-[12.5rem] focus-visible:w-[12.5rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 ${gradient}`}
       >
-        {/* glass gloss */}
         <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/30 to-transparent" />
-        {/* light sweep on hover */}
         <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-white/25 opacity-0 blur-md transition-all duration-700 group-hover:left-[120%] group-hover:opacity-100" />
-
-        <span className="relative grid h-14 w-14 shrink-0 place-items-center">{icon}</span>
-
-        <span className="relative flex min-w-0 translate-x-3 flex-col whitespace-nowrap pl-5 text-left leading-tight opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100">
+        <span className="relative grid h-14 w-14 shrink-0 place-items-center">{active ? <span className="text-3xl font-light leading-none">×</span> : icon}</span>
+        <span className="relative flex min-w-0 translate-x-3 flex-col whitespace-nowrap pl-5 text-left leading-tight opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100">
           <span className="text-sm font-semibold tracking-tight">{label}</span>
-          <span className="text-[11px] font-medium text-white/80">{sub}</span>
+          <span className="text-[11px] font-medium text-white/80">Click to open</span>
         </span>
-      </motion.a>
+      </motion.button>
     </motion.div>
+  );
+}
+
+function ContactPopup({ kind, phone, onClose }: { kind: ContactKind; phone: string; onClose: () => void }) {
+  const isPhone = kind === "phone";
+  return (
+    <motion.section
+      role="dialog"
+      aria-label={isPhone ? "Call options" : "WhatsApp options"}
+      initial={{ opacity: 0, y: 18, scale: 0.94 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 18, scale: 0.94 }}
+      className={`contact-popup ${isPhone ? "contact-popup-phone" : "contact-popup-whatsapp"}`}
+    >
+      <header>
+        <div>
+          <strong>{isPhone ? "Call Tech.Mind" : "Chat with Tech.Mind"}</strong>
+          <span>{isPhone ? "Choose an option to call" : "Choose a branch to chat"}</span>
+        </div>
+        <button type="button" onClick={onClose} aria-label="Close contact popup">×</button>
+      </header>
+      <div className="contact-popup-body">
+        {isPhone ? (
+          <a href={`tel:${phone.replace(/\\s/g, "")}`} className="contact-option">
+            <span className="contact-option-icon"><PhoneGlyph className="h-5 w-5" /></span>
+            <span><strong>{phone}</strong><small>Main line</small></span>
+          </a>
+        ) : (
+          <>
+            <p className="contact-welcome">Hi! How can we help you today?</p>
+            <a href={`https://wa.me/${phone.replace(/\\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="contact-option contact-option-whatsapp">
+              <span>General enquiries</span><WhatsAppGlyph className="h-5 w-5" />
+            </a>
+          </>
+        )}
+      </div>
+    </motion.section>
   );
 }
 
 export default function FloatingActions() {
   const [showTop, setShowTop] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState<ContactKind | null>(null);
   const reduce = useReducedMotion();
 
   useEffect(() => {
@@ -112,9 +148,6 @@ export default function FloatingActions() {
       window.removeEventListener("keydown", onKey);
     };
   }, []);
-
-  const waNumber = company.phone.replace(/\D/g, "");
-  const waText = encodeURIComponent("Hi Tech Mind, I'd like to know more about your services.");
 
   return (
     <>
@@ -153,26 +186,30 @@ export default function FloatingActions() {
         </motion.button>
       </div>
 
-      <div className="contact-actions flex w-14 flex-col items-end gap-4">
+      <div className={`contact-actions flex w-14 flex-col items-end gap-4 ${contactOpen ? "contact-actions-open" : ""}`}>
+        <AnimatePresence>
+          {contactOpen && <ContactPopup kind={contactOpen} phone={company.phone} onClose={() => setContactOpen(null)} />}
+        </AnimatePresence>
         <DockButton
-          href={`https://wa.me/${waNumber}?text=${waText}`}
-          external
+          kind="whatsapp"
           label="Chat on WhatsApp"
-          sub="Quick replies"
-          aria="Chat with us on WhatsApp"
+          aria="Open WhatsApp contact options"
           gradient="bg-[linear-gradient(135deg,#4ff08f_0%,#25d366_45%,#0f9e6e_100%)]"
           glow="rgba(37,211,102,0.75)"
           delay={0.1}
+          active={contactOpen === "whatsapp"}
+          onClick={() => setContactOpen(contactOpen === "whatsapp" ? null : "whatsapp")}
           icon={<WhatsAppGlyph className="h-[26px] w-[26px] drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />}
         />
         <DockButton
-          href={`tel:${company.phone.replace(/\s/g, "")}`}
+          kind="phone"
           label="Call us now"
-          sub={company.phone}
-          aria={`Call ${company.phone}`}
+          aria="Open phone contact options"
           gradient="bg-[linear-gradient(135deg,#34e0cc_0%,#14b8a6_45%,#0b5f58_100%)]"
           glow="rgba(20,184,166,0.8)"
           delay={0.22}
+          active={contactOpen === "phone"}
+          onClick={() => setContactOpen(contactOpen === "phone" ? null : "phone")}
           icon={
             <motion.span
               className="grid place-items-center"

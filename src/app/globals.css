@@ -392,6 +392,68 @@ html {
   align-items: center;
   gap: 0.75rem;
   transform: translateY(-50%);
+  transition: top 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .contact-actions-open {
+  top: auto;
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  transform: none;
+  }
+
+  .contact-actions-open .contact-active-button {
+  order: 2;
+  }
+
+  .contact-actions-open > div:not(.contact-active-button) {
+  display: none;
+  }
+
+  .contact-popup {
+  position: absolute;
+  right: 0;
+  bottom: 4.5rem;
+  width: min(22rem, calc(100vw - 2rem));
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  background: var(--paper-raised);
+  color: var(--ink);
+  box-shadow: 0 24px 60px -20px rgba(6, 31, 34, 0.32);
+  }
+
+  .contact-popup header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.25rem 1.1rem;
+  color: white;
+  }
+
+  .contact-popup-phone header { background: linear-gradient(135deg, #0b7a72, #14b8a6); }
+  .contact-popup-whatsapp header { background: linear-gradient(135deg, #16a65a, #25d366); }
+
+  .contact-popup header strong,
+  .contact-popup header span {
+  display: block;
+  }
+
+  .contact-popup header strong { font-size: 1rem; }
+  .contact-popup header span { margin-top: 0.2rem; font-size: 0.78rem; color: rgba(255,255,255,0.82); }
+  .contact-popup header button { color: white; font-size: 1.75rem; line-height: 1; opacity: 0.85; }
+  .contact-popup-body { display: grid; gap: 0.75rem; padding: 1rem; background: var(--paper-raised); }
+  .contact-option { display: flex; align-items: center; gap: 0.8rem; border-radius: 1rem; background: var(--mist); padding: 0.85rem; color: var(--ink-soft); text-decoration: none; }
+  .contact-option strong, .contact-option small { display: block; }
+  .contact-option strong { font-size: 1rem; }
+  .contact-option small { margin-top: 0.15rem; color: var(--slate); font-size: 0.75rem; }
+  .contact-option-icon { display: grid; height: 2.4rem; width: 2.4rem; place-items: center; border-radius: 999px; background: var(--teal); color: white; }
+  .contact-option-whatsapp { justify-content: space-between; border: 1px solid #25d366; background: transparent; color: #087f53; }
+  .contact-welcome { margin: 0; border-radius: 1rem; background: var(--mist); padding: 0.9rem 1rem; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.5; }
+
+  @media (max-width: 640px) {
+    .contact-actions { right: 1rem; }
+    .contact-popup { right: 0; width: min(22rem, calc(100vw - 2rem)); }
   }
 
 @keyframes ring-pulse {
