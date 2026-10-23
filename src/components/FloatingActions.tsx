@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { company } from "@/lib/data";
-import { IconArrowRight, IconPhone } from "./icons";
+import { IconArrowRight, IconPhone, IconWhatsApp } from "./icons";
 import CommandPalette from "./CommandPalette";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -45,7 +45,7 @@ export default function FloatingActions() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.7 }}
               transition={{ duration: 0.25, ease }}
-              className="flex h-11 w-11 items-center justify-center self-end rounded-full border border-line bg-paper-raised text-ink-soft shadow-[var(--shadow-soft)] transition-colors hover:border-teal-deep hover:text-teal-deep"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-paper-raised text-ink-soft shadow-[var(--shadow-soft)] transition-colors hover:border-teal-deep hover:text-teal-deep"
             >
               <IconArrowRight className="h-4 w-4 -rotate-90" />
             </motion.button>
@@ -58,7 +58,7 @@ export default function FloatingActions() {
           aria-label="Search the site (Ctrl or Command + K)"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="group flex h-11 items-center gap-2 self-end rounded-full border border-line bg-paper-raised px-4 text-sm font-medium text-ink-soft shadow-[var(--shadow-soft)] transition-colors hover:border-teal-deep hover:text-teal-deep"
+          className="group flex h-11 items-center gap-2 rounded-full border border-line bg-paper-raised px-4 text-sm font-medium text-ink-soft shadow-[var(--shadow-soft)] transition-colors hover:border-teal-deep hover:text-teal-deep"
         >
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <circle cx="11" cy="11" r="7" />
@@ -67,18 +67,29 @@ export default function FloatingActions() {
           <span className="hidden sm:inline">Search</span>
           <kbd className="hidden rounded border border-line px-1.5 text-[0.65rem] text-slate sm:inline">⌘K</kbd>
         </motion.button>
+      </div>
 
-        <div className="flex items-center gap-3 self-end">
-          <motion.a
-            href={`tel:${company.phone.replace(/\s/g, "")}`}
-            aria-label={`Call ${company.phone}`}
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.94 }}
-            className="pulse-ring relative flex h-14 w-14 items-center justify-center rounded-full bg-teal-deep text-paper shadow-[var(--shadow-glow)]"
-          >
-            <IconPhone className="h-5 w-5" />
-          </motion.a>
-        </div>
+      <div className="contact-actions">
+        <motion.a
+          href={`https://wa.me/${company.phone.replace(/\D/g, "")}`}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Chat with us on WhatsApp"
+          whileHover={{ scale: 1.06 }}
+          whileTap={{ scale: 0.94 }}
+          className="flex h-12 w-12 items-center justify-center rounded-full border border-line bg-paper-raised text-[#25d366] shadow-[var(--shadow-soft)] transition-colors hover:border-[#25d366]"
+        >
+          <IconWhatsApp className="h-5 w-5" />
+        </motion.a>
+        <motion.a
+          href={`tel:${company.phone.replace(/\s/g, "")}`}
+          aria-label={`Call ${company.phone}`}
+          whileHover={{ scale: 1.06 }}
+          whileTap={{ scale: 0.94 }}
+          className="pulse-ring relative flex h-14 w-14 items-center justify-center rounded-full bg-teal-deep text-paper shadow-[var(--shadow-glow)]"
+        >
+          <IconPhone className="h-5 w-5" />
+        </motion.a>
       </div>
       <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
     </>
