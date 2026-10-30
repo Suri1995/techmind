@@ -492,11 +492,13 @@ export type Client = {
   summary: string;
   focus: string;
   tags: string[];
+  /** Path inside /public. When missing (or the file fails to load), the card shows an initials avatar. */
+  logo?: string;
   /** External website. The card becomes clickable only when this is set. */
   website?: string;
 };
 
-export const clients: Client[] = [
+const rawClients: Client[] = [
   {
     slug: "srigdha-group",
     name: "Srigdha Group",
@@ -506,6 +508,7 @@ export const clients: Client[] = [
     summary: "Two gated communities covering villas and apartments in East Hyderabad.",
     focus: "Real estate branding and lead generation",
     tags: ["Meta Ads", "Google Ads", "SEO", "Video Shoots", "CRM", "Website & GMB"],
+    logo: "/srigdha-logo.png",
     website: "https://srigdha.com/",
   },
   {
@@ -518,6 +521,7 @@ export const clients: Client[] = [
       "Digital visibility support for the Kokapet and LB Nagar locations, including Google Search and Maps presence.",
     focus: "Branding and appointment bookings",
     tags: ["Local SEO", "Google Maps", "Meta Ads", "Google Ads", "CRM", "Website & GMB"],
+    logo: "/amma-eye-care-logo.webp",
     website: "https://ammaeyecarehospital.com/",
   },
   {
@@ -530,6 +534,7 @@ export const clients: Client[] = [
       "Long-term social media structure and digital marketing support for a pearls and jewellery brand.",
     focus: "E-commerce sales, audience growth and store visits",
     tags: ["Social Media", "E-commerce", "Meta Ads", "SEO", "Video Shoots", "CRM"],
+    logo: "/mangatrai-logo.png",
     website: "https://www.mangatrai.com/",
   },
   {
@@ -541,6 +546,7 @@ export const clients: Client[] = [
     summary: "Digital marketing support for hospitality visibility and customer engagement.",
     focus: "Hotel bookings and table reservations",
     tags: ["Branding", "Meta Ads", "Google Ads", "SEO", "Video Shoots", "Website & GMB"],
+    logo: "/thepark-logo.png",
     website: "https://www.theparkhotels.com/",
   },
   {
@@ -552,6 +558,8 @@ export const clients: Client[] = [
     summary: "Brand and digital marketing support to attract relevant audiences and enquiries.",
     focus: "Branding and appointment bookings",
     tags: ["Lead Generation", "Social Media", "Meta Ads", "SEO", "CRM", "Website & GMB"],
+    // No logo yet: the card shows an "FS" initials avatar automatically.
+    // logo: "/feijoa.png",
     // website: "https://",
   },
   {
@@ -563,6 +571,7 @@ export const clients: Client[] = [
     summary: "Digital brand support to strengthen online presence and e-commerce activity.",
     focus: "Branding and e-commerce sales",
     tags: ["Branding", "E-commerce", "Meta Ads", "Google Ads", "SEO", "CRM"],
+    logo: "/kinnera-logo.png",
     website: "https://kinnerafarms.com/",
   },
   {
@@ -574,9 +583,15 @@ export const clients: Client[] = [
     summary: "Digital marketing to strengthen brand visibility and generate relevant enquiries.",
     focus: "Branding and lead generation",
     tags: ["Lead Generation", "Social Media", "Meta Ads", "Google Ads", "SEO", "Website & GMB"],
+    logo: "/obedience-logo.webp",
     website: "https://obediencemasters.com/",
   },
 ];
+
+/** Safety net: if a slug is ever listed twice, only one card is kept (prevents duplicate React keys). */
+export const clients: Client[] = Array.from(
+  new Map(rawClients.map((c) => [c.slug, c])).values()
+);
 
 export const sectors = Array.from(new Set(clients.map((c) => c.sector)));
 export const industries = sectors;

@@ -20,7 +20,7 @@ export default function Home() {
       <Stats />
       <Process />
       <WhyTechMind />
-      <Planner />
+      {/* <Planner /> */}
       <FAQ />
       <Testimonials/>
       <CTA />
