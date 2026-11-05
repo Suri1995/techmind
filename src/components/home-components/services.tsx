@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  animate,
   AnimatePresence,
   motion,
   MotionConfig,
@@ -39,10 +40,12 @@ const word: Variants = {
   show: { y: "0%", rotate: 0, transition: { duration: 0.7, ease: EASE } },
   exit: { y: "-110%", transition: { duration: 0.22 } },
 };
+// The wipe only ever animates the clip + a tiny scale; at rest the image sits at scale 1,
+// so the full 2:1 artwork is always visible.
 const imageVariants: Variants = {
   enter: (d: number) => ({
     clipPath: d > 0 ? "inset(0% 0% 0% 100%)" : "inset(0% 100% 0% 0%)",
-    scale: 1.1,
+    scale: 1.04,
   }),
   center: {
     clipPath: "inset(0% 0% 0% 0%)",
@@ -50,7 +53,7 @@ const imageVariants: Variants = {
     transition: { duration: 0.95, ease: EASE },
   },
   exit: {
-    scale: 0.96,
+    scale: 0.98,
     opacity: 0,
     transition: { duration: 0.95, ease: EASE, opacity: { delay: 0.55, duration: 0.4 } },
   },
@@ -64,6 +67,39 @@ function CheckIcon({ className = "" }: { className?: string }) {
   );
 }
 
+function PauseIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 20 20" fill="currentColor" className={className} aria-hidden>
+      <rect x="5" y="4" width="3.5" height="12" rx="1.2" />
+      <rect x="11.5" y="4" width="3.5" height="12" rx="1.2" />
+    </svg>
+  );
+}
+
+function PlayIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 20 20" fill="currentColor" className={className} aria-hidden>
+      <path d="M6.5 4.6a1 1 0 0 1 1.5-.86l8 5.4a1 1 0 0 1 0 1.72l-8 5.4a1 1 0 0 1-1.5-.86V4.6Z" />
+    </svg>
+  );
+}
+
+/** Counts up to a value whenever it changes (these are stats, not service numbering). */
+function Counter({ value }: { value: number }) {
+  const reduce = useReducedMotion();
+  const mv = useMotionValue(reduce ? value : 0);
+  const rounded = useTransform(mv, (v) => Math.round(v));
+  useEffect(() => {
+    if (reduce) {
+      mv.set(value);
+      return;
+    }
+    const controls = animate(mv, value, { duration: 0.9, ease: EASE });
+    return () => controls.stop();
+  }, [value, reduce, mv]);
+  return <motion.span>{rounded}</motion.span>;
+}
+
 const tint = (accent: string) => `linear-gradient(135deg, ${accent}, #071a1d)`;
 
 export default function Services() {
@@ -72,17 +108,19 @@ export default function Services() {
 
   const [active, setActive] = useState(0);
   const [dir, setDir] = useState(1);
-  const [paused, setPaused] = useState(false);
+  const [hoverPaused, setHoverPaused] = useState(false);
+  const [userPaused, setUserPaused] = useState(false);
   // if an image file is missing we show a branded panel instead of an empty frame
   const [failed, setFailed] = useState<Record<string, boolean>>({});
   const markFailed = (slug: string) => setFailed((f) => (f[slug] ? f : { ...f, [slug]: true }));
 
   const sectionRef = useRef<HTMLElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const railRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const inView = useInView(sectionRef, { amount: 0.25 });
 
-  // autoplay progress (0 → 1) feeds the tab bar and the ring on the next button
+  // autoplay progress (0 → 1) feeds the tab underline, the segment bar and the ring on the next button
   const progress = useMotionValue(0);
 
   /* ───────── rail: arrows, edge fades, drag-to-scroll ───────── */
@@ -141,14 +179,16 @@ export default function Services() {
 
   /* ───────── navigation + autoplay ───────── */
   const go = useCallback(
-    (next: number) => {
+    (next: number, forceDir?: number) => {
       const i = (next + total) % total;
-      setDir(i >= active ? 1 : -1);
+      setDir(forceDir ?? (i >= active ? 1 : -1));
       progress.set(0);
       setActive(i);
     },
     [active, total, progress]
   );
+
+  const paused = hoverPaused || userPaused;
 
   useEffect(() => {
     if (paused || !inView || reduce) return;
@@ -193,19 +233,17 @@ export default function Services() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* ───────── 3D tilt, parallax and glare for the image stage ───────── */
+  /* ───────── 3D tilt + glare for the image stage (the frame tilts, the artwork is never scaled up) ───────── */
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const sx = useSpring(mx, { stiffness: 90, damping: 18, mass: 0.6 });
   const sy = useSpring(my, { stiffness: 90, damping: 18, mass: 0.6 });
-  const tiltX = useTransform(sy, (v) => v * -9);
-  const tiltY = useTransform(sx, (v) => v * 11);
-  const imgX = useTransform(sx, (v) => v * -16);
-  const imgY = useTransform(sy, (v) => v * -12);
+  const tiltX = useTransform(sy, (v) => v * -8);
+  const tiltY = useTransform(sx, (v) => v * 10);
   const gx = useTransform(sx, (v) => (v + 0.5) * 100);
   const gy = useTransform(sy, (v) => (v + 0.5) * 100);
   const glareOn = useSpring(0, { stiffness: 120, damping: 20 });
-  const glare = useMotionTemplate`radial-gradient(520px circle at ${gx}% ${gy}%, rgba(255,255,255,0.22), transparent 45%)`;
+  const glare = useMotionTemplate`radial-gradient(520px circle at ${gx}% ${gy}%, rgba(255,255,255,0.2), transparent 45%)`;
 
   const onStageMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (reduce || e.pointerType !== "mouse") return;
@@ -218,6 +256,17 @@ export default function Services() {
     mx.set(0);
     my.set(0);
     glareOn.set(0);
+  };
+
+  /* ───────── cursor spotlight across the whole showcase panel ───────── */
+  const spx = useMotionValue(-400);
+  const spy = useMotionValue(-400);
+  const spot = useMotionTemplate`radial-gradient(420px circle at ${spx}px ${spy}px, rgba(255,255,255,0.07), transparent 70%)`;
+  const onPanelMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (reduce || e.pointerType !== "mouse" || !panelRef.current) return;
+    const r = panelRef.current.getBoundingClientRect();
+    spx.set(e.clientX - r.left);
+    spy.set(e.clientY - r.top);
   };
 
   /* magnetic CTA (mouse only) */
@@ -237,12 +286,20 @@ export default function Services() {
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowRight" || e.key === "ArrowDown") {
       e.preventDefault();
-      go(active + 1);
+      go(active + 1, 1);
       tabRefs.current[(active + 1) % total]?.focus();
     } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
       e.preventDefault();
-      go(active - 1);
+      go(active - 1, -1);
       tabRefs.current[(active - 1 + total) % total]?.focus();
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      go(0);
+      tabRefs.current[0]?.focus();
+    } else if (e.key === "End") {
+      e.preventDefault();
+      go(total - 1);
+      tabRefs.current[total - 1]?.focus();
     }
   };
 
@@ -252,13 +309,22 @@ export default function Services() {
   const nv = getServiceVisual(next.slug);
   const currentOk = !!cv.image && !failed[current.slug];
   const nextOk = !!nv.image && !failed[next.slug];
-  const pad = (n: number) => String(n).padStart(2, "0");
   const nameWords = current.name.split(" ");
   // long names would wrap awkwardly inside the pill button
   const ctaLabel = current.name.length > 22 ? "Explore this service" : `Explore ${current.name}`;
 
+  const stats = [
+    { label: "Channels", value: current.channels.length },
+    { label: "Deliverables", value: current.included.length },
+    { label: "Process steps", value: current.process.length },
+  ];
+
   return (
     <MotionConfig reducedMotion="user">
+      <style>{`
+        @keyframes svc-marquee { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
+        .svc-marquee-track { animation: svc-marquee var(--svc-dur, 28s) linear infinite; will-change: transform; }
+      `}</style>
       <section ref={sectionRef} className="relative overflow-hidden py-12 sm:py-16 md:py-24">
         <div className="mesh-hero pointer-events-none opacity-60">
           <div className="mesh-blob one" />
@@ -288,10 +354,10 @@ export default function Services() {
           <Reveal delay={0.1}>
             <div
               className="mt-8 sm:mt-10 md:mt-12"
-              onPointerEnter={(e) => e.pointerType === "mouse" && setPaused(true)}
-              onPointerLeave={(e) => e.pointerType === "mouse" && setPaused(false)}
-              onFocus={() => setPaused(true)}
-              onBlur={() => setPaused(false)}
+              onPointerEnter={(e) => e.pointerType === "mouse" && setHoverPaused(true)}
+              onPointerLeave={(e) => e.pointerType === "mouse" && setHoverPaused(false)}
+              onFocus={(e) => e.target.matches(":focus-visible") && setHoverPaused(true)}
+              onBlur={() => setHoverPaused(false)}
             >
               {/* ───────── TOP: service selector rail ───────── */}
               <div className="relative">
@@ -381,8 +447,9 @@ export default function Services() {
                         )}
 
                         <span className="relative flex items-center gap-2.5 sm:gap-3">
+                          {/* thumbnail keeps the artwork's 2:1 ratio so it is never cropped */}
                           <span
-                            className={`relative h-9 w-14 shrink-0 overflow-hidden rounded-xl ring-1 transition-all duration-300 sm:h-10 sm:w-[4.5rem] ${
+                            className={`relative aspect-[2/1] h-8 shrink-0 overflow-hidden rounded-lg ring-1 transition-all duration-300 sm:h-9 ${
                               isActive ? "ring-white/30" : "opacity-85 ring-black/5 group-hover:opacity-100"
                             }`}
                             style={{ background: tint(v.accent) }}
@@ -395,16 +462,9 @@ export default function Services() {
                                 sizes="72px"
                                 unoptimized
                                 onError={() => markFailed(service.slug)}
-                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                className="object-contain transition-transform duration-500 group-hover:scale-105"
                               />
                             )}
-                            <span
-                              className={`absolute left-1 top-1 rounded-md px-1 text-[10px] font-bold leading-4 tabular-nums backdrop-blur ${
-                                isActive ? "bg-teal text-ink" : "bg-ink/70 text-paper"
-                              }`}
-                            >
-                              {service.number}
-                            </span>
                           </span>
                           <span
                             className={`whitespace-nowrap text-[13px] font-semibold leading-snug transition-colors duration-300 sm:text-sm ${
@@ -431,10 +491,12 @@ export default function Services() {
 
               {/* ───────── BOTTOM: showcase ───────── */}
               <div
+                ref={panelRef}
                 id="service-panel"
                 role="tabpanel"
                 aria-labelledby={`service-tab-${current.slug}`}
-                className="relative mt-3 overflow-hidden rounded-[24px] bg-ink shadow-[var(--shadow-lift)] sm:mt-4 sm:rounded-[32px]"
+                onPointerMove={onPanelMove}
+                className="relative mt-3 overflow-hidden rounded-[24px] bg-ink shadow-[var(--shadow-lift)] ring-1 ring-white/10 sm:mt-4 sm:rounded-[32px]"
               >
                 {/* ambient accent glow that cross-fades per service */}
                 <AnimatePresence initial={false}>
@@ -470,24 +532,12 @@ export default function Services() {
                   }}
                 />
 
-                <div className="relative grid items-center gap-6 p-4 sm:gap-8 sm:p-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10 lg:p-10">
-                  {/* ── content (fixed min-height so the card never jumps between services) ── */}
-                  <div className="relative order-2 flex min-h-[22rem] flex-col justify-center sm:min-h-[26rem] lg:order-1 lg:min-h-[27rem]">
-                    {/* ghost number, kept to the right so it never sits under the heading */}
-                    {/* <AnimatePresence mode="wait" initial={false}>
-                      <motion.span
-                        key={`ghost-${current.slug}`}
-                        aria-hidden
-                        className="pointer-events-none absolute -top-2 right-0 hidden select-none font-display text-[7rem] font-bold leading-none text-white/[0.05] sm:block lg:text-[9rem]"
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -40 }}
-                        transition={{ duration: 0.6, ease: EASE }}
-                      >
-                        {current.number}
-                      </motion.span>
-                    </AnimatePresence> */}
+                {/* cursor spotlight */}
+                <motion.div aria-hidden className="pointer-events-none absolute inset-0 hidden lg:block" style={{ background: spot }} />
 
+                <div className="relative grid items-center gap-7 p-4 sm:gap-8 sm:p-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10 lg:p-10">
+                  {/* ── content (fixed min-height so the card never jumps between services) ── */}
+                  <div className="relative order-2 flex min-h-[22rem] flex-col justify-center sm:min-h-[26rem] lg:order-1 lg:min-h-[28rem]">
                     <AnimatePresence mode="wait" initial={false}>
                       <motion.div
                         key={current.slug}
@@ -497,16 +547,19 @@ export default function Services() {
                         exit="exit"
                         className="relative"
                       >
-                        {/* <motion.span
+                        <motion.span
                           variants={item}
-                          className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-paper backdrop-blur-md"
+                          className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] py-1 pl-2 pr-3 text-xs font-medium text-paper/85 backdrop-blur-md"
                         >
                           <span className="relative flex h-2 w-2">
-                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber opacity-70 motion-reduce:hidden" />
-                            <span className="relative inline-flex h-2 w-2 rounded-full bg-amber" />
+                            <span
+                              className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 motion-reduce:hidden"
+                              style={{ background: cv.accent }}
+                            />
+                            <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: cv.accent }} />
                           </span>
-                          Service {current.number}
-                        </motion.span> */}
+                          {current.channels.length} channels covered
+                        </motion.span>
 
                         <h3 className="mt-4 font-display text-[1.7rem] leading-[1.1] text-paper sm:mt-5 sm:text-4xl lg:text-[2.2rem] xl:text-[2.7rem]">
                           {nameWords.map((w, i) => (
@@ -550,21 +603,27 @@ export default function Services() {
                             </Link>
                           </motion.div>
 
-                          {/* controls */}
-                          <div className="flex items-center gap-2 rounded-full border border-white/15 bg-white/10 p-1 backdrop-blur-md sm:gap-2.5">
+                          {/* controls: previous, play/pause, next (with autoplay ring) */}
+                          <div className="flex items-center gap-1 rounded-full border border-white/15 bg-white/10 p-1 backdrop-blur-md">
                             <button
                               type="button"
-                              onClick={() => go(active - 1)}
+                              onClick={() => go(active - 1, -1)}
                               aria-label="Previous service"
                               className="flex h-10 w-10 items-center justify-center rounded-full text-paper transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber"
                             >
                               <IconArrowRight className="h-4 w-4 rotate-180" />
                             </button>
-                            <span className="min-w-[3rem] text-center text-xs font-semibold tabular-nums text-paper">
-                              {pad(active + 1)}
-                              <span className="mx-1 text-paper/40">/</span>
-                              {pad(total)}
-                            </span>
+                            {!reduce && (
+                              <button
+                                type="button"
+                                onClick={() => setUserPaused((p) => !p)}
+                                aria-label={userPaused ? "Resume autoplay" : "Pause autoplay"}
+                                aria-pressed={userPaused}
+                                className="flex h-10 w-10 items-center justify-center rounded-full text-paper/80 transition-colors hover:bg-white/15 hover:text-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber"
+                              >
+                                {userPaused ? <PlayIcon className="h-3.5 w-3.5" /> : <PauseIcon className="h-3.5 w-3.5" />}
+                              </button>
+                            )}
                             <span className="relative h-11 w-11">
                               <svg className="absolute inset-0 -rotate-90" viewBox="0 0 44 44" aria-hidden>
                                 <circle cx="22" cy="22" r="20" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="2" />
@@ -582,7 +641,7 @@ export default function Services() {
                               </svg>
                               <button
                                 type="button"
-                                onClick={() => go(active + 1)}
+                                onClick={() => go(active + 1, 1)}
                                 aria-label="Next service"
                                 className="absolute inset-[3px] flex items-center justify-center rounded-full bg-paper text-ink transition-colors hover:bg-amber focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber"
                               >
@@ -598,14 +657,14 @@ export default function Services() {
                   {/* ── image stage ── */}
                   <div className="order-1 min-w-0 lg:order-2">
                     <motion.div
-                      className="touch-pan-y pb-3 pr-3 pt-3 sm:pb-5 sm:pr-5"
+                      className="touch-pan-y pb-3 pr-3 sm:pb-5 sm:pr-5"
                       drag={reduce ? false : "x"}
                       dragConstraints={{ left: 0, right: 0 }}
                       dragElastic={0.12}
                       dragSnapToOrigin
                       onDragEnd={(_, info) => {
-                        if (info.offset.x < -70) go(active + 1);
-                        else if (info.offset.x > 70) go(active - 1);
+                        if (info.offset.x < -70) go(active + 1, 1);
+                        else if (info.offset.x > 70) go(active - 1, -1);
                       }}
                     >
                       <motion.div
@@ -619,6 +678,20 @@ export default function Services() {
                         }}
                         className="relative"
                       >
+                        {/* accent halo behind the frame */}
+                        <AnimatePresence initial={false}>
+                          <motion.div
+                            key={`halo-${current.slug}`}
+                            aria-hidden
+                            className="pointer-events-none absolute inset-3 rounded-[28px] blur-2xl"
+                            style={{ background: cv.accent }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 0.35 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.9 }}
+                          />
+                        </AnimatePresence>
+
                         {/* peek of the next service, stacked behind */}
                         <div className="pointer-events-none absolute inset-0 translate-x-2.5 translate-y-2.5 sm:translate-x-5 sm:translate-y-5">
                           <AnimatePresence initial={false}>
@@ -632,15 +705,16 @@ export default function Services() {
                               transition={{ duration: 0.8 }}
                             >
                               {nextOk && (
-                                <Image src={nv.image} alt="" fill sizes="40vw" unoptimized className="object-cover blur-[1.5px]" />
+                                <Image src={nv.image} alt="" fill sizes="40vw" unoptimized className="object-contain blur-[1.5px]" />
                               )}
                               <div className="absolute inset-0 bg-ink/40" />
                             </motion.div>
                           </AnimatePresence>
                         </div>
 
-                        {/* main frame: always 2:1 so the artwork is never cropped */}
-                        <div className="relative aspect-[2/1] overflow-hidden rounded-[16px] border border-white/20 bg-ink shadow-[0_40px_80px_-30px_rgba(0,0,0,0.8)] sm:rounded-[22px]">
+                        {/* main frame: locked to the artwork's 1774 × 887 (2:1) ratio and sized by width,
+                            so the whole image shows on every screen. object-contain is a safety net. */}
+                        <div className="relative aspect-[2/1] w-full overflow-hidden rounded-[16px] bg-ink shadow-[0_40px_80px_-30px_rgba(0,0,0,0.8)] sm:rounded-[22px]">
                           <AnimatePresence initial={false} custom={dir} mode="sync">
                             <motion.div
                               key={current.slug}
@@ -653,22 +727,19 @@ export default function Services() {
                               style={{ background: tint(cv.accent) }}
                             >
                               {currentOk ? (
-                                <motion.div className="absolute -inset-3 sm:-inset-4" style={{ x: imgX, y: imgY }}>
-                                  <Image
-                                    src={cv.image}
-                                    alt={cv.alt}
-                                    fill
-                                    priority={active === 0}
-                                    unoptimized
-                                    sizes="(min-width: 1024px) 58vw, 100vw"
-                                    onError={() => markFailed(current.slug)}
-                                    className="object-cover"
-                                  />
-                                </motion.div>
+                                <Image
+                                  src={cv.image}
+                                  alt={cv.alt}
+                                  fill
+                                  priority={active === 0}
+                                  unoptimized
+                                  sizes="(min-width: 1024px) 58vw, 100vw"
+                                  onError={() => markFailed(current.slug)}
+                                  className="object-contain"
+                                />
                               ) : (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 p-4 text-center">
-                                  <span className="font-display text-4xl text-white/80 sm:text-6xl">{current.number}</span>
-                                  <span className="text-sm font-semibold text-paper sm:text-lg">{current.name}</span>
+                                <div className="absolute inset-0 flex items-center justify-center p-4 text-center">
+                                  <span className="font-display text-2xl text-paper sm:text-4xl">{current.name}</span>
                                 </div>
                               )}
                             </motion.div>
@@ -678,7 +749,7 @@ export default function Services() {
                           <motion.div
                             key={`sheen-${current.slug}`}
                             aria-hidden
-                            className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                            className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent"
                             initial={{ x: "-120%" }}
                             animate={{ x: "420%" }}
                             transition={{ duration: 1.2, delay: 0.2, ease: EASE }}
@@ -691,61 +762,58 @@ export default function Services() {
                             style={{ background: glare, opacity: glareOn }}
                           />
 
-                          <div className="pointer-events-none absolute inset-0 rounded-[16px] ring-1 ring-inset ring-white/10 sm:rounded-[22px]" />
+                          <div className="pointer-events-none absolute inset-0 rounded-[16px] ring-1 ring-inset ring-white/20 sm:rounded-[22px]" />
                         </div>
-
-                        {/* floating chips (lifted in 3D) */}
-                        <motion.div
-                          key={`chip-a-${current.slug}`}
-                          className="absolute -top-3 left-3 z-10 flex items-center gap-2 rounded-full border border-white/25 bg-ink/80 px-2.5 py-1 text-[11px] font-semibold text-paper shadow-lg backdrop-blur-xl sm:left-4 sm:px-3 sm:py-1.5 sm:text-xs"
-                          style={{ z: 60 }}
-                          initial={{ opacity: 0, y: 14, scale: 0.9 }}
-                          animate={reduce ? { opacity: 1, y: 0, scale: 1 } : { opacity: 1, y: [0, -5, 0], scale: 1 }}
-                          transition={{
-                            opacity: { duration: 0.5, delay: 0.5 },
-                            scale: { duration: 0.5, delay: 0.5, ease: EASE },
-                            y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-                          }}
-                        >
-                          <span className="h-2 w-2 rounded-full" style={{ background: cv.accent }} />
-                          {current.channels.length} channels
-                        </motion.div>
-
-                        <motion.div
-                          key={`chip-b-${current.slug}`}
-                          className="absolute -bottom-3 left-8 z-10 hidden rounded-full border border-white/25 bg-paper/90 px-3.5 py-1.5 text-xs font-semibold text-ink shadow-lg backdrop-blur-xl sm:block"
-                          style={{ z: 40 }}
-                          initial={{ opacity: 0, y: -14, scale: 0.9 }}
-                          animate={reduce ? { opacity: 1, y: 0, scale: 1 } : { opacity: 1, y: [0, 5, 0], scale: 1 }}
-                          transition={{
-                            opacity: { duration: 0.5, delay: 0.7 },
-                            scale: { duration: 0.5, delay: 0.7, ease: EASE },
-                            y: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1.2 },
-                          }}
-                        >
-                          {current.included.length} deliverables, {current.process.length}-step process
-                        </motion.div>
                       </motion.div>
                     </motion.div>
 
-                    {/* channel marquee */}
-                    <div className="relative mt-2 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)] sm:mt-3">
-                      <motion.div
-                        key={`marquee-${current.slug}`}
-                        className="flex w-max"
-                        animate={reduce ? undefined : { x: ["0%", "-50%"] }}
-                        transition={{ duration: 24, ease: "linear", repeat: Infinity }}
+                    {/* stats sit below the image, so nothing ever covers the artwork */}
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.dl
+                        key={`stats-${current.slug}`}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.4, ease: EASE }}
+                        className="mr-3 grid grid-cols-3 divide-x divide-white/10 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur-md sm:mr-5"
                       >
-                        {[...current.channels, ...current.channels].map((c, i) => (
-                          <span
-                            key={`${c}-${i}`}
-                            className="mr-2.5 inline-flex shrink-0 items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-paper/80 sm:px-3.5"
-                          >
-                            <span className="h-1.5 w-1.5 rounded-full" style={{ background: cv.accent }} />
-                            {c}
-                          </span>
+                        {stats.map((s) => (
+                          <div key={s.label} className="px-3 py-2.5 text-center sm:px-4 sm:py-3">
+                            <dd className="font-display text-xl leading-none text-paper tabular-nums sm:text-2xl">
+                              <Counter value={s.value} />
+                            </dd>
+                            <dt className="mt-1 text-[11px] font-medium text-paper/55 sm:text-xs">{s.label}</dt>
+                          </div>
                         ))}
-                      </motion.div>
+                      </motion.dl>
+                    </AnimatePresence>
+
+                    {/* channel marquee: seamless CSS loop (two identical groups, shifted by exactly -50%), pauses on hover */}
+                    <div
+                      key={`marquee-${current.slug}`}
+                      className="group/marquee relative mr-3 mt-3 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)] sm:mr-5 sm:mt-4"
+                      aria-label={`Channels: ${current.channels.join(", ")}`}
+                    >
+                      <div
+                        className="svc-marquee-track flex w-max motion-reduce:animate-none group-hover/marquee:[animation-play-state:paused]"
+                        style={{ ["--svc-dur" as string]: `${Math.max(22, current.channels.length * 4)}s` }}
+                      >
+                        {[0, 1].map((copy) => (
+                          <div key={copy} aria-hidden={copy === 1} className="flex shrink-0 items-center gap-2.5 pr-2.5">
+                            {Array.from({ length: Math.max(1, Math.ceil(10 / current.channels.length)) }).flatMap((_, rep) =>
+                              current.channels.map((c) => (
+                                <span
+                                  key={`${copy}-${rep}-${c}`}
+                                  className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-paper/80 sm:px-3.5"
+                                >
+                                  <span className="h-1.5 w-1.5 rounded-full" style={{ background: cv.accent }} />
+                                  {c}
+                                </span>
+                              ))
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
