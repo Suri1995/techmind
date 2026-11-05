@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import type { BlogPost } from "@/lib/data";
 
 export function BlogCard({ post }: { post: BlogPost }) {
   return (
-    <article className="card-lift group block">
+    <Link href={`/blog/${post.slug}`} className="card-lift group block">
+      <article>
       <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-ink-soft shadow-[var(--shadow-soft)]">
         <Image
           src={post.image}
@@ -25,6 +27,7 @@ export function BlogCard({ post }: { post: BlogPost }) {
       </div>
       <h3 className="mt-3 font-display text-xl text-ink transition-colors group-hover:text-teal-deep">{post.title}</h3>
       <p className="mt-2 text-sm leading-relaxed text-slate">{post.excerpt}</p>
-    </article>
+      </article>
+    </Link>
   );
 }
