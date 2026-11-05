@@ -784,63 +784,12 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
-    slug: "meta-ads-vs-google-ads",
-    title: "Meta Ads or Google Ads: where should your first budget go?",
-    excerpt:
-      "One platform catches people who are searching, the other finds people who are scrolling. How to choose based on your offer, audience and goal.",
-    category: "Paid Media",
-    date: "Oct 2026",
-    readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    slug: "local-seo-checklist",
-    title: "A local SEO checklist for clinics, hotels and neighbourhood brands",
-    excerpt:
-      "Google Business Profile, reviews, Maps and location pages: the practical steps that help nearby customers find you first.",
-    category: "SEO",
-    date: "Sep 2026",
-    readTime: "7 min read",
-    image: "https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    slug: "reels-that-sell",
-    title: "What makes a reel work for a brand and not just for likes",
-    excerpt:
-      "Hooks, pacing and a clear next step: how short video is planned when the goal is enquiries and store visits.",
-    category: "Video",
-    date: "Sep 2026",
-    readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    slug: "working-with-creators",
-    title: "How to work with creators without losing your brand voice",
-    excerpt:
-      "Choosing the right creators, writing a brief that helps and planning content you can reuse in your own ads.",
-    category: "Influencer",
-    date: "Aug 2026",
-    readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    slug: "tracking-before-spending",
-    title: "Set up tracking before you spend a rupee on ads",
-    excerpt:
-      "Pixels, conversions and call tracking: the measurement groundwork that makes every later decision easier.",
-    category: "Analytics",
-    date: "Aug 2026",
-    readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    slug: "website-or-web-app",
-    title: "Website or web application: which does your business need?",
-    excerpt:
-      "When a good website is enough, and when a portal, booking system or CRM will save your team real time.",
-    category: "Development",
-    date: "Jul 2026",
-    readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80",
+    slug: "seo-vs-google-ads",
+    title: "SEO vs Google Ads: Which Should Your Business Invest in First?",
+    excerpt: "SEO builds long-term visibility while Google Ads creates instant reach. Here is how to choose the right first investment for your business.",
+    category: "Search Marketing",
+    date: "Nov 2026",
+    readTime: "8 min read",
+    image: "/SEO-vs-Google_Ads-Blog.png",
   },
 ];
