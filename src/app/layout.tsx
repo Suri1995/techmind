@@ -12,11 +12,11 @@ import SpotlightEffect from "@/components/motion/SpotlightEffect";
 
 export const metadata: Metadata = {
   title: {
-    default: "Tech.Mind: Build Your Brand. Grow With Purpose.",
+    default: "Digital Marketing Agency in Hyderabad | Tech.Mind",
     template: "%s — Tech.Mind",
   },
   description:
-    "Complete digital marketing solutions: Meta Ads, Google Ads, SEO, influencer marketing, video, websites and web applications. Strategy, creativity and performance under one roof.",
+    "Tech.Mind helps Hyderabad businesses grow with SEO, Meta Ads, Google Ads, content and websites. Speak to our team about your marketing goals.",
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },

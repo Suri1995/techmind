@@ -70,13 +70,15 @@ export default function Hero() {
               Strategy <span aria-hidden className="text-line">|</span> Creativity <span aria-hidden className="text-line">|</span> Performance
             </span>
           </Reveal>
-          <h1 className="mt-5 font-display text-[2.7rem] leading-[1.04] text-ink sm:text-6xl lg:text-[3.6rem] xl:text-[4.2rem]">
-            <WordReveal text="Build Your Brand." delay={0.1} />
-            <br />
-            <WordReveal text="Grow With Purpose." delay={0.45} gradient />
+          
+          {/* FIXED: Changed leading-[1.04] to leading-[1.15], added pb-2 to prevent clipping */}
+          <h1 className="mt-5 pb-2 font-display text-[2.7rem] leading-[1.15] text-ink sm:text-6xl lg:text-[3.6rem] xl:text-[4.2rem]">
+            <WordReveal text="Digital Marketing Agency" delay={0.1} gradient/>
+            <WordReveal text=" in Hyderabad" delay={0.45}  />
           </h1>
+          
           <Reveal delay={0.7}>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate">
+            <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate">
               Complete digital marketing solutions that help businesses strengthen
               visibility, generate enquiries, build customer relationships, and grow online.
             </p>
