@@ -782,14 +782,16 @@ export type BlogPost = {
   image: string;
 };
 
+// In lib/data.ts: delete the old blogPosts array and replace it with this block.
 export const blogPosts: BlogPost[] = [
   {
     slug: "seo-vs-google-ads",
     title: "SEO vs Google Ads: Which Should Your Business Invest in First?",
-    excerpt: "SEO builds long-term visibility while Google Ads creates instant reach. Here is how to choose the right first investment for your business.",
+    excerpt:
+      "SEO builds long-term visibility while Google Ads creates instant reach. Here is how to choose the right first investment for your business.",
     category: "Search Marketing",
     date: "Nov 2026",
-    readTime: "8 min read",
+    readTime: "5 min read",
     image: "/SEO-vs-Google_Ads-Blog.png",
   },
 ];
