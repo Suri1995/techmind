@@ -480,6 +480,76 @@ export const services: Service[] = [
 export const getService = (slug: string) => services.find((s) => s.slug === slug);
 
 /* ------------------------------------------------------------------ */
+/*  Service visuals (showcase images + glow colour)                    */
+/*  Files live directly in /public. To use another file, change only   */
+/*  the `image` path on the matching line.                             */
+/* ------------------------------------------------------------------ */
+
+export type ServiceVisual = {
+  /** Path inside /public (2:1 artwork, e.g. 1774x887). */
+  image: string;
+  alt: string;
+  /** Glow colour used behind the showcase and on small accents. */
+  accent: string;
+};
+
+export const serviceVisuals: Record<string, ServiceVisual> = {
+  "meta-ads": {
+    image: "/Meta_Ads_1774x887.png",
+    alt: "Meta Ads dashboard with Facebook and Instagram",
+    accent: "#2f7bff",
+  },
+  "google-ads": {
+    image: "/Google_Ads_1774x887.png",
+    alt: "Google Ads performance dashboard",
+    accent: "#4a90ff",
+  },
+  seo: {
+    image: "/seo.png",
+    alt: "Search engine optimisation chalkboard diagram",
+    accent: "#f5a524",
+  },
+  "influencer-marketing": {
+    image: "/influencer-marketing.png",
+    alt: "Influencer marketing illustration",
+    accent: "#a78bfa",
+  },
+  "video-editing": {
+    image: "/cinematography-&-video-editing.png",
+    alt: "Cinematography and video editing studio",
+    accent: "#7c8cff",
+  },
+  "website-app-development": {
+    image: "/web-development.png",
+    alt: "Web development illustration",
+    accent: "#38bdf8",
+  },
+  "performance-marketing": {
+    image: "/complete-performance-marketing.png",
+    alt: "Performance marketing analytics dashboard",
+    accent: "#22c1a0",
+  },
+  "political-ads": {
+    image: "/political-ads.png",
+    alt: "Political ads campaign dashboard",
+    accent: "#2fb36d",
+  },
+  "e-commerce": {
+    image: "/ecommerce.png",
+    alt: "E-commerce website development",
+    accent: "#ef4444",
+  },
+  "lead-generation": {
+    image: "/lead-generation.png",
+    alt: "Lead generation illustration",
+    accent: "#f59e0b",
+  },
+};
+
+export const getServiceVisual = (slug: string): ServiceVisual =>
+  serviceVisuals[slug] ?? { image: "", alt: "", accent: "#22c1a0" };
+
+/* ------------------------------------------------------------------ */
 /*  Clients                                                            */
 /* ------------------------------------------------------------------ */
 

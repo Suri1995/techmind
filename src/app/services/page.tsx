@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import ServicesHero from "@/components/heroes/ServicesHero";
 import ServiceNav from "@/components/ServiceNav";
 import { services } from "@/lib/data";
 import ServiceOverviewList from "@/components/Serviceoverviewlist";
 import ServicesCta from "@/components/Servicecta";
+import ServicesHero from "@/components/heroes/ServicesHero";
 
 export const metadata: Metadata = {
   title: "Services",

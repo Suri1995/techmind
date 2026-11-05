@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import ServiceDetailHero from "@/components/heroes/ServiceDetailHero";
 import SectionNav from "@/components/SectionNav";
 import SectionHeading from "@/components/SectionHeading";
-import ServiceArt from "@/components/ServiceArt";
+import ServiceImage from "@/components/ServiceImage";
 import ServiceName from "@/components/ServiceName";
 import FAQ from "@/components/home-components/faq";
 import Reveal, { RevealGroup, RevealItem } from "@/components/motion/Reveal";
@@ -32,7 +32,7 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
   const index = services.findIndex((s) => s.slug === slug);
   const prev = services[(index - 1 + services.length) % services.length];
   const next = services[(index + 1) % services.length];
-  const related = service.related.map((r) => getService(r)!).filter(Boolean);
+  const related = service.related.map((r) => getService(r)).filter((r): r is NonNullable<typeof r> => Boolean(r));
   const usedBy = clients.filter((c) => c.tags.some((t) => tagInfo[t]?.service === slug));
 
   const nav = [
@@ -180,26 +180,32 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
       <FAQ id="faq" items={service.faqs} eyebrow="FAQs" title={`${service.name}: common questions.`} description="Anything else? Send us your question and we'll reply within one business day." />
 
       {/* Related */}
-      <section className="wrap py-16 md:py-24">
-        <Reveal>
-          <SectionHeading eyebrow="Works well with" title="Services that pair naturally with this one." />
-        </Reveal>
-        <RevealGroup className="mt-10 grid gap-6 md:grid-cols-3" stagger={0.08}>
-          {related.map((r) => (
-            <RevealItem key={r.slug}>
-              <Link href={`/services/${r.slug}`} className="card-lift group block overflow-hidden rounded-3xl border border-line bg-paper-raised">
-                <div className="relative aspect-[16/9] overflow-hidden">
-                  <ServiceArt slug={r.slug} className="h-full w-full transition-transform duration-700 group-hover:scale-105" />
-                </div>
-                <div className="p-6">
-                  <h3 className="mt-2 font-display text-xl text-ink group-hover:text-teal-deep">{r.name}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slate">{r.short}</p>
-                </div>
-              </Link>
-            </RevealItem>
-          ))}
-        </RevealGroup>
-      </section>
+      {related.length > 0 && (
+        <section className="wrap py-16 md:py-24">
+          <Reveal>
+            <SectionHeading eyebrow="Works well with" title="Services that pair naturally with this one." />
+          </Reveal>
+          <RevealGroup className="mt-10 grid gap-6 md:grid-cols-3" stagger={0.08}>
+            {related.map((r) => (
+              <RevealItem key={r.slug}>
+                <Link href={`/services/${r.slug}`} className="card-lift group block overflow-hidden rounded-3xl border border-line bg-paper-raised">
+                  <div className="relative aspect-[2/1] overflow-hidden">
+                    <ServiceImage
+                      slug={r.slug}
+                      sizes="(min-width: 768px) 33vw, 100vw"
+                      imageClassName="transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="mt-2 font-display text-xl text-ink group-hover:text-teal-deep">{r.name}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-slate">{r.short}</p>
+                  </div>
+                </Link>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+        </section>
+      )}
 
       {/* Final CTA + prev/next */}
       <section className="relative overflow-hidden bg-ink py-16 text-paper md:py-24">
