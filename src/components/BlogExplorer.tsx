@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { BlogCard } from "./cards";
 import type { BlogPost } from "@/lib/data";
@@ -64,7 +65,7 @@ export default function BlogExplorer({ posts }: { posts: BlogPost[] }) {
       </div>
 
       {isDefaultView && featured && (
-        <article className="group relative mt-10 grid overflow-hidden rounded-[28px] border border-line bg-paper-raised shadow-[var(--shadow-soft)] transition-shadow duration-500 hover:shadow-[var(--shadow-lift)] md:grid-cols-[1.15fr_1fr]">
+        <Link href={`/blog/${featured.slug}`} className="group relative mt-10 grid overflow-hidden rounded-[28px] border border-line bg-paper-raised shadow-[var(--shadow-soft)] transition-shadow duration-500 hover:shadow-[var(--shadow-lift)] md:grid-cols-[1.15fr_1fr]">
           <div className="relative aspect-[16/10] overflow-hidden md:aspect-auto md:min-h-[22rem]">
             <Image
               src={featured.image}
@@ -91,7 +92,7 @@ export default function BlogExplorer({ posts }: { posts: BlogPost[] }) {
               <IconArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </span>
           </div>
-        </article>
+        </Link>
       )}
 
       <motion.div layout className="mt-12 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">

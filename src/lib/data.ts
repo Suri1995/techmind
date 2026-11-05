@@ -769,8 +769,14 @@ export const faqs = [
 ];
 
 /* ------------------------------------------------------------------ */
-/*  Blog (editorial placeholders, ready for real articles)             */
+/*  Blog                                                               */
 /* ------------------------------------------------------------------ */
+
+export type BlogSection = {
+  heading: string;
+  paragraphs: string[];
+  bullets?: string[];
+};
 
 export type BlogPost = {
   slug: string;
@@ -780,67 +786,77 @@ export type BlogPost = {
   date: string;
   readTime: string;
   image: string;
+  sections: BlogSection[];
 };
 
 export const blogPosts: BlogPost[] = [
   {
-    slug: "meta-ads-vs-google-ads",
-    title: "Meta Ads or Google Ads: where should your first budget go?",
+    slug: "seo-vs-google-ads",
+    title: "SEO vs Google Ads: Which Should Your Business Invest in First?",
     excerpt:
-      "One platform catches people who are searching, the other finds people who are scrolling. How to choose based on your offer, audience and goal.",
-    category: "Paid Media",
-    date: "Oct 2026",
-    readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    slug: "local-seo-checklist",
-    title: "A local SEO checklist for clinics, hotels and neighbourhood brands",
-    excerpt:
-      "Google Business Profile, reviews, Maps and location pages: the practical steps that help nearby customers find you first.",
-    category: "SEO",
-    date: "Sep 2026",
-    readTime: "7 min read",
-    image: "https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    slug: "reels-that-sell",
-    title: "What makes a reel work for a brand and not just for likes",
-    excerpt:
-      "Hooks, pacing and a clear next step: how short video is planned when the goal is enquiries and store visits.",
-    category: "Video",
-    date: "Sep 2026",
-    readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    slug: "working-with-creators",
-    title: "How to work with creators without losing your brand voice",
-    excerpt:
-      "Choosing the right creators, writing a brief that helps and planning content you can reuse in your own ads.",
-    category: "Influencer",
-    date: "Aug 2026",
-    readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    slug: "tracking-before-spending",
-    title: "Set up tracking before you spend a rupee on ads",
-    excerpt:
-      "Pixels, conversions and call tracking: the measurement groundwork that makes every later decision easier.",
-    category: "Analytics",
-    date: "Aug 2026",
-    readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    slug: "website-or-web-app",
-    title: "Website or web application: which does your business need?",
-    excerpt:
-      "When a good website is enough, and when a portal, booking system or CRM will save your team real time.",
-    category: "Development",
-    date: "Jul 2026",
-    readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80",
+      "SEO builds long-term visibility while Google Ads creates instant reach. Here is how to choose the right first investment for your business.",
+    category: "Search Marketing",
+    date: "Nov 2026",
+    readTime: "8 min read",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/SEO_vs_Google_Ads_Blog_Cover_1280x720-vTCCVH27i1qHre45271pKKexzLYI2L.png",
+    sections: [
+      {
+        heading: "SEO vs Google Ads: the real difference",
+        paragraphs: [
+          "When people search for your product or service, your business can appear in two main ways: organically through SEO or as a paid placement through Google Ads. Both can bring qualified visitors, but they work on different timelines and require different kinds of investment.",
+          "SEO is an earned channel. You improve your website, content, technical foundation and local presence so search engines can confidently recommend your business. Google Ads is a paid channel. You bid for visibility on relevant searches and pay when someone clicks or takes an action.",
+        ],
+      },
+      {
+        heading: "What SEO gives your business",
+        paragraphs: [
+          "SEO is designed for compounding growth. A useful page can continue attracting relevant visitors long after it is published, and a stronger website can support every future campaign. It is especially valuable for businesses that want to become the trusted answer in their category.",
+        ],
+        bullets: [
+          "Long-term visibility that can reduce dependence on paid clicks",
+          "Trust and credibility from appearing in organic results",
+          "A stronger website experience for every marketing channel",
+          "Compounding results from technical improvements and useful content",
+        ],
+      },
+      {
+        heading: "What Google Ads gives your business",
+        paragraphs: [
+          "Google Ads is built for speed and control. Once campaigns are approved and tracking is in place, you can reach people who are actively searching for what you offer. Budgets, locations, keywords and messages can be adjusted quickly as performance data comes in.",
+        ],
+        bullets: [
+          "Immediate visibility for high-intent searches",
+          "Precise control over budget, location and audience",
+          "Fast learning about which offers and keywords create demand",
+          "Clear measurement of clicks, calls, enquiries and sales",
+        ],
+      },
+      {
+        heading: "So, which should you invest in first?",
+        paragraphs: [
+          "Start with Google Ads when you need qualified enquiries quickly, your service has clear search demand, or you are testing a new offer and want feedback fast. Paid search can give you useful data while your organic foundation is being built.",
+          "Start with SEO when you are building for the long term, your customers research before buying, or paid clicks are becoming too expensive to sustain. SEO takes patience, but it can become one of your most efficient acquisition channels over time.",
+          "For most businesses, the strongest answer is not either-or. Use Google Ads for immediate demand capture and SEO for durable visibility. The search terms, conversion data and customer questions from your ads can make your SEO strategy smarter, while organic insights can improve your ad messaging.",
+        ],
+      },
+      {
+        heading: "A practical decision framework",
+        paragraphs: [
+          "Before choosing a channel, answer these four questions:",
+        ],
+        bullets: [
+          "Do customers already search for the exact product or service you sell?",
+          "How quickly do you need leads or sales from this investment?",
+          "Can your website convert the traffic you attract?",
+          "Do you have the time and content needed to build organic authority?",
+        ],
+      },
+      {
+        heading: "The bottom line",
+        paragraphs: [
+          "Google Ads buys attention when you need it. SEO earns attention that can keep working. The right mix depends on your goals, competition, budget and timeline, but both channels perform best when they point to a clear offer and a website built to convert.",
+        ],
+      },
+    ],
   },
 ];
