@@ -61,23 +61,44 @@ export default function AboutPage() {
       </section>
 
       <section className="wrap py-16 md:py-24">
-        <Reveal>
-          <SectionHeading eyebrow="How we work" title="Clear strategy. Thoughtful execution." description="We align the right channels with your goals, then learn and optimize as campaigns develop." />
-        </Reveal>
-        <div className="relative mt-12">
-          <RevealGroup className="grid gap-8 md:grid-cols-4" stagger={0.1}>
-            {process.map((step) => (
-              <RevealItem key={step.step}>
-                <div className="border-t-2 border-amber pt-5">
-                  <span className="text-xs font-bold uppercase tracking-[0.18em] text-teal-deep">{step.step} / {step.title}</span>
-                  <h3 className="mt-3 font-display text-xl text-ink">{step.headline}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slate">{step.text}</p>
-                </div>
-              </RevealItem>
-            ))}
-          </RevealGroup>
-        </div>
-      </section>
+  <Reveal>
+    <SectionHeading
+      eyebrow="How we work"
+      title="Clear strategy. Thoughtful execution."
+      description="We align the right channels with your goals, then learn and optimize as campaigns develop."
+    />
+  </Reveal>
+
+  <div className="relative mt-12">
+    <RevealGroup className="grid gap-8 md:grid-cols-4" stagger={0.1}>
+      {process.map((step, index) => (
+        <RevealItem key={step.title}>
+          <div className="border-t-2 border-amber pt-5">
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-teal-deep">
+              {String(index + 1).padStart(2, "0")} / {step.title}
+            </span>
+
+            <h3 className="mt-3 font-display text-xl text-ink">
+              {step.headline}
+            </h3>
+
+            <ul className="mt-3 space-y-2">
+              {step.points.map((point, pointIndex) => (
+                <li
+                  key={pointIndex}
+                  className="flex items-start gap-2 text-sm leading-relaxed text-slate"
+                >
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-deep" />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </RevealItem>
+      ))}
+    </RevealGroup>
+  </div>
+</section>
 
       <section className="relative overflow-hidden border-t border-line bg-ink py-16 text-paper md:py-24">
         <div className="mesh-hero mesh-dark">
