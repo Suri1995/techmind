@@ -4,20 +4,24 @@ import { useEffect, useId, useRef, type CSSProperties, type PointerEvent } from 
 
 const points = [
   {
-    title: "One accountable team",
-    text: "One team from strategy through to execution, so nothing gets lost between vendors",
+    no: "01",
+    title: "One Accountable Team",
+    text: "One team managing everything from strategy to execution.",
   },
   {
-    title: "Tailored to you",
-    text: "Plans tailored to your business goals, audience, and budget",
+    no: "02",
+    title: "Tailored to Your Business",
+    text: "Strategies built around your goals, audience, and budget.",
   },
   {
-    title: "Aligned, then optimized",
-    text: "The right channels aligned with your goals, then learned from and optimized as campaigns develop",
+    no: "03",
+    title: "Aligned & Optimized",
+    text: "Connected marketing channels, continuously improved for better results.",
   },
   {
-    title: "Guided by data",
-    text: "Practical next steps guided by the performance data available",
+    no: "04",
+    title: "Guided by Data",
+    text: "Smarter decisions driven by campaign performance and insights.",
   },
 ];
 
@@ -27,8 +31,16 @@ const pillars = ["Strategy", "Creativity", "Performance"];
 const CSS = `
 .wt-glow{
   background:
-    radial-gradient(48rem 20rem at 50% 0%, rgba(20,184,166,.10), transparent 70%),
-    radial-gradient(30rem 16rem at 100% 100%, rgba(56,189,248,.07), transparent 70%);
+    radial-gradient(48rem 20rem at 50% 0%, rgba(20,184,166,.12), transparent 70%),
+    radial-gradient(32rem 18rem at 100% 100%, rgba(232,162,58,.08), transparent 70%),
+    radial-gradient(28rem 16rem at 0% 70%, rgba(56,189,248,.07), transparent 70%);
+}
+.wt-dots{
+  background-image:radial-gradient(#cfe0dc 1px,transparent 1px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 0%,#000 20%,transparent 78%);
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 0%,#000 20%,transparent 78%);
+  opacity:.5;
 }
 .wt-reveal{
   opacity:0;
@@ -47,14 +59,25 @@ const CSS = `
 }
 .wt[data-revealed="true"] .wt-mark{background-size:100% .16em}
 
+.wt-grad{
+  background:linear-gradient(100deg,#0b7a72,#14b8a6 55%,#e8a23a);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
 .wt-sweep{
   position:absolute;top:0;bottom:0;left:0;width:35%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),transparent);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);
   transform:translate3d(-120%,0,0);
   pointer-events:none;
 }
-.wt[data-revealed="true"] .wt-sweep{animation:wt-sweep 1.8s cubic-bezier(.22,1,.36,1) .6s 1 forwards}
+.wt[data-revealed="true"] .wt-sweep{animation:wt-sweep 1.8s cubic-bezier(.22,1,.36,1) .8s 1 forwards}
 @keyframes wt-sweep{to{transform:translate3d(320%,0,0)}}
+
+.wt-num{
+  font-variant-numeric:tabular-nums;
+  background:linear-gradient(135deg,#0b7a72,#14b8a6 60%,#e8a23a);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
 
 @media (prefers-reduced-motion:reduce){
   .wt-reveal{opacity:1;transform:none;transition:none}
@@ -124,14 +147,15 @@ export default function WhyTechMind() {
     >
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
       <div aria-hidden="true" className="wt-glow pointer-events-none absolute inset-0" />
+      <div aria-hidden="true" className="wt-dots pointer-events-none absolute inset-0" />
 
       <div className="wrap relative">
         {/* Header */}
         <div className="mx-auto max-w-3xl text-center">
           <p className="wt-reveal inline-flex items-center gap-3 text-sm font-semibold text-teal-deep">
-            <span aria-hidden="true" className="h-px w-8 bg-teal-deep/40" />
-            Why Tech.Mind
-            <span aria-hidden="true" className="h-px w-8 bg-teal-deep/40" />
+            <span aria-hidden="true" className="h-px w-8 bg-gradient-to-r from-transparent to-teal-deep/50" />
+            Why Tech Mind
+            <span aria-hidden="true" className="h-px w-8 bg-gradient-to-l from-transparent to-teal-deep/50" />
           </p>
 
           <h2
@@ -144,21 +168,21 @@ export default function WhyTechMind() {
             </span>
             ,{" "}
             <span className="wt-mark" style={{ "--d": "0.55s" } as CSSProperties}>
-              creativity
+              Creativity
             </span>{" "}
-            and{" "}
+            &amp;{" "}
             <span className="wt-mark" style={{ "--d": "0.7s" } as CSSProperties}>
-              performance
-            </span>
-            , working as one.
+              Performance
+            </span>{" "}
+            — <span className="wt-grad">All in One.</span>
           </h2>
 
           <p
             style={{ "--d": "0.16s" } as CSSProperties}
             className="wt-reveal mx-auto mt-6 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg"
           >
-            Most marketing struggles when channels are run in isolation. We connect paid media, search, content,
-            video and development around a single goal: yours.
+            We bring strategy, creative thinking, and performance marketing together to grow your brand across digital
+            channels.
           </p>
         </div>
 
@@ -166,31 +190,31 @@ export default function WhyTechMind() {
         <ul onPointerMove={onPointerMove} className="mt-12 grid gap-4 md:mt-14 md:grid-cols-2 md:gap-5">
           {points.map((point, i) => (
             <li
-              key={point.title}
+              key={point.no}
               data-card
               style={{ "--d": `${0.2 + i * 0.09}s` } as CSSProperties}
-              className="wt-reveal group relative overflow-hidden rounded-3xl border border-line bg-white p-6 transition-[transform,border-color,box-shadow] duration-500 hover:border-teal-deep/30 hover:shadow-[0_28px_50px_-28px_rgba(15,60,60,0.35)] motion-safe:hover:-translate-y-1 md:p-8"
+              className="wt-reveal group relative overflow-hidden rounded-3xl border border-line bg-white p-6 shadow-[0_1px_2px_rgba(6,31,34,0.04),0_14px_32px_-22px_rgba(6,31,34,0.22)] transition-[transform,border-color,box-shadow] duration-500 hover:border-teal-deep/30 hover:shadow-[0_28px_50px_-26px_rgba(11,122,114,0.4)] motion-safe:hover:-translate-y-1 md:p-8"
             >
               {/* Cursor spotlight */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(280px_circle_at_var(--mx,50%)_var(--my,0%),rgba(20,184,166,0.12),transparent_70%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(300px_circle_at_var(--mx,50%)_var(--my,0%),rgba(20,184,166,0.13),transparent_70%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
               />
               {/* Accent bar draws in on hover */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-teal to-sky-400 transition-transform duration-500 [transition-timing-function:cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100"
+                className="pointer-events-none absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-teal via-aqua to-amber transition-transform duration-500 [transition-timing-function:cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100"
               />
 
-              <div className="relative flex items-start gap-4 md:gap-5">
+              <div className="relative flex items-start gap-2 md:gap-3">
                 <span
                   aria-hidden="true"
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-teal/10 text-teal-deep transition-colors duration-500 group-hover:bg-teal-deep group-hover:text-white"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl bg-teal-tint text-teal-deep ring-1 ring-teal/15 transition-[background-color,color,transform] duration-500 group-hover:bg-teal-deep group-hover:text-white motion-safe:group-hover:-rotate-6 motion-safe:group-hover:scale-105"
                 >
                   <IconCheck className="h-5 w-5" />
                 </span>
                 <div>
-                  <h3 className="font-display text-xl font-semibold leading-snug text-ink">{point.title}</h3>
+                  <h3 className="mt-0.5 font-display text-xl font-semibold leading-snug text-ink">{point.title}</h3>
                   <p className="mt-2 text-base leading-relaxed text-ink-soft">{point.text}</p>
                 </div>
               </div>
@@ -198,22 +222,21 @@ export default function WhyTechMind() {
           ))}
         </ul>
 
-        {/* Goals band */}
+        {/* Pillars band (light) */}
         <div
           style={{ "--d": "0.6s" } as CSSProperties}
-          className="wt-reveal relative mt-5 overflow-hidden rounded-3xl bg-gradient-to-br from-[#0b2a2c] via-[#08201f] to-[#041514] p-8 md:mt-6 md:p-10"
+          className="wt-reveal relative mt-5 overflow-hidden rounded-3xl border border-teal/20 bg-gradient-to-br from-teal-tint via-white to-mist p-8 shadow-[0_1px_2px_rgba(6,31,34,0.04),0_20px_44px_-28px_rgba(11,122,114,0.35)] md:mt-6 md:p-10"
         >
           <span aria-hidden="true" className="wt-sweep" />
           <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal">At the centre</p>
-              <p className="mt-2 font-display text-3xl font-semibold text-white md:text-4xl">Your goals.</p>
-            </div>
-            <ul className="flex flex-wrap gap-3" aria-label="What we align around your goals">
+            <p className="font-display text-3xl font-semibold text-ink md:text-4xl">
+              <span className="wt-grad">All in One.</span>
+            </p>
+            <ul className="flex flex-wrap gap-3" aria-label="Strategy, Creativity and Performance">
               {pillars.map((p) => (
                 <li
                   key={p}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white"
+                  className="inline-flex items-center gap-2 rounded-full border border-teal/20 bg-white px-4 py-2 text-sm font-medium text-ink shadow-[0_6px_16px_-10px_rgba(11,122,114,0.45)] transition-[transform,border-color] duration-300 hover:border-teal-deep/40 motion-safe:hover:-translate-y-0.5"
                 >
                   <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-teal" />
                   {p}

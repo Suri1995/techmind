@@ -233,10 +233,10 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
   return (
     <Link
       href={href}
-      className="group/link relative inline-flex w-fit items-center text-sm text-slate-on-ink transition-all duration-300 hover:translate-x-1.5 hover:text-paper focus-visible:text-paper focus-visible:outline-none"
+      className="group/link relative inline-flex w-fit items-center text-sm font-medium text-ink-soft transition-all duration-300 hover:translate-x-1.5 hover:text-ink focus-visible:text-ink focus-visible:outline-none"
     >
-      <span className="absolute -left-4 top-1/2 h-1.5 w-1.5 -translate-y-1/2 scale-0 rounded-full bg-teal shadow-[0_0_10px_2px_rgba(20,184,166,0.6)] transition-transform duration-300 group-hover/link:scale-100 group-focus-visible/link:scale-100" />
-      <span className="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-gradient-to-r after:from-teal after:to-transparent after:transition-transform after:duration-300 group-hover/link:after:scale-x-100 group-focus-visible/link:after:scale-x-100">
+      <span className="absolute -left-4 top-1/2 h-1.5 w-1.5 -translate-y-1/2 scale-0 rounded-full bg-teal shadow-[0_0_10px_2px_rgba(20,184,166,0.45)] transition-transform duration-300 group-hover/link:scale-100 group-focus-visible/link:scale-100" />
+      <span className="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-gradient-to-r after:from-teal-deep after:to-transparent after:transition-transform after:duration-300 group-hover/link:after:scale-x-100 group-focus-visible/link:after:scale-x-100">
         {children}
       </span>
     </Link>
@@ -247,14 +247,14 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
 function ColumnHeading({ children }: { children: React.ReactNode }) {
   return (
     <div>
-      <h3 className="font-display text-lg tracking-tight text-paper">{children}</h3>
-      <span className="mt-3 block h-px w-10 bg-gradient-to-r from-teal to-transparent" />
+      <h3 className="font-display text-lg font-semibold tracking-tight text-ink">{children}</h3>
+      <span className="mt-3 block h-[2px] w-10 rounded-full bg-gradient-to-r from-teal-deep to-teal" />
     </div>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* MapCard: dark, teal-tinted live map with address + directions CTA   */
+/* MapCard: bright live map with address + directions CTA   */
 /* ------------------------------------------------------------------ */
 const MAP_EMBED_URL =
   "https://www.google.com/maps?q=17.3624822,78.5684163&z=16&output=embed";
@@ -268,10 +268,10 @@ function MapCard() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`Get directions to ${company.name}, ${company.address}`}
-      className="group/map relative block overflow-hidden rounded-2xl bg-[#071518] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)] ring-1 ring-inset ring-white/10 transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[0_24px_60px_-18px_rgba(20,184,166,0.35)] hover:ring-teal/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
+      className="group/map relative block overflow-hidden rounded-2xl border-2 border-ink bg-white shadow-[0_2px_0_0_rgba(6,31,34,0.9),0_22px_44px_-22px_rgba(11,122,114,0.5)] transition-all duration-500 hover:-translate-y-1 hover:border-teal-deep hover:shadow-[0_2px_0_0_rgba(11,122,114,0.9),0_28px_56px_-20px_rgba(11,122,114,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2"
     >
-      {/* map */}
-      <div className="relative h-40 overflow-hidden">
+      {/* map: full brightness, crisp, no dark overlays */}
+      <div className="relative h-40 overflow-hidden bg-[#eaf4f1]">
         {/* iframe is shifted up to crop Google's place card; bottom stays for attribution */}
         <iframe
           title={`Map showing ${company.name}`}
@@ -280,39 +280,45 @@ function MapCard() {
           referrerPolicy="no-referrer-when-downgrade"
           tabIndex={-1}
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 -top-[90px] h-[calc(100%+90px)] w-full border-0 opacity-80 transition-all duration-700 [filter:invert(92%)_hue-rotate(180deg)_saturate(0.55)_brightness(0.85)_contrast(0.95)] group-hover/map:scale-105 group-hover/map:opacity-100"
+          className="pointer-events-none absolute inset-x-0 -top-[90px] h-[calc(100%+90px)] w-full border-0 [filter:saturate(1.1)_brightness(1.04)_contrast(1.02)] transition-transform duration-700 group-hover/map:scale-105"
         />
 
-        {/* teal tint + soft vignette so the map blends into the footer */}
-        <div className="pointer-events-none absolute inset-0 bg-teal/20 mix-blend-color" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#071518]/50 via-transparent to-[#071518]/30" />
+        {/* very light mint wash only at the bottom so the map meets the panel softly */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white/70 to-transparent" />
 
         {/* radar pulse on the pin location */}
         <span
           aria-hidden="true"
           className="pointer-events-none absolute left-1/2 top-[calc(50%-45px)] -translate-x-1/2 -translate-y-1/2"
         >
-          <span className="block h-10 w-10 rounded-full bg-teal/30 motion-safe:animate-ping" />
+          <span className="block h-10 w-10 rounded-full bg-teal/35 motion-safe:animate-ping" />
         </span>
 
-        {/* floating badge */}
-        <span className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full bg-[#071518]/70 px-3 py-1.5 text-[11px] font-medium text-paper ring-1 ring-inset ring-white/15 backdrop-blur-md">
+        {/* floating badge: white, dark text */}
+        <span className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white px-3 py-1.5 text-[11px] font-semibold text-ink shadow-[0_6px_16px_-8px_rgba(6,31,34,0.5)]">
           <span className="relative flex h-1.5 w-1.5">
             <span className="absolute inline-flex h-full w-full rounded-full bg-teal opacity-75 motion-safe:animate-ping" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-teal" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-teal-deep" />
           </span>
           Our office
         </span>
       </div>
 
-      {/* address + CTA */}
-      <div className="flex items-start gap-3 border-t border-white/10 bg-gradient-to-b from-white/[0.05] to-transparent p-4">
-        <div className="min-w-0 flex-1">
-          <span className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-teal">
+      {/* address + CTA: light panel, dark text */}
+      <div className="flex items-center justify-between gap-3 border-t-2 border-ink bg-gradient-to-b from-white to-[#eaf6f2] px-4 py-3.5">
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-ink">Hyderabad, Telangana</p>
+          <span className="mt-0.5 inline-flex items-center gap-1.5 text-xs font-semibold text-teal-deep">
             Get directions
             <IconArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/map:translate-x-1" />
           </span>
         </div>
+        <span
+          aria-hidden="true"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-tint text-teal-deep ring-1 ring-inset ring-teal/20 transition-all duration-300 group-hover/map:bg-teal-deep group-hover/map:text-white group-hover/map:-rotate-45"
+        >
+          <IconArrowRight className="h-4 w-4" />
+        </span>
       </div>
     </a>
   );
@@ -320,7 +326,7 @@ function MapCard() {
 
 /* Icon chip used in the contact column */
 const chip =
-  "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-white/[0.08] to-white/[0.02] text-teal shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-inset ring-white/10 transition-all duration-300 group-hover/row:bg-teal/15 group-hover/row:ring-teal/50";
+  "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-tint text-teal-deep shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] ring-1 ring-inset ring-teal/20 transition-all duration-300 group-hover/row:bg-teal-deep group-hover/row:text-white group-hover/row:ring-teal-deep";
 
 export default function Footer() {
   const reduce = useReducedMotion();
@@ -332,7 +338,7 @@ export default function Footer() {
   // Cursor spotlight that follows the pointer across the footer
   const mx = useMotionValue(-400);
   const my = useMotionValue(-400);
-  const spotlight = useMotionTemplate`radial-gradient(560px circle at ${mx}px ${my}px, rgba(20,184,166,0.12), transparent 70%)`;
+  const spotlight = useMotionTemplate`radial-gradient(560px circle at ${mx}px ${my}px, rgba(20,184,166,0.13), transparent 70%)`;
 
   async function copyEmail() {
     try {
@@ -352,6 +358,15 @@ export default function Footer() {
     ? serviceLinks
     : serviceLinks.slice(0, INITIAL_SERVICE_COUNT);
 
+  // Slow drift for the background waves (off when reduced motion is requested)
+  const drift = (d: number, delay = 0) =>
+    reduce
+      ? {}
+      : {
+          animate: { y: [0, d, 0], x: [0, d / 2, 0] },
+          transition: { duration: 16, repeat: Infinity, ease: "easeInOut" as const, delay },
+        };
+
   return (
     <footer
       ref={footerRef}
@@ -361,31 +376,44 @@ export default function Footer() {
         mx.set(e.clientX - r.left);
         my.set(e.clientY - r.top);
       }}
-      className="relative isolate overflow-hidden border-t border-line-dark bg-ink text-paper"
+      className="relative isolate overflow-hidden border-t border-line bg-gradient-to-b from-[#f1faf7] via-[#e8f6f2] to-[#dff1ec] text-ink"
     >
-      {/* ambient layers */}
-      <div className="noise-overlay" />
+      {/* ambient layers: soft mint waves, top-left and bottom-right */}
+      <motion.svg
+        aria-hidden="true"
+        viewBox="0 0 640 260"
+        className="pointer-events-none absolute -left-10 -top-6 h-60 w-[42rem] max-w-none"
+        {...drift(10)}
+      >
+        <path d="M0 0H600C520 36 470 118 330 132C210 144 120 100 0 196Z" fill="#cdeee6" fillOpacity="0.55" />
+      </motion.svg>
+      <motion.svg
+        aria-hidden="true"
+        viewBox="0 0 640 300"
+        className="pointer-events-none absolute -bottom-16 -right-10 h-72 w-[46rem] max-w-none"
+        {...drift(-12, 2)}
+      >
+        <path d="M640 40C560 40 520 130 410 150C300 170 200 130 100 220L60 300H640Z" fill="#bfe8dd" fillOpacity="0.5" />
+      </motion.svg>
 
       {/* faint dot grid that fades out toward the edges */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.35] [mask-image:radial-gradient(ellipse_75%_60%_at_50%_30%,black,transparent)]"
+        className="pointer-events-none absolute inset-0 opacity-50 [mask-image:radial-gradient(ellipse_75%_60%_at_50%_30%,black,transparent)]"
         style={{
           backgroundImage:
-            "radial-gradient(rgba(255,255,255,0.18) 1px, transparent 1px)",
+            "radial-gradient(rgba(11,122,114,0.16) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
 
       {/* top edge: hairline + soft glow */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-teal/[0.07] to-transparent" />
-      <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-teal/60 blur-sm" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-teal/[0.08] to-transparent" />
 
       {/* aurora blobs */}
       <div className="pointer-events-none absolute -left-40 top-20 h-96 w-96 rounded-full bg-teal/10 blur-[130px]" />
-      <div className="pointer-events-none absolute -right-32 bottom-40 h-96 w-96 rounded-full bg-[#123a3c]/70 blur-[130px]" />
-      <div className="pointer-events-none absolute left-1/3 top-1/2 h-64 w-64 rounded-full bg-teal/[0.06] blur-[110px]" />
+      <div className="pointer-events-none absolute -right-32 top-1/3 h-80 w-80 rounded-full bg-sky-300/15 blur-[120px]" />
 
       {/* cursor spotlight */}
       <motion.div
@@ -408,9 +436,9 @@ export default function Footer() {
             alt={company.name}
             width={180}
             height={52}
-            className="h-12 w-auto md:h-16 bg-amber-50 rounded-2xl"
+            className="h-12 w-auto md:h-16"
           />
-          <p className="mt-6 max-w-full text-[15px] leading-[1.75] text-slate-on-ink">
+          <p className="mt-6 max-w-full text-[15px] leading-[1.75] text-ink-soft">
             Complete digital marketing solutions that help businesses strengthen visibility,
             generate enquiries, build customer relationships, and grow online.
           </p>
@@ -424,7 +452,7 @@ export default function Footer() {
                   aria-label={`Follow us on ${label}`}
                   title={label}
                   style={{ "--c": color } as React.CSSProperties}
-                  className="group/social relative flex h-11 w-11 items-center justify-center rounded-full bg-white/[0.04] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-inset ring-white/10 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/[0.08] hover:shadow-[0_10px_28px_-6px_var(--c)] hover:ring-[color:var(--c)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
+                  className="group/social relative flex h-11 w-11 items-center justify-center rounded-full bg-white/80 shadow-[0_6px_16px_-10px_rgba(6,31,34,0.35)] ring-1 ring-inset ring-line backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_12px_28px_-8px_var(--c)] hover:ring-[color:var(--c)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
                 >
                   <Icon className="h-[22px] w-[22px] transition-transform duration-300 group-hover/social:scale-110" />
                 </a>
@@ -436,7 +464,7 @@ export default function Footer() {
         {/* Company */}
         <motion.div
           variants={item}
-          className="lg:border-l lg:border-white/[0.07] lg:pl-8"
+          className="lg:border-l lg:border-teal-deep/10 lg:pl-8"
         >
           <ColumnHeading>Company</ColumnHeading>
           <ul className="mt-6 flex flex-col gap-3.5 pl-4">
@@ -451,7 +479,7 @@ export default function Footer() {
         {/* Services */}
         <motion.div
           variants={item}
-          className="lg:border-l lg:border-white/[0.07] lg:pl-8"
+          className="lg:border-l lg:border-teal-deep/10 lg:pl-8"
         >
           <ColumnHeading>Services</ColumnHeading>
           <ul className="mt-6 flex flex-col gap-3.5 pl-4">
@@ -474,33 +502,33 @@ export default function Footer() {
 
           {serviceLinks.length > INITIAL_SERVICE_COUNT && (
             <button
-  type="button"
-  onClick={() => setShowAllServices((v) => !v)}
-  aria-expanded={showAllServices}
-  className="group/more mt-5 ml-4 inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-teal transition-colors hover:text-paper focus-visible:text-paper focus-visible:outline-none"
->
-  {showAllServices
-    ? "Show less"
-    : `Show more (${serviceLinks.length - INITIAL_SERVICE_COUNT})`}
-    
-  <IconArrowDown
-    className={`h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-      showAllServices 
-        ? "-rotate-180" 
-        : "group-hover/more:translate-y-1"
-    }`}
-  />
-</button>
+              type="button"
+              onClick={() => setShowAllServices((v) => !v)}
+              aria-expanded={showAllServices}
+              className="group/more mt-5 ml-4 inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-teal-deep transition-colors hover:text-ink focus-visible:text-ink focus-visible:outline-none"
+            >
+              {showAllServices
+                ? "Show less"
+                : `Show more (${serviceLinks.length - INITIAL_SERVICE_COUNT})`}
+
+              <IconArrowDown
+                className={`h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  showAllServices
+                    ? "-rotate-180"
+                    : "group-hover/more:translate-y-1"
+                }`}
+              />
+            </button>
           )}
         </motion.div>
 
         {/* Contact */}
         <motion.div
           variants={item}
-          className="lg:border-l lg:border-white/[0.07] lg:pl-8"
+          className="lg:border-l lg:border-teal-deep/10 lg:pl-8"
         >
           <ColumnHeading>Get in touch</ColumnHeading>
-          <ul className="mt-6 flex flex-col gap-5 text-sm leading-relaxed text-slate-on-ink">
+          <ul className="mt-6 flex flex-col gap-5 text-sm font-medium leading-relaxed text-ink-soft">
             <li>
               <MapCard />
             </li>
@@ -510,7 +538,7 @@ export default function Footer() {
               </span>
               <a
                 href={`tel:${company.phone.replace(/\s/g, "")}`}
-                className="transition-colors hover:text-paper focus-visible:text-paper focus-visible:outline-none"
+                className="transition-colors hover:text-teal-deep focus-visible:text-teal-deep focus-visible:outline-none"
               >
                 {company.phone}
               </a>
@@ -523,7 +551,7 @@ export default function Footer() {
                 href={`mailto:${company.email}`}
                 title={company.email}
                 aria-label={`Email us at ${company.email}`}
-                className="min-w-0 flex-1 whitespace-nowrap transition-colors hover:text-paper focus-visible:text-paper focus-visible:outline-none"
+                className="min-w-0 flex-1 whitespace-nowrap transition-colors hover:text-teal-deep focus-visible:text-teal-deep focus-visible:outline-none"
               >
                 Email us
               </a>
@@ -531,7 +559,7 @@ export default function Footer() {
                 type="button"
                 onClick={copyEmail}
                 aria-label="Copy email address"
-                className="relative flex h-8 min-w-[4.25rem] shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/[0.03] px-3 text-xs font-medium text-paper/80 ring-1 ring-inset ring-white/10 transition-all duration-300 hover:bg-teal/10 hover:text-teal hover:ring-teal/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
+                className="relative flex h-8 min-w-[4.25rem] shrink-0 items-center justify-center overflow-hidden rounded-full border border-teal-deep/40 bg-white/70 px-3 text-xs font-semibold text-teal-deep transition-all duration-300 hover:bg-teal-deep hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
               >
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.span
@@ -540,7 +568,6 @@ export default function Footer() {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -14, opacity: 0 }}
                     transition={{ duration: 0.18 }}
-                    className={copied ? "text-teal" : ""}
                   >
                     {copied ? "Copied" : "Copy"}
                   </motion.span>
@@ -556,29 +583,29 @@ export default function Footer() {
 
       {/* ---------------- 5. Wordmark ---------------- */}
       <div
-        className="wrap relative [mask-image:linear-gradient(to_bottom,black_45%,transparent_98%)]"
+        className="wrap relative [mask-image:linear-gradient(to_bottom,black_40%,transparent_98%)]"
         aria-hidden="true"
       >
         <motion.p
-          className="flex select-none justify-between font-display text-[17vw] leading-[0.85] tracking-tight lg:text-[14rem]"
+          className="flex select-none justify-between font-display text-[17vw] font-semibold leading-[0.85] tracking-tight lg:text-[14rem]"
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06 } } }}
           {...reveal}
         >
           {"Tech.Mind".split("").map((char, i) => (
             <span key={i} className="overflow-hidden pb-[0.12em]">
               <motion.span
-                className="block cursor-default transition-[filter] duration-300 hover:[filter:drop-shadow(0_0_28px_rgba(45,212,191,0.45))]"
+                className="block cursor-default transition-[filter] duration-300 hover:[filter:drop-shadow(0_0_26px_rgba(20,184,166,0.4))]"
                 variants={{
                   hidden: { y: "105%" },
                   visible: { y: 0, transition: { duration: 0.9, ease: EASE } },
                 }}
                 whileHover={reduce ? undefined : { y: "-4%", transition: { duration: 0.25 } }}
                 style={{
-                  backgroundImage: "var(--grad-accent-light)",
+                  backgroundImage: "linear-gradient(120deg,#7fd6c6 0%,#9fe0bd 55%,#6fcfa6 100%)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   color: "transparent",
-                  opacity: 0.92,
+                  opacity: 0.55,
                 }}
               >
                 {char}
@@ -589,9 +616,9 @@ export default function Footer() {
       </div>
 
       {/* ---------------- 6. Bottom bar ---------------- */}
-      <div className="relative border-t border-white/[0.07] bg-black/25 backdrop-blur-md">
+      <div className="relative border-t border-teal-deep/10 bg-white/70 backdrop-blur-md">
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal/40 to-transparent" />
-        <div className="wrap flex flex-col gap-4 py-6 text-xs leading-relaxed text-slate-on-ink sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+        <div className="wrap flex flex-col gap-4 py-6 text-xs font-medium leading-relaxed text-ink sm:flex-row sm:items-center sm:justify-between sm:gap-6">
           <p>
             © <span suppressHydrationWarning>{new Date().getFullYear()}</span> {company.name}. All
             rights reserved.

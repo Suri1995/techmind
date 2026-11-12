@@ -79,9 +79,6 @@ export default function ClientCarousel({ clients }: { clients: Client[] }) {
   const thumbWidth = Math.min(100, Math.max((visibleCount / total) * 100, 12));
   const thumbLeft = progress * (100 - thumbWidth);
 
-  const first = inView.length ? Math.min(...inView) + 1 : 1;
-  const last = inView.length ? Math.max(...inView) + 1 : 1;
-
   // Soft fade on whichever edge has more content, so the carousel feels continuous.
   const left = canPrev ? "transparent, #000 40px" : "#000, #000";
   const right = canNext ? "#000 calc(100% - 72px), transparent" : "#000, #000";
@@ -155,16 +152,8 @@ export default function ClientCarousel({ clients }: { clients: Client[] }) {
                       : "h-full"
                   }
                 >
+                  {/* The only visit button lives inside ClientCard (black circle). */}
                   <ClientCard client={client} />
-
-                  {site && (
-                    <span
-                      aria-hidden="true"
-                      className="pointer-events-none absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-teal-deep text-white opacity-0 shadow-lg shadow-teal-deep/25 transition-all duration-300 group-hover/card:translate-y-0 group-hover/card:opacity-100 group-focus-visible/card:translate-y-0 group-focus-visible/card:opacity-100 translate-y-1 motion-reduce:transition-none"
-                    >
-                      <IconArrowRight className="h-4 w-4 -rotate-45" />
-                    </span>
-                  )}
                 </div>
               </div>
             );
@@ -174,7 +163,6 @@ export default function ClientCarousel({ clients }: { clients: Client[] }) {
 
       {/* Controls */}
       <div className="mt-2 flex items-center gap-5 sm:gap-8">
-
         {/* Rail: tall hit area, slim visual track */}
         <div
           ref={railRef}

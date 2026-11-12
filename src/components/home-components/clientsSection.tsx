@@ -14,16 +14,23 @@ export default function ClientsSection() {
             <SectionHeading
               eyebrow="Our clients"
               title="Brands We're Proud to Work With"
-              description="Ongoing partnerships across real estate, healthcare, jewellery, hospitality, wellness, farming, and pet training."
+              description="Ongoing partnerships across real estate, healthcare, jewellery, hospitality, wellness, food, building materials, farming, and pet training."
             />
           </Reveal>
+
           <Reveal delay={0.1}>
-            <Link href="/clients" className="flex shrink-0 border-2 border-ink-soft hover:bg-ink-soft p-3 rounded-2xl items-center gap-2 text-sm font-semibold hover:text-white text-teal-deep">
+            <Link
+              href="/clients"
+              className="group inline-flex shrink-0 items-center gap-3 self-start rounded-full bg-ink py-2 pl-6 pr-2 text-sm font-semibold text-white shadow-[var(--shadow-soft)] transition-all duration-300 hover:bg-ink-soft hover:shadow-[var(--shadow-lift)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/30 md:self-auto"
+            >
               View all clients
-              <IconArrowRight className="h-4 w-4" />
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-teal text-ink transition-all duration-300 group-hover:bg-aqua">
+                <IconArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </span>
             </Link>
           </Reveal>
         </div>
+
         <Reveal delay={0.1} className="mt-10">
           <ClientCarousel clients={clients} />
         </Reveal>

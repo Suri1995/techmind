@@ -58,8 +58,9 @@ function AvatarFallback({ name }: { name: string }) {
 }
 
 /**
- * Dark client card: white logo panel with sector chip + visit button,
- * then name, focus line, service tags and a website / partnership footer.
+ * Light client card: soft white card with dark text, a framed logo panel with
+ * sector chip + visit button, then name, focus line, service tags and a
+ * website / partnership footer.
  * Clients without a logo (or whose logo fails to load) get an initials avatar.
  */
 export default function ClientCard({
@@ -77,10 +78,10 @@ export default function ClientCard({
 
   return (
     <article
-      className={`group relative flex h-full flex-col rounded-3xl border border-white/10 bg-gradient-to-b from-[#0f1f45] via-[#0a1635] to-[#050b1f] p-3 shadow-[0_24px_50px_-28px_rgba(2,8,30,0.9)] transition-colors duration-300 hover:border-white/25 ${className}`}
+      className={`group relative flex h-full flex-col rounded-3xl border border-line bg-paper-raised p-3 shadow-[var(--shadow-soft)] transition-all duration-300 hover:border-teal hover:shadow-[var(--shadow-lift)] ${className}`}
     >
       {/* Logo panel */}
-      <div className="relative flex h-40 items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(120%_100%_at_50%_0%,#ffffff_0%,#eef2f7_100%)] sm:h-44">
+      <div className="relative flex h-40 items-center justify-center overflow-hidden rounded-2xl border border-line bg-[radial-gradient(120%_100%_at_50%_0%,#ffffff_0%,#eef5f3_100%)] sm:h-44">
         {showLogo ? (
           <Image
             src={client.logo as string}
@@ -96,32 +97,34 @@ export default function ClientCard({
         )}
 
         {/* Sector chip */}
-        <span className="absolute left-3 top-3 max-w-[calc(100%-4.5rem)] truncate rounded-full bg-[#1c2745] px-3 py-1 text-xs font-semibold text-white shadow-sm">
+        <span className="absolute left-3 top-3 max-w-[calc(100%-4.5rem)] truncate rounded-full bg-ink px-3 py-1 text-xs font-semibold text-white shadow-sm">
           {client.sector}
         </span>
 
-        {/* Visit button (only when the client has a website) */}
+        {/* Visit button (only when the client has a website).
+            One static circle: no colour change, no scaling, no second layer.
+            Only the arrow inside moves a little on hover. */}
         {client.website && (
           <a
             href={client.website}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Visit ${client.name} website (opens in a new tab)`}
-            className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-black/5 bg-white text-[#0a1635] shadow-md transition-all duration-300 hover:bg-teal-deep hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/30 group-hover:scale-105"
+            className="group/visit absolute right-3 top-3 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-ink text-white shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/40"
           >
-            <IconArrowRight className="h-4 w-4 -rotate-45" />
+            <IconArrowRight className="h-4 w-4 -rotate-45 transition-transform duration-300 group-hover/visit:translate-x-0.5 group-hover/visit:-translate-y-0.5" />
           </a>
         )}
       </div>
 
       {/* Details */}
       <div className="flex flex-1 flex-col px-2 pb-1 pt-5">
-        <h3 className="font-display text-xl font-semibold leading-snug text-white">
+        <h3 className="font-display text-xl font-semibold leading-snug text-ink">
           {client.name}
         </h3>
 
-        <p className="mt-2.5 flex items-start gap-2.5 text-sm leading-snug text-slate-300">
-          <IconTarget className="mt-0.5 h-4 w-4 shrink-0 text-sky-400" />
+        <p className="mt-2.5 flex items-start gap-2.5 text-sm leading-snug text-ink-soft">
+          <IconTarget className="mt-0.5 h-4 w-4 shrink-0 text-teal-deep" />
           <span>{client.focus}</span>
         </p>
 
@@ -129,7 +132,7 @@ export default function ClientCard({
           {client.tags.map((t) => (
             <li
               key={t}
-              className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-[0.7rem] font-medium text-slate-300"
+              className="rounded-md border border-line bg-mist px-2.5 py-1 text-[0.7rem] font-medium text-ink-soft"
             >
               {t}
             </li>
@@ -137,13 +140,11 @@ export default function ClientCard({
         </ul>
 
         {/* Footer */}
-        <div className="mt-auto flex items-center justify-between gap-3 border-t border-white/10 pt-4">
-          <span className="flex min-w-0 items-center gap-2.5 text-sm text-slate-300">
+        <div className="mt-auto flex items-center justify-between gap-3 border-t border-line pt-4">
+          <span className="flex min-w-0 items-center gap-2.5 text-sm text-ink-soft">
             <span
               className={`h-1.5 w-1.5 shrink-0 rounded-full ${
-                domain
-                  ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"
-                  : "bg-slate-500"
+                domain ? "bg-teal shadow-[0_0_8px_rgba(20,184,166,0.7)]" : "bg-slate/50"
               }`}
             />
             <span className="truncate">{domain ?? "Website coming soon"}</span>
@@ -157,13 +158,13 @@ export default function ClientCard({
             }
             className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.7rem] font-semibold ${
               client.ongoing
-                ? "bg-emerald-400/15 text-emerald-300"
-                : "bg-amber/15 text-amber"
+                ? "bg-teal-tint text-teal-deep"
+                : "bg-amber/15 text-[#8a5a0a]"
             }`}
           >
             <span
               className={`h-1.5 w-1.5 rounded-full ${
-                client.ongoing ? "bg-emerald-400" : "bg-amber"
+                client.ongoing ? "bg-teal" : "bg-amber"
               }`}
             />
             {client.ongoing ? "Ongoing" : client.partnership}

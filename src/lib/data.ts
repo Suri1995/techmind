@@ -15,7 +15,7 @@ export const company = {
 export const stats = [
   { value: "360°", label: "Marketing solutions, from brand to sale" },
   { value: "8", label: "Service categories under one roof" },
-  { value: "7", label: "Industries we currently support" },
+  { value: "10", label: "Industries we currently support" },
   { value: "One Team", label: "From strategy to execution" },
 ];
 
@@ -609,7 +609,7 @@ const rawClients: Client[] = [
   },
   {
     slug: "the-park-hotels",
-    name: "The Park Hotels",
+    name: "The Park Hotels – Managed by Cream Soda Social Agency",
     sector: "Hospitality",
     partnership: "6 months",
     ongoing: false,
@@ -629,7 +629,7 @@ const rawClients: Client[] = [
     focus: "Branding and appointment bookings",
     tags: ["Lead Generation", "Social Media", "Meta Ads", "SEO", "CRM", "Website & GMB"],
     // No logo yet: the card shows an "FS" initials avatar automatically.
-    // logo: "/feijoa.png",
+    logo: "/feijoa-logo.png",
     // website: "https://",
   },
   {
@@ -656,6 +656,55 @@ const rawClients: Client[] = [
     logo: "/obedience-logo.webp",
     website: "https://obediencemasters.com/",
   },
+  {
+    slug: "irie-kitchen",
+    name: "Irie Kitchen",
+    sector: "Food & Wellness",
+    partnership: "Ongoing", // TODO: confirm
+    ongoing: true, // TODO: confirm
+    summary:
+      "Healthy Indian meals, millet bowls, salads and meal subscriptions delivered across Hyderabad.",
+    focus: "Branding and meal-subscription orders", // TODO: confirm
+    tags: ["Branding", "Social Media", "Meta Ads"], // TODO: confirm services
+    logo: "/irie-kitchen-logo.png",
+    website: "https://iriekitchen.pplx.app/",
+  },
+  {
+    slug: "vd-enterprises",
+    name: "VD Enterprises",
+    sector: "Enterprise", // TODO: replace with their real sector
+    partnership: "Ongoing", // TODO: confirm
+    ongoing: true, // TODO: confirm
+    summary: "Facebook, Instagram and Google Ads campaigns for lead generation and branding.",
+    focus: "Lead generation and branding",
+    tags: ["Meta Ads", "Google Ads", "Lead Generation", "Branding"],
+    logo: "/vd-enterprises-logo.png",
+    // No website yet: the card shows "Website coming soon".
+  },
+  {
+    slug: "sri-shambhavi-upvc-manufacturers",
+    name: "Sri Shambhavi UPVC Manufacturers",
+    sector: "Building Materials",
+    partnership: "Ongoing", // TODO: confirm
+    ongoing: true, // TODO: confirm
+    summary:
+      "End-to-end brand management with Facebook, Instagram and Google Ads for a uPVC window and profile manufacturer.",
+    focus: "Lead generation and end-to-end brand management",
+    tags: ["Meta Ads", "Google Ads", "Lead Generation", "Branding", "End-to-End Brand Management"],
+    logo: "/shambhavi-logo.png",
+  },
+  {
+    slug: "horizon-eco-cladding",
+    name: "Horizon Eco Cladding Enterprises",
+    sector: "Building Materials",
+    partnership: "Ongoing", // TODO: confirm
+    ongoing: true, // TODO: confirm
+    summary:
+      "End-to-end brand management with Facebook, Instagram and Google Ads for an eco cladding and uPVC window manufacturer.",
+    focus: "Lead generation and end-to-end brand management",
+    tags: ["Meta Ads", "Google Ads", "Lead Generation", "Branding", "End-to-End Brand Management"],
+    logo: "/horizon-logo.png",
+  },
 ];
 
 /** Safety net: if a slug is ever listed twice, only one card is kept (prevents duplicate React keys). */
@@ -681,40 +730,58 @@ export const tagInfo: Record<string, { text: string; service: string }> = {
   Branding: { text: "A clear, recognisable identity across every touchpoint.", service: "performance-marketing" },
   "Lead Generation": { text: "Campaigns and funnels designed to produce qualified enquiries.", service: "lead-generation" },
   "Political Ads": { text: "Responsible digital campaigns for public communication and turnout.", service: "political-ads" },
+  "End-to-End Brand Management": {
+    text: "One team handling strategy, creative, paid media and reporting for the whole brand.",
+    service: "performance-marketing",
+  },
 };
 
 /* ------------------------------------------------------------------ */
 /*  Process                                                            */
 /* ------------------------------------------------------------------ */
 
-export const process = [
+export type ProcessStep = {
+  title: string;
+  headline: string;
+  points: string[];
+};
+
+export const process: ProcessStep[] = [
   {
-    step: "01",
     title: "Discover",
-    headline: "Understand the business",
-    text: "Clarify audience, objectives, offer, market, and budget.",
-    points: ["Stakeholder conversation and goal setting", "Audience and competitor review", "Audit of existing channels and tracking"],
+    headline: "Understand Your Business",
+    points: [
+      "Identify your goals and target audience.",
+      "Analyze competitors and market.",
+      "Audit existing marketing channels.",
+    ],
   },
   {
-    step: "02",
     title: "Plan",
-    headline: "Build the strategy",
-    text: "Choose channels, creative direction, measurement, and priorities.",
-    points: ["Channel and budget mix", "Creative and content direction", "Tracking and reporting plan"],
+    headline: "Build the Right Strategy",
+    points: [
+      "Select the right marketing channels.",
+      "Plan budgets and creative direction.",
+      "Define tracking and reporting.",
+    ],
   },
   {
-    step: "03",
     title: "Execute",
-    headline: "Launch & manage",
-    text: "Deliver campaigns, content, search work, and lead workflows.",
-    points: ["Campaign launch and daily management", "Content and video production", "Lead capture and CRM follow-up"],
+    headline: "Launch & Manage Campaigns",
+    points: [
+      "Manage digital ad campaigns.",
+      "Create engaging content and videos.",
+      "Generate leads and manage follow-ups.",
+    ],
   },
   {
-    step: "04",
     title: "Optimize",
-    headline: "Review & improve",
-    text: "Use available performance data to guide practical next steps.",
-    points: ["Regular performance reviews", "Creative and audience testing", "Clear recommendations for what to do next"],
+    headline: "Analyze & Grow",
+    points: [
+      "Monitor campaign performance.",
+      "Improve creatives and targeting.",
+      "Optimize results and ROI.",
+    ],
   },
 ];
 
@@ -782,7 +849,6 @@ export type BlogPost = {
   image: string;
 };
 
-// In lib/data.ts: delete the old blogPosts array and replace it with this block.
 export const blogPosts: BlogPost[] = [
   {
     slug: "seo-vs-google-ads",
