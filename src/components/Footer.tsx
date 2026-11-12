@@ -382,7 +382,7 @@ export default function Footer() {
       <motion.svg
         aria-hidden="true"
         viewBox="0 0 640 260"
-        className="pointer-events-none absolute -left-10 -top-6 h-60 w-[42rem] max-w-none"
+        className="pointer-events-none absolute -left-10 -top-6 h-50 w-[36rem] max-w-none"
         {...drift(10)}
       >
         <path d="M0 0H600C520 36 470 118 330 132C210 144 120 100 0 196Z" fill="#cdeee6" fillOpacity="0.55" />
@@ -601,11 +601,9 @@ export default function Footer() {
                 }}
                 whileHover={reduce ? undefined : { y: "-4%", transition: { duration: 0.25 } }}
                 style={{
-                  backgroundImage: "linear-gradient(120deg,#7fd6c6 0%,#9fe0bd 55%,#6fcfa6 100%)",
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  color: "transparent",
-                  opacity: 0.55,
+                  /* solid teal-deep text color */
+                  color: "var(--teal-deep)",
+                  opacity: 0.95,
                 }}
               >
                 {char}

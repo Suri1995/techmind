@@ -100,7 +100,8 @@ function Counter({ value }: { value: number }) {
   return <motion.span>{rounded}</motion.span>;
 }
 
-const tint = (accent: string) => `linear-gradient(135deg, ${accent}, #071a1d)`;
+/* Light accent-tinted backdrop used behind artwork and thumbnails */
+const tint = (accent: string) => `linear-gradient(135deg, ${accent}26, #eef8f5 70%)`;
 
 export default function Services() {
   const reduce = useReducedMotion();
@@ -243,7 +244,7 @@ export default function Services() {
   const gx = useTransform(sx, (v) => (v + 0.5) * 100);
   const gy = useTransform(sy, (v) => (v + 0.5) * 100);
   const glareOn = useSpring(0, { stiffness: 120, damping: 20 });
-  const glare = useMotionTemplate`radial-gradient(520px circle at ${gx}% ${gy}%, rgba(255,255,255,0.2), transparent 45%)`;
+  const glare = useMotionTemplate`radial-gradient(520px circle at ${gx}% ${gy}%, rgba(255,255,255,0.45), transparent 45%)`;
 
   const onStageMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (reduce || e.pointerType !== "mouse") return;
@@ -261,7 +262,7 @@ export default function Services() {
   /* ───────── cursor spotlight across the whole showcase panel ───────── */
   const spx = useMotionValue(-400);
   const spy = useMotionValue(-400);
-  const spot = useMotionTemplate`radial-gradient(420px circle at ${spx}px ${spy}px, rgba(255,255,255,0.07), transparent 70%)`;
+  const spot = useMotionTemplate`radial-gradient(420px circle at ${spx}px ${spy}px, rgba(20,184,166,0.12), transparent 70%)`;
   const onPanelMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (reduce || e.pointerType !== "mouse" || !panelRef.current) return;
     const r = panelRef.current.getBoundingClientRect();
@@ -325,9 +326,14 @@ export default function Services() {
         @keyframes svc-marquee { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
         .svc-marquee-track { animation: svc-marquee var(--svc-dur, 28s) linear infinite; will-change: transform; }
       `}</style>
-      <section ref={sectionRef} className="relative overflow-hidden py-12 sm:py-16 md:py-24">
+      <section
+        ref={sectionRef}
+        className="relative overflow-hidden bg-gradient-to-b from-paper via-[#eef8f5] to-paper py-12 text-ink sm:py-16 md:py-24"
+      >
         <div className="mesh-hero pointer-events-none opacity-60">
+          <div className="mesh-grid" />
           <div className="mesh-blob one" />
+          <div className="mesh-blob two" />
         </div>
 
         <div className="wrap relative">
@@ -343,7 +349,7 @@ export default function Services() {
             <Reveal delay={0.1}>
               <Link
                 href="/services"
-                className="btn-shine group inline-flex w-fit shrink-0 items-center gap-2 rounded-full bg-ink px-5 py-3 text-sm font-semibold text-paper transition-colors hover:bg-teal-deep sm:px-6 sm:py-3.5"
+                className="btn-shine group inline-flex w-fit shrink-0 items-center gap-2 rounded-full bg-teal px-5 py-3 text-sm font-semibold text-ink shadow-[var(--shadow-glow)] transition-colors hover:bg-amber sm:px-6 sm:py-3.5"
               >
                 View all services
                 <IconArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -374,7 +380,7 @@ export default function Services() {
                         type="button"
                         onClick={() => nudge(-1)}
                         aria-label="Scroll services left"
-                        className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full border border-line bg-white text-ink shadow-[0_8px_24px_-8px_rgba(0,0,0,0.35)] transition-all duration-300 hover:scale-105 hover:bg-ink hover:text-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
+                        className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full border border-line bg-white text-ink shadow-[0_8px_24px_-8px_rgba(6,31,34,0.3)] transition-all duration-300 hover:scale-105 hover:bg-teal-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
                       >
                         <IconArrowRight className="h-4 w-4 rotate-180" />
                       </button>
@@ -392,7 +398,7 @@ export default function Services() {
                         type="button"
                         onClick={() => nudge(1)}
                         aria-label="Scroll services right"
-                        className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full border border-line bg-white text-ink shadow-[0_8px_24px_-8px_rgba(0,0,0,0.35)] transition-all duration-300 hover:scale-105 hover:bg-ink hover:text-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
+                        className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full border border-line bg-white text-ink shadow-[0_8px_24px_-8px_rgba(6,31,34,0.3)] transition-all duration-300 hover:scale-105 hover:bg-teal-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
                       >
                         <IconArrowRight className="h-4 w-4" />
                       </button>
@@ -410,7 +416,7 @@ export default function Services() {
                   onPointerUp={onRailUp}
                   onPointerLeave={onRailUp}
                   onPointerCancel={onRailUp}
-                  className={`relative flex select-none gap-1.5 overflow-x-auto overscroll-x-contain rounded-[20px] border border-line bg-white/70 p-1.5 backdrop-blur-md [scrollbar-width:none] sm:gap-2 sm:rounded-[24px] sm:p-2 [&::-webkit-scrollbar]:hidden ${
+                  className={`relative flex select-none gap-1.5 overflow-x-auto overscroll-x-contain rounded-[20px] border border-line bg-white/80 p-1.5 shadow-[0_1px_2px_rgba(6,31,34,0.04),0_14px_32px_-22px_rgba(6,31,34,0.25)] backdrop-blur-md [scrollbar-width:none] sm:gap-2 sm:rounded-[24px] sm:p-2 [&::-webkit-scrollbar]:hidden ${
                     grabbing ? "cursor-grabbing" : "cursor-grab"
                   }`}
                 >
@@ -439,7 +445,7 @@ export default function Services() {
                         {isActive ? (
                           <motion.span
                             layoutId="service-active-pill"
-                            className="absolute inset-0 rounded-2xl bg-ink shadow-[0_14px_32px_-12px_rgba(0,0,0,0.55)]"
+                            className="absolute inset-0 rounded-2xl border border-teal-deep/30 bg-gradient-to-b from-white to-teal-tint shadow-[0_14px_30px_-14px_rgba(11,122,114,0.5)]"
                             transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 34 }}
                           />
                         ) : (
@@ -450,7 +456,7 @@ export default function Services() {
                           {/* thumbnail keeps the artwork's 2:1 ratio so it is never cropped */}
                           <span
                             className={`relative aspect-[2/1] h-8 shrink-0 overflow-hidden rounded-lg ring-1 transition-all duration-300 sm:h-9 ${
-                              isActive ? "ring-white/30" : "opacity-85 ring-black/5 group-hover:opacity-100"
+                              isActive ? "ring-teal-deep/30" : "opacity-90 ring-black/5 group-hover:opacity-100"
                             }`}
                             style={{ background: tint(v.accent) }}
                           >
@@ -468,7 +474,7 @@ export default function Services() {
                           </span>
                           <span
                             className={`whitespace-nowrap text-[13px] font-semibold leading-snug transition-colors duration-300 sm:text-sm ${
-                              isActive ? "text-paper" : "text-slate group-hover:text-ink"
+                              isActive ? "text-ink" : "text-ink-soft group-hover:text-ink"
                             }`}
                           >
                             {service.name}
@@ -476,9 +482,9 @@ export default function Services() {
                         </span>
 
                         {isActive && (
-                          <span className="absolute inset-x-3 bottom-1 h-[2px] overflow-hidden rounded-full bg-white/15">
+                          <span className="absolute inset-x-3 bottom-1 h-[2px] overflow-hidden rounded-full bg-teal-deep/15">
                             <motion.span
-                              className="block h-full origin-left rounded-full bg-amber"
+                              className="block h-full origin-left rounded-full bg-gradient-to-r from-teal-deep to-amber"
                               style={{ scaleX: reduce ? 1 : progress }}
                             />
                           </span>
@@ -496,7 +502,7 @@ export default function Services() {
                 role="tabpanel"
                 aria-labelledby={`service-tab-${current.slug}`}
                 onPointerMove={onPanelMove}
-                className="relative mt-3 overflow-hidden rounded-[24px] bg-ink shadow-[var(--shadow-lift)] ring-1 ring-white/10 sm:mt-4 sm:rounded-[32px]"
+                className="relative mt-3 overflow-hidden rounded-[24px] border border-line bg-gradient-to-br from-white via-[#f4faf8] to-[#e6f4f0] shadow-[0_1px_2px_rgba(6,31,34,0.04),0_40px_80px_-44px_rgba(11,122,114,0.45)] sm:mt-4 sm:rounded-[32px]"
               >
                 {/* ambient accent glow that cross-fades per service */}
                 <AnimatePresence initial={false}>
@@ -510,13 +516,13 @@ export default function Services() {
                   >
                     <motion.div
                       className="absolute -right-32 -top-32 h-[24rem] w-[24rem] rounded-full blur-3xl sm:h-[34rem] sm:w-[34rem]"
-                      style={{ background: `radial-gradient(circle, ${cv.accent}66, transparent 65%)` }}
+                      style={{ background: `radial-gradient(circle, ${cv.accent}33, transparent 65%)` }}
                       animate={reduce ? undefined : { x: [0, -30, 0], y: [0, 24, 0] }}
                       transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
                     />
                     <motion.div
                       className="absolute -bottom-40 -left-24 h-[20rem] w-[20rem] rounded-full blur-3xl sm:h-[26rem] sm:w-[26rem]"
-                      style={{ background: `radial-gradient(circle, ${cv.accent}33, transparent 65%)` }}
+                      style={{ background: `radial-gradient(circle, ${cv.accent}1f, transparent 65%)` }}
                       animate={reduce ? undefined : { x: [0, 26, 0], y: [0, -20, 0] }}
                       transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
                     />
@@ -527,7 +533,7 @@ export default function Services() {
                 <div
                   className="pointer-events-none absolute inset-0 opacity-60 [mask-image:radial-gradient(ellipse_at_center,#000_30%,transparent_80%)]"
                   style={{
-                    backgroundImage: "radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px)",
+                    backgroundImage: "radial-gradient(rgba(11,122,114,0.14) 1px, transparent 1px)",
                     backgroundSize: "22px 22px",
                   }}
                 />
@@ -549,7 +555,7 @@ export default function Services() {
                       >
                         <motion.span
                           variants={item}
-                          className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] py-1 pl-2 pr-3 text-xs font-medium text-paper/85 backdrop-blur-md"
+                          className="inline-flex items-center gap-2 rounded-full border border-line bg-white py-1 pl-2 pr-3 text-xs font-semibold text-ink-soft shadow-[0_6px_16px_-10px_rgba(6,31,34,0.35)]"
                         >
                           <span className="relative flex h-2 w-2">
                             <span
@@ -561,7 +567,7 @@ export default function Services() {
                           {current.channels.length} channels covered
                         </motion.span>
 
-                        <h3 className="mt-4 font-display text-[1.7rem] leading-[1.1] text-paper sm:mt-5 sm:text-4xl lg:text-[2.2rem] xl:text-[2.7rem]">
+                        <h3 className="mt-4 font-display text-[1.7rem] font-semibold leading-[1.1] text-ink sm:mt-5 sm:text-4xl lg:text-[2.2rem] xl:text-[2.7rem]">
                           {nameWords.map((w, i) => (
                             <span key={`${w}-${i}`} className="mr-[0.28em] inline-block overflow-hidden pb-1 align-bottom">
                               <motion.span variants={word} className="inline-block">
@@ -571,19 +577,19 @@ export default function Services() {
                           ))}
                         </h3>
 
-                        <motion.p variants={item} className="mt-3 text-[15px] leading-relaxed text-paper/90 sm:mt-4 md:text-lg">
+                        <motion.p variants={item} className="mt-3 text-[15px] font-medium leading-relaxed text-ink sm:mt-4 md:text-lg">
                           {current.tagline}
                         </motion.p>
-                        <motion.p variants={item} className="mt-2.5 max-w-md text-sm leading-relaxed text-slate-on-ink sm:mt-3">
+                        <motion.p variants={item} className="mt-2.5 max-w-md text-sm leading-relaxed text-ink-soft sm:mt-3">
                           {current.short}
                         </motion.p>
 
                         <motion.ul variants={item} className="mt-5 hidden space-y-2.5 sm:block">
                           {current.bestFor.slice(0, 2).map((b) => (
-                            <li key={b} className="flex items-start gap-2.5 text-sm text-paper/80">
+                            <li key={b} className="flex items-start gap-2.5 text-sm font-medium text-ink">
                               <span
-                                className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-ink"
-                                style={{ background: cv.accent }}
+                                className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-ink ring-1 ring-inset"
+                                style={{ background: `${cv.accent}26`, ["--tw-ring-color" as string]: `${cv.accent}66` }}
                               >
                                 <CheckIcon className="h-3 w-3" />
                               </span>
@@ -596,7 +602,7 @@ export default function Services() {
                           <motion.div onPointerMove={onCtaMove} onPointerLeave={onCtaLeave} style={{ x: bx, y: by }}>
                             <Link
                               href={`/services/${current.slug}`}
-                              className="btn-shine group inline-flex items-center gap-2 rounded-full bg-paper px-5 py-3 text-sm font-semibold text-ink transition-colors hover:bg-amber focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber sm:px-6"
+                              className="btn-shine group inline-flex items-center gap-2 rounded-full bg-teal px-5 py-3 text-sm font-semibold text-ink shadow-[var(--shadow-glow)] transition-colors hover:bg-amber focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-deep sm:px-6"
                             >
                               {ctaLabel}
                               <IconArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -604,12 +610,12 @@ export default function Services() {
                           </motion.div>
 
                           {/* controls: previous, play/pause, next (with autoplay ring) */}
-                          <div className="flex items-center gap-1 rounded-full border border-white/15 bg-white/10 p-1 backdrop-blur-md">
+                          <div className="flex items-center gap-1 rounded-full border border-line bg-white/90 p-1 shadow-[0_8px_20px_-14px_rgba(6,31,34,0.4)] backdrop-blur-md">
                             <button
                               type="button"
                               onClick={() => go(active - 1, -1)}
                               aria-label="Previous service"
-                              className="flex h-10 w-10 items-center justify-center rounded-full text-paper transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber"
+                              className="flex h-10 w-10 items-center justify-center rounded-full text-ink transition-colors hover:bg-teal-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
                             >
                               <IconArrowRight className="h-4 w-4 rotate-180" />
                             </button>
@@ -619,14 +625,14 @@ export default function Services() {
                                 onClick={() => setUserPaused((p) => !p)}
                                 aria-label={userPaused ? "Resume autoplay" : "Pause autoplay"}
                                 aria-pressed={userPaused}
-                                className="flex h-10 w-10 items-center justify-center rounded-full text-paper/80 transition-colors hover:bg-white/15 hover:text-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber"
+                                className="flex h-10 w-10 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-teal-tint hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
                               >
                                 {userPaused ? <PlayIcon className="h-3.5 w-3.5" /> : <PauseIcon className="h-3.5 w-3.5" />}
                               </button>
                             )}
                             <span className="relative h-11 w-11">
                               <svg className="absolute inset-0 -rotate-90" viewBox="0 0 44 44" aria-hidden>
-                                <circle cx="22" cy="22" r="20" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="2" />
+                                <circle cx="22" cy="22" r="20" fill="none" stroke="rgba(6,31,34,0.12)" strokeWidth="2" />
                                 <motion.circle
                                   cx="22"
                                   cy="22"
@@ -635,7 +641,7 @@ export default function Services() {
                                   stroke="currentColor"
                                   strokeWidth="2"
                                   strokeLinecap="round"
-                                  className="text-amber"
+                                  className="text-teal-deep"
                                   style={{ pathLength: reduce ? 0 : progress }}
                                 />
                               </svg>
@@ -643,7 +649,7 @@ export default function Services() {
                                 type="button"
                                 onClick={() => go(active + 1, 1)}
                                 aria-label="Next service"
-                                className="absolute inset-[3px] flex items-center justify-center rounded-full bg-paper text-ink transition-colors hover:bg-amber focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber"
+                                className="absolute inset-[3px] flex items-center justify-center rounded-full bg-teal text-ink transition-colors hover:bg-amber focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-deep"
                               >
                                 <IconArrowRight className="h-4 w-4" />
                               </button>
@@ -686,7 +692,7 @@ export default function Services() {
                             className="pointer-events-none absolute inset-3 rounded-[28px] blur-2xl"
                             style={{ background: cv.accent }}
                             initial={{ opacity: 0 }}
-                            animate={{ opacity: 0.35 }}
+                            animate={{ opacity: 0.22 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.9 }}
                           />
@@ -697,24 +703,24 @@ export default function Services() {
                           <AnimatePresence initial={false}>
                             <motion.div
                               key={`peek-${next.slug}`}
-                              className="absolute inset-0 overflow-hidden rounded-[16px] border border-white/10 sm:rounded-[22px]"
+                              className="absolute inset-0 overflow-hidden rounded-[16px] border border-line sm:rounded-[22px]"
                               style={{ background: tint(nv.accent) }}
                               initial={{ opacity: 0 }}
-                              animate={{ opacity: 0.4 }}
+                              animate={{ opacity: 0.7 }}
                               exit={{ opacity: 0 }}
                               transition={{ duration: 0.8 }}
                             >
                               {nextOk && (
                                 <Image src={nv.image} alt="" fill sizes="40vw" unoptimized className="object-contain blur-[1.5px]" />
                               )}
-                              <div className="absolute inset-0 bg-ink/40" />
+                              <div className="absolute inset-0 bg-white/40" />
                             </motion.div>
                           </AnimatePresence>
                         </div>
 
                         {/* main frame: locked to the artwork's 1774 × 887 (2:1) ratio and sized by width,
                             so the whole image shows on every screen. object-contain is a safety net. */}
-                        <div className="relative aspect-[2/1] w-full overflow-hidden rounded-[16px] bg-ink shadow-[0_40px_80px_-30px_rgba(0,0,0,0.8)] sm:rounded-[22px]">
+                        <div className="relative aspect-[2/1] w-full overflow-hidden rounded-[16px] border border-line bg-white shadow-[0_36px_70px_-34px_rgba(11,122,114,0.55)] sm:rounded-[22px]">
                           <AnimatePresence initial={false} custom={dir} mode="sync">
                             <motion.div
                               key={current.slug}
@@ -739,7 +745,7 @@ export default function Services() {
                                 />
                               ) : (
                                 <div className="absolute inset-0 flex items-center justify-center p-4 text-center">
-                                  <span className="font-display text-2xl text-paper sm:text-4xl">{current.name}</span>
+                                  <span className="font-display text-2xl font-semibold text-ink sm:text-4xl">{current.name}</span>
                                 </div>
                               )}
                             </motion.div>
@@ -749,7 +755,7 @@ export default function Services() {
                           <motion.div
                             key={`sheen-${current.slug}`}
                             aria-hidden
-                            className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                            className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/55 to-transparent"
                             initial={{ x: "-120%" }}
                             animate={{ x: "420%" }}
                             transition={{ duration: 1.2, delay: 0.2, ease: EASE }}
@@ -762,7 +768,7 @@ export default function Services() {
                             style={{ background: glare, opacity: glareOn }}
                           />
 
-                          <div className="pointer-events-none absolute inset-0 rounded-[16px] ring-1 ring-inset ring-white/20 sm:rounded-[22px]" />
+                          <div className="pointer-events-none absolute inset-0 rounded-[16px] ring-1 ring-inset ring-ink/10 sm:rounded-[22px]" />
                         </div>
                       </motion.div>
                     </motion.div>
@@ -775,14 +781,14 @@ export default function Services() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -6 }}
                         transition={{ duration: 0.4, ease: EASE }}
-                        className="mr-3 grid grid-cols-3 divide-x divide-white/10 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur-md sm:mr-5"
+                        className="mr-3 grid grid-cols-3 divide-x divide-line overflow-hidden rounded-2xl border border-line bg-white/85 shadow-[0_10px_24px_-18px_rgba(6,31,34,0.35)] backdrop-blur-md sm:mr-5"
                       >
                         {stats.map((s) => (
                           <div key={s.label} className="px-3 py-2.5 text-center sm:px-4 sm:py-3">
-                            <dd className="font-display text-xl leading-none text-paper tabular-nums sm:text-2xl">
+                            <dd className="font-display text-xl font-semibold leading-none text-ink tabular-nums sm:text-2xl">
                               <Counter value={s.value} />
                             </dd>
-                            <dt className="mt-1 text-[11px] font-medium text-paper/55 sm:text-xs">{s.label}</dt>
+                            <dt className="mt-1 text-[11px] font-medium text-ink-soft sm:text-xs">{s.label}</dt>
                           </div>
                         ))}
                       </motion.dl>
@@ -804,7 +810,7 @@ export default function Services() {
                               current.channels.map((c) => (
                                 <span
                                   key={`${copy}-${rep}-${c}`}
-                                  className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-paper/80 sm:px-3.5"
+                                  className="inline-flex shrink-0 items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-xs font-semibold text-ink-soft shadow-[0_4px_10px_-8px_rgba(6,31,34,0.35)] sm:px-3.5"
                                 >
                                   <span className="h-1.5 w-1.5 rounded-full" style={{ background: cv.accent }} />
                                   {c}
