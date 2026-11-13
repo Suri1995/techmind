@@ -181,6 +181,72 @@ const CSS = `
   .tm-marquee .tm-tile > span:last-child svg{display:none}
 }
 
+/* ================================================================== */
+/*  DESKTOP / TABLET (>= 768px): header laid out on a real grid so the   */
+/*  title never gets squeezed and the stats + pause never wrap.          */
+/* ================================================================== */
+@media (min-width:768px){
+  .tm-marquee .tm-head-wrap{width:100%}
+  .tm-marquee .tm-head{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;          /* if title + stats don't fit on one line, stats drop below: never overlap */
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:1.5rem 3rem;
+  }
+  .tm-marquee .tm-title{flex:0 0 auto;max-width:100%}
+  .tm-marquee .tm-title h2{
+    margin-top:.75rem;
+    font-size:clamp(1.875rem,2.6vw,2.5rem);
+    line-height:1.1;
+    letter-spacing:-.015em;
+    white-space:nowrap;
+  }
+
+  /* stats + pause stay on one line, stats become one connected card */
+  .tm-marquee .tm-controls{
+    display:flex;
+    flex:0 0 auto;
+    flex-wrap:nowrap;
+    align-items:center;
+    gap:.875rem;
+    max-width:100%;
+  }
+  .tm-marquee .tm-stats{
+    display:grid;
+    grid-template-columns:repeat(3,auto);
+    flex:0 1 auto;
+    gap:0;
+    padding:.2rem 0;
+    border:1px solid var(--line);
+    border-radius:1.25rem;
+    background:#fff;
+    box-shadow:0 14px 30px -24px rgba(15,60,60,.35);
+  }
+  .tm-marquee .tm-stat{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:.15rem;
+    padding:.85rem 1.75rem;
+    border:0;
+    border-radius:0;
+    background:none;
+  }
+  .tm-marquee .tm-stat + .tm-stat{border-left:1px solid var(--line)}
+  .tm-marquee .tm-stat > span:first-child{font-size:1.875rem;line-height:1.1}
+  .tm-marquee .tm-stat > span:last-child{font-size:.8125rem;line-height:1.3;white-space:nowrap}
+
+  .tm-marquee .tm-pause{
+    flex:none;
+    height:3rem;
+    padding:0 1.35rem;
+    white-space:nowrap;
+  }
+}
+
+
 /* Reduced motion: no movement at all. Show one static, wrapped set of logos. */
 @media (prefers-reduced-motion:reduce){
   .tm-reveal{opacity:1;transform:none;transition:none}
@@ -469,9 +535,9 @@ export default function IndustryMarquee() {
       <div aria-hidden="true" className="tm-glow pointer-events-none absolute inset-0" />
 
       {/* Header */}
-      <div className="wrap relative">
+      <div className="tm-head-wrap wrap relative">
         <div className="tm-head tm-reveal flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div>
+          <div className="tm-title">
             <p className="inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-teal-deep">
               <span aria-hidden="true" className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-teal/60 motion-safe:animate-ping" />
@@ -479,42 +545,15 @@ export default function IndustryMarquee() {
               </span>
               Trusted by
             </p>
-            <h2 id={headingId} className="mt-3 font-display text-2xl font-semibold leading-tight text-ink md:text-3xl">
+            <h2 id={headingId} className="mt-3 font-display text-2xl font-semibold leading-tight text-ink md:text-5xl">
               Brands that grow with us
             </h2>
-          </div>
-
-          <div className="tm-controls flex flex-wrap items-center gap-3">
-            <ul className="tm-stats flex flex-wrap gap-3" aria-label="At a glance">
-              {stats.map((s) => (
-                <li
-                  key={s.label}
-                  className="tm-stat flex items-baseline gap-2 rounded-full border border-line bg-white px-4 py-2"
-                >
-                  <span className="font-display text-lg font-semibold tabular-nums text-ink">{s.value}</span>
-                  <span className="text-xs font-medium text-ink-soft">{s.label}</span>
-                </li>
-              ))}
-            </ul>
-
-            {/* WCAG 2.2.2: moving content needs a way to pause it */}
-            <button
-              type="button"
-              onClick={() => setPaused((p) => !p)}
-              className="tm-dup tm-pause inline-flex h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-ink transition-colors hover:border-teal-deep hover:text-teal-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-deep focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-            >
-              {paused ? <IconPlay className="h-4 w-4" /> : <IconPause className="h-4 w-4" />}
-              <span>
-                {paused ? "Play" : "Pause"}
-                <span className="sr-only"> scrolling client logos</span>
-              </span>
-            </button>
           </div>
         </div>
       </div>
 
       {/* Rows */}
-      <div className="tm-rows tm-reveal relative mt-6 space-y-1 md:mt-8" style={{ "--d": "0.15s" } as CSSProperties}>
+      <div className="tm-rows tm-reveal relative mt-4 space-y-1 md:mt-6" style={{ "--d": "0.15s" } as CSSProperties}>
         <MarqueeRow items={clients} secPerTile={5.5} accessible />
         <MarqueeRow items={rowTwo} reverse secPerTile={7} accessible={false} />
       </div>
