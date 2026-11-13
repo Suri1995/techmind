@@ -67,6 +67,120 @@ const CSS = `
 }
 .tm-marquee[data-revealed="true"] .tm-reveal{opacity:1;transform:none}
 
+/* ================================================================== */
+/*  MOBILE ONLY (< 768px). Desktop styles above/in the markup are       */
+/*  untouched. Selectors are scoped under .tm-marquee so they reliably  */
+/*  win over the Tailwind utilities on the same elements.               */
+/* ================================================================== */
+@media (max-width:767px){
+  section.tm-marquee{padding-block:2.5rem 2.75rem}
+
+  /* ----- Header: title + round pause button on one line, stats card below ----- */
+  .tm-marquee .tm-head{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    gap:1.25rem .75rem;
+  }
+  .tm-marquee .tm-controls{display:contents}
+
+  .tm-marquee .tm-pause{
+    grid-column:2;
+    grid-row:1;
+    position:relative;
+    width:2.75rem;
+    height:2.75rem;
+    padding:0;
+    justify-content:center;
+    gap:0;
+  }
+  /* keep the text for screen readers, show the icon only */
+  .tm-marquee .tm-pause > span{
+    position:absolute;
+    width:1px;height:1px;
+    margin:-1px;padding:0;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+  }
+
+  /* Stats: one tidy card with three equal columns instead of wrapping pills */
+  .tm-marquee .tm-stats{
+    grid-column:1 / -1;
+    grid-row:2;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:0;
+    padding:.95rem .25rem;
+    border:1px solid var(--line);
+    border-radius:1.25rem;
+    background:#fff;
+    box-shadow:0 14px 30px -22px rgba(15,60,60,.35);
+  }
+  .tm-marquee .tm-stat{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    gap:.2rem;
+    padding:0 .4rem;
+    border:0;
+    border-radius:0;
+    background:none;
+    text-align:center;
+  }
+  .tm-marquee .tm-stat + .tm-stat{border-left:1px solid var(--line)}
+  .tm-marquee .tm-stat > span:first-child{font-size:1.65rem;line-height:1.1}
+  .tm-marquee .tm-stat > span:last-child{font-size:.72rem;line-height:1.3;font-weight:500}
+
+  /* ----- Rows: tighter, calmer, wider edge fade clears sooner ----- */
+  .tm-marquee .tm-rows{margin-top:1.5rem}
+  .tm-marquee .tm-rows.tm-rows > .tm-viewport + .tm-viewport{margin-top:.25rem}
+  .tm-marquee .tm-viewport{
+    -webkit-mask-image:linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+    mask-image:linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+  }
+  .tm-marquee .tm-track{padding:.5rem 0}
+  .tm-marquee .tm-set{gap:.875rem;padding-right:.875rem}
+
+  /* ----- Tiles: smaller, always-visible logo + sector, no hover dependence ----- */
+  .tm-marquee .tm-tile{
+    width:10.5rem;
+    height:6.5rem;
+    padding:.75rem 1rem 1.9rem;
+    border-radius:1rem;
+    border-color:rgba(15,60,60,.12);
+    box-shadow:0 10px 24px -18px rgba(15,60,60,.4);
+    transform:none;
+  }
+  .tm-marquee .tm-tile:hover{transform:none;box-shadow:0 10px 24px -18px rgba(15,60,60,.4)}
+  .tm-marquee .tm-tile:hover > div{transform:none}
+  .tm-marquee .tm-tile > span:first-child{display:none} /* cursor spotlight */
+
+  /* Logos in full colour at full strength: there is no hover on touch screens */
+  .tm-marquee .tm-logo{opacity:1;filter:none;transform:none}
+  .tm-marquee .tm-fallback{opacity:1;filter:none}
+  .tm-marquee .tm-fallback > span:first-child{width:2.25rem;height:2.25rem;font-size:.85rem}
+  .tm-marquee .tm-fallback > span:last-child{font-size:.8rem}
+
+  /* Sector caption is always shown, centred under the logo */
+  .tm-marquee .tm-tile > span:last-child{
+    left:.5rem;right:.5rem;bottom:.6rem;
+    display:block;
+    text-align:center;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    font-size:.625rem;
+    letter-spacing:.1em;
+    color:var(--ink-soft);
+    opacity:1;
+    transform:none;
+  }
+  .tm-marquee .tm-tile > span:last-child svg{display:none}
+}
+
 /* Reduced motion: no movement at all. Show one static, wrapped set of logos. */
 @media (prefers-reduced-motion:reduce){
   .tm-reveal{opacity:1;transform:none;transition:none}
@@ -163,11 +277,11 @@ function LogoTile({ client, interactive }: { client: Client; interactive: boolea
               fetchPriority="low"
               draggable={false}
               onError={() => setFailed(true)}
-              className="select-none object-contain py-1 opacity-70 grayscale transition-[filter,opacity,transform] duration-500 group-hover:scale-105 group-hover:opacity-100 group-hover:grayscale-0 group-focus-visible:opacity-100 group-focus-visible:grayscale-0"
+              className="tm-logo select-none object-contain py-1 opacity-70 grayscale transition-[filter,opacity,transform] duration-500 group-hover:scale-105 group-hover:opacity-100 group-hover:grayscale-0 group-focus-visible:opacity-100 group-focus-visible:grayscale-0"
             />
           </div>
         ) : (
-          <div className="flex min-w-0 items-center gap-3 opacity-80 grayscale transition-[filter,opacity] duration-500 group-hover:opacity-100 group-hover:grayscale-0 group-focus-visible:opacity-100 group-focus-visible:grayscale-0">
+          <div className="tm-fallback flex min-w-0 items-center gap-3 opacity-80 grayscale transition-[filter,opacity] duration-500 group-hover:opacity-100 group-hover:grayscale-0 group-focus-visible:opacity-100 group-focus-visible:grayscale-0">
             <span
               aria-hidden="true"
               className="flex h-11 w-11 shrink-0 select-none items-center justify-center rounded-xl bg-gradient-to-br from-teal-deep to-teal font-display text-base font-semibold tracking-wide text-white"
@@ -190,7 +304,7 @@ function LogoTile({ client, interactive }: { client: Client; interactive: boolea
   );
 
   const base =
-    "group relative block h-24 w-48 shrink-0 overflow-hidden rounded-2xl border border-line bg-white px-6 py-5 transition-[transform,border-color,box-shadow] duration-500 motion-safe:hover:-translate-y-1.5 hover:border-teal-deep/40 hover:shadow-[0_22px_40px_-22px_rgba(15,60,60,0.35)] md:h-28 md:w-56";
+    "tm-tile group relative block h-24 w-48 shrink-0 overflow-hidden rounded-2xl border border-line bg-white px-6 py-5 transition-[transform,border-color,box-shadow] duration-500 motion-safe:hover:-translate-y-1.5 hover:border-teal-deep/40 hover:shadow-[0_22px_40px_-22px_rgba(15,60,60,0.35)] md:h-28 md:w-56";
 
   if (hasLink) {
     return (
@@ -356,7 +470,7 @@ export default function IndustryMarquee() {
 
       {/* Header */}
       <div className="wrap relative">
-        <div className="tm-reveal flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="tm-head tm-reveal flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-teal-deep">
               <span aria-hidden="true" className="relative flex h-2 w-2">
@@ -370,12 +484,12 @@ export default function IndustryMarquee() {
             </h2>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <ul className="flex flex-wrap gap-3" aria-label="At a glance">
+          <div className="tm-controls flex flex-wrap items-center gap-3">
+            <ul className="tm-stats flex flex-wrap gap-3" aria-label="At a glance">
               {stats.map((s) => (
                 <li
                   key={s.label}
-                  className="flex items-baseline gap-2 rounded-full border border-line bg-white px-4 py-2"
+                  className="tm-stat flex items-baseline gap-2 rounded-full border border-line bg-white px-4 py-2"
                 >
                   <span className="font-display text-lg font-semibold tabular-nums text-ink">{s.value}</span>
                   <span className="text-xs font-medium text-ink-soft">{s.label}</span>
@@ -387,7 +501,7 @@ export default function IndustryMarquee() {
             <button
               type="button"
               onClick={() => setPaused((p) => !p)}
-              className="tm-dup inline-flex h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-ink transition-colors hover:border-teal-deep hover:text-teal-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-deep focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+              className="tm-dup tm-pause inline-flex h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold text-ink transition-colors hover:border-teal-deep hover:text-teal-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-deep focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             >
               {paused ? <IconPlay className="h-4 w-4" /> : <IconPause className="h-4 w-4" />}
               <span>

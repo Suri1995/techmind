@@ -8,6 +8,7 @@ import Process from "@/components/home-components/process";
 import Services from "@/components/home-components/services";
 import Stats from "@/components/home-components/stats";
 import WhyTechMind from "@/components/home-components/whyTechMind";
+import MeetOurTeam from "@/components/meet-our-team";
 import Testimonials from "@/components/testimonials";
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
       <Hero />
       <IndustryMarquee />
       <Services />
+      <MeetOurTeam/>
       <ClientsSection />
       <Stats />
       <Process />

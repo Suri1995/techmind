@@ -184,7 +184,7 @@ export default function FloatingActions() {
         </motion.button>
       </div>
 
-      <div className={`contact-actions flex w-14 flex-col items-end gap-4 ${contactOpen ? "contact-actions-open" : ""}`}>
+      <div className={`contact-actions flex w-8 md:w-14 flex-col items-end gap-4 ${contactOpen ? "contact-actions-open" : ""}`}>
         <AnimatePresence>
           {contactOpen && <ContactPopup kind={contactOpen} phone={company.phone} onClose={() => setContactOpen(null)} />}
         </AnimatePresence>
