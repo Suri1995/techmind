@@ -47,7 +47,7 @@ function DockButton({ label, aria, gradient, glow, icon, delay, active, onClick 
 
   return (
     <motion.div
-      className={`relative h-14 w-14 shrink-0 hover:z-20 focus-within:z-20 ${active ? "contact-active-button" : ""}`}
+      className={`relative h-7 w-7 md:h-14 md:w-14 shrink-0 hover:z-20 focus-within:z-20 ${active ? "contact-active-button" : ""}`}
       initial={reduce ? false : { opacity: 0, scale: 0.5, y: 24 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 240, damping: 18, delay }}
@@ -57,7 +57,7 @@ function DockButton({ label, aria, gradient, glow, icon, delay, active, onClick 
           <motion.span
             key={i}
             aria-hidden="true"
-            className="pointer-events-none absolute right-0 top-0 h-14 w-14 rounded-full"
+            className="pointer-events-none absolute right-0 top-0 h-7 w-7 md:h-14 md:w-14 rounded-full"
             style={{ border: `1.5px solid ${glow}` }}
             animate={{ scale: [1, 1.9], opacity: [0.55, 0] }}
             transition={{ duration: 2.4, ease: "easeOut", repeat: Infinity, delay: i * 1.2 + delay }}
@@ -73,11 +73,13 @@ function DockButton({ label, aria, gradient, glow, icon, delay, active, onClick 
         style={{
           boxShadow: `inset 0 1px 0 rgba(255,255,255,.4), inset 0 -8px 16px rgba(0,0,0,.12), 0 14px 34px -10px ${glow}`,
         }}
-        className={`group absolute right-0 top-0 flex h-14 w-14 flex-row-reverse items-center overflow-hidden rounded-full text-white transition-[width] duration-500 [transition-timing-function:cubic-bezier(.22,1,.36,1)] hover:w-[12.5rem] focus-visible:w-[12.5rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 ${gradient}`}
+        className={`group absolute right-0 top-0 flex h-7 w-7 md:h-14 md:w-14 flex-row-reverse items-center overflow-hidden rounded-full text-white transition-[width] duration-500 [transition-timing-function:cubic-bezier(.22,1,.36,1)] hover:w-[12.5rem] focus-visible:w-[12.5rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 ${gradient}`}
       >
         <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/30 to-transparent" />
         <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-white/25 opacity-0 blur-md transition-all duration-700 group-hover:left-[120%] group-hover:opacity-100" />
-        <span className="relative grid h-14 w-14 shrink-0 place-items-center">{active ? <span className="text-3xl font-light leading-none">×</span> : icon}</span>
+        <span className="relative grid h-7 w-7 md:h-14 md:w-14 shrink-0 place-items-center">
+          {active ? <span className="text-lg md:text-3xl font-light leading-none">×</span> : icon}
+        </span>
         <span className="relative flex min-w-0 translate-x-3 flex-col whitespace-nowrap pl-5 text-left leading-tight opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100">
           <span className="text-sm font-semibold tracking-tight">{label}</span>
           <span className="text-[11px] font-medium text-white/80">Click to open</span>
@@ -149,23 +151,45 @@ export default function FloatingActions() {
 
   return (
     <>
-      <div className="floating-actions">
-        <AnimatePresence>
-          {showTop && (
-            <motion.button
-              type="button"
-              aria-label="Back to top"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.7 }}
-              transition={{ duration: 0.25, ease }}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-paper-raised text-ink-soft shadow-[var(--shadow-soft)] transition-colors hover:border-teal-deep hover:text-teal-deep"
-            >
-              <IconArrowRight className="h-4 w-4 -rotate-90" />
-            </motion.button>
-          )}
-        </AnimatePresence>
+      {/* One bottom-right stack: WhatsApp, phone, then Search, all separated by the same 0.5rem gap */}
+      <div className="floating-actions !fixed !bottom-4 !right-4 !left-auto !top-auto !m-0 !p-0 !flex !flex-col !items-end !gap-2 md:!bottom-6 md:!right-6">
+        {/* Contact buttons: same markup/behaviour as before, now sitting directly above Search */}
+        <div className={`contact-actions !relative !inset-auto !m-0 !p-0 !h-auto !min-h-0 !transform-none flex w-8 md:w-14 flex-col items-end !gap-2 ${contactOpen ? "contact-actions-open" : ""}`}>
+          <AnimatePresence>
+            {contactOpen && <ContactPopup kind={contactOpen} phone={company.phone} onClose={() => setContactOpen(null)} />}
+          </AnimatePresence>
+          <DockButton
+            kind="whatsapp"
+            label="Chat on WhatsApp"
+            aria="Open WhatsApp contact options"
+            gradient="bg-[linear-gradient(135deg,#4ff08f_0%,#25d366_45%,#0f9e6e_100%)]"
+            glow="rgba(37,211,102,0.75)"
+            delay={0.1}
+            active={contactOpen === "whatsapp"}
+            onClick={() => setContactOpen(contactOpen === "whatsapp" ? null : "whatsapp")}
+            icon={<WhatsAppGlyph className="h-[13px] w-[13px] md:h-[26px] md:w-[26px] drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />}
+          />
+          <DockButton
+            kind="phone"
+            label="Call us now"
+            aria="Open phone contact options"
+            gradient="bg-[linear-gradient(135deg,#34e0cc_0%,#14b8a6_45%,#0b5f58_100%)]"
+            glow="rgba(20,184,166,0.8)"
+            delay={0.22}
+            active={contactOpen === "phone"}
+            onClick={() => setContactOpen(contactOpen === "phone" ? null : "phone")}
+            icon={
+              <motion.span
+                className="grid place-items-center"
+                style={{ transformOrigin: "50% 50%" }}
+                animate={reduce ? undefined : { rotate: [0, -14, 12, -10, 8, -4, 0] }}
+                transition={{ duration: 0.9, ease: "easeInOut", repeat: Infinity, repeatDelay: 4.5 }}
+              >
+                <PhoneGlyph className="h-3 w-3 md:h-6 md:w-6 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
+              </motion.span>
+            }
+          />
+        </div>
 
         <motion.button
           type="button"
@@ -182,43 +206,6 @@ export default function FloatingActions() {
           <span className="hidden sm:inline">Search</span>
           <kbd className="hidden rounded border border-line px-1.5 text-[0.65rem] text-slate sm:inline">⌘K</kbd>
         </motion.button>
-      </div>
-
-      <div className={`contact-actions flex w-8 md:w-14 flex-col items-end gap-4 ${contactOpen ? "contact-actions-open" : ""}`}>
-        <AnimatePresence>
-          {contactOpen && <ContactPopup kind={contactOpen} phone={company.phone} onClose={() => setContactOpen(null)} />}
-        </AnimatePresence>
-        <DockButton
-          kind="whatsapp"
-          label="Chat on WhatsApp"
-          aria="Open WhatsApp contact options"
-          gradient="bg-[linear-gradient(135deg,#4ff08f_0%,#25d366_45%,#0f9e6e_100%)]"
-          glow="rgba(37,211,102,0.75)"
-          delay={0.1}
-          active={contactOpen === "whatsapp"}
-          onClick={() => setContactOpen(contactOpen === "whatsapp" ? null : "whatsapp")}
-          icon={<WhatsAppGlyph className="h-[26px] w-[26px] drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />}
-        />
-        <DockButton
-          kind="phone"
-          label="Call us now"
-          aria="Open phone contact options"
-          gradient="bg-[linear-gradient(135deg,#34e0cc_0%,#14b8a6_45%,#0b5f58_100%)]"
-          glow="rgba(20,184,166,0.8)"
-          delay={0.22}
-          active={contactOpen === "phone"}
-          onClick={() => setContactOpen(contactOpen === "phone" ? null : "phone")}
-          icon={
-            <motion.span
-              className="grid place-items-center"
-              style={{ transformOrigin: "50% 50%" }}
-              animate={reduce ? undefined : { rotate: [0, -14, 12, -10, 8, -4, 0] }}
-              transition={{ duration: 0.9, ease: "easeInOut", repeat: Infinity, repeatDelay: 4.5 }}
-            >
-              <PhoneGlyph className="h-[24px] w-[24px] drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
-            </motion.span>
-          }
-        />
       </div>
 
       <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />

@@ -495,12 +495,12 @@ export type ServiceVisual = {
 
 export const serviceVisuals: Record<string, ServiceVisual> = {
   "meta-ads": {
-    image: "/Meta_Ads_1774x887.png",
+    image: "/meta-ads.png",
     alt: "Meta Ads dashboard with Facebook and Instagram",
     accent: "#2f7bff",
   },
   "google-ads": {
-    image: "/Google_Ads_1774x887.png",
+    image: "/google-ads.png",
     alt: "Google Ads performance dashboard",
     accent: "#4a90ff",
   },
@@ -609,7 +609,7 @@ const rawClients: Client[] = [
   },
   {
     slug: "the-park-hotels",
-    name: "The Park Hotels – Managed by Cream Soda Social Agency",
+    name: "The Park Hotels – Managed for Cream Soda Social Agency",
     sector: "Hospitality",
     partnership: "6 months",
     ongoing: false,

@@ -7,7 +7,7 @@ import { IconArrowRight } from "@/components/icons";
 
 export default function ClientsSection() {
   return (
-    <section className="overflow-hidden py-16 md:py-24">
+    <section className="overflow-hidden py-10 md:py-20">
       <div className="wrap">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <Reveal>

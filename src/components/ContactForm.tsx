@@ -179,7 +179,7 @@ export default function ContactForm() {
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduce ? 0 : 0.5, ease }}
-        className="relative w-full"
+        className="relative w-full min-w-0"
         role="status"
       >
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-teal/10 ring-1 ring-teal/30">
@@ -208,15 +208,15 @@ export default function ContactForm() {
             />
           </svg>
         </div>
-        <h3 className="mt-6 font-display text-2xl text-ink sm:text-3xl">
+        <h3 className="mt-6 font-display text-2xl text-ink [overflow-wrap:anywhere] sm:text-3xl">
           Thanks, {data.name.split(" ")[0]}. We have your requirements.
         </h3>
-        <p className="mt-3 max-w-md text-slate">
+        <p className="mt-3 max-w-md text-slate [overflow-wrap:anywhere]">
           Someone from our team will reply to <span className="font-medium text-ink">{data.email}</span> within one
           business day to set up a short call.
         </p>
 
-        <dl className="mt-7 grid gap-x-8 gap-y-4 rounded-2xl border border-line bg-paper p-5 text-sm sm:grid-cols-2">
+        <dl className="mt-7 grid grid-cols-1 gap-x-8 gap-y-4 rounded-2xl border border-line bg-paper p-5 text-sm sm:grid-cols-2">
           <Summary label="Service" value={data.service} />
           <Summary label="Business" value={data.business} />
           <Summary label="Monthly budget" value={data.budget || "Not shared"} />
@@ -244,7 +244,7 @@ export default function ContactForm() {
   const current = steps[step];
 
   return (
-    <form ref={formRef} onSubmit={submit} noValidate className="w-full">
+    <form ref={formRef} onSubmit={submit} noValidate className="w-full min-w-0">
       {/* Progress */}
       <ol className="grid grid-cols-3 gap-3" aria-label="Form progress">
         {steps.map((s, i) => {
@@ -260,7 +260,7 @@ export default function ContactForm() {
                   transition={{ duration: reduce ? 0 : 0.5, ease }}
                 />
               </span>
-              <span className="mt-2.5 flex items-center gap-2">
+              <span className="mt-2.5 flex min-w-0 items-center gap-2">
                 <span
                   className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[11px] font-semibold transition-colors duration-300 ${
                     done
@@ -273,7 +273,7 @@ export default function ContactForm() {
                   {done ? <IconCheck className="h-3 w-3" /> : i + 1}
                 </span>
                 <span
-                  className={`truncate text-xs sm:text-sm ${active ? "font-semibold text-ink" : done ? "text-ink-soft" : "text-slate"}`}
+                  className={`min-w-0 truncate text-xs sm:text-sm ${active ? "font-semibold text-ink" : done ? "text-ink-soft" : "text-slate"}`}
                 >
                   {s.label}
                 </span>
@@ -281,7 +281,7 @@ export default function ContactForm() {
             </>
           );
           return (
-            <li key={s.label} aria-current={active ? "step" : undefined}>
+            <li key={s.label} className="min-w-0" aria-current={active ? "step" : undefined}>
               {done ? (
                 <button
                   type="button"
@@ -325,7 +325,8 @@ export default function ContactForm() {
               </h3>
               <p className="mt-1.5 text-sm text-slate">{current.hint}</p>
 
-              <div className="mt-6 grid gap-x-5 gap-y-5 sm:grid-cols-2">
+              {/* grid-cols-1 so the single mobile column can't grow past the card */}
+              <div className="mt-6 grid grid-cols-1 gap-x-5 gap-y-5 sm:grid-cols-2">
                 {step === 0 && (
                   <>
                     <Field id="name" label="Your name" placeholder="Full name" required autoComplete="name"
@@ -341,15 +342,15 @@ export default function ContactForm() {
 
                 {step === 1 && (
                   <>
-                    <div className="sm:col-span-2">
+                    <div className="min-w-0 sm:col-span-2">
                       <ChipGroup name="service" legend="Service required" required options={serviceOptions}
                         value={data.service} onChange={(v) => set("service", v)} error={errors.service} />
                     </div>
-                    <div className="sm:col-span-2">
+                    <div className="min-w-0 sm:col-span-2">
                       <ChipGroup name="budget" legend="Approx. monthly budget" optional options={budgets}
                         value={data.budget} onChange={(v) => set("budget", v)} />
                     </div>
-                    <div className="sm:col-span-2">
+                    <div className="min-w-0 sm:col-span-2">
                       <ChipGroup name="start" legend="Expected start" optional options={timelines}
                         value={data.start} onChange={(v) => set("start", v)} />
                     </div>
@@ -358,7 +359,7 @@ export default function ContactForm() {
 
                 {step === 2 && (
                   <>
-                    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-line bg-paper px-4 py-3 text-sm sm:col-span-2">
+                    <div className="flex min-w-0 flex-wrap items-center gap-2 rounded-2xl border border-line bg-paper px-4 py-3 text-sm sm:col-span-2">
                       <span className="text-slate">Your brief:</span>
                       <Pill>{data.service}</Pill>
                       {data.budget && <Pill>{data.budget}</Pill>}
@@ -376,7 +377,7 @@ export default function ContactForm() {
                       placeholder="https://" autoComplete="url" wide icon={<IconGlobe />}
                       value={data.website} onChange={(v) => set("website", v)} />
 
-                    <div className="sm:col-span-2">
+                    <div className="min-w-0 sm:col-span-2">
                       <label htmlFor="contact-message" className={labelCls}>
                         Tell us about your requirements <span className="font-normal text-slate">(optional)</span>
                       </label>
@@ -403,13 +404,13 @@ export default function ContactForm() {
         </div>
       </div>
 
-      {/* Actions */}
-      <div className="mt-4 flex items-center justify-between gap-4 border-t border-line pt-6">
+      {/* Actions: flex-wrap so Back + Submit drop onto two rows on narrow phones instead of overflowing */}
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-t border-line pt-6">
         {step > 0 ? (
           <button
             type="button"
             onClick={back}
-            className="flex items-center gap-2 text-sm font-semibold text-ink-soft hover:text-teal-deep border-2 border-ink-soft hover:border-teal-deep p-2 rounded-3xl"
+            className="flex shrink-0 items-center gap-2 rounded-3xl border-2 border-ink-soft p-2 text-sm font-semibold text-ink-soft hover:border-teal-deep hover:text-teal-deep"
           >
             <IconArrowRight className="h-4 w-4 rotate-180" />
             Back
@@ -428,7 +429,7 @@ export default function ContactForm() {
             key="continue"
             type="button"
             onClick={next}
-            className="btn-shine group inline-flex items-center gap-2 rounded-full bg-ink px-8 py-4 text-sm font-semibold text-paper shadow-[var(--shadow-lift)] transition-colors hover:bg-teal-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/30"
+            className="btn-shine group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-sm font-semibold text-paper shadow-[var(--shadow-lift)] transition-colors hover:bg-teal-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/30 sm:px-8 sm:py-4"
           >
             Continue
             <IconArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
@@ -438,7 +439,7 @@ export default function ContactForm() {
             key="submit"
             type="submit"
             disabled={submitting}
-            className="btn-shine group inline-flex items-center gap-2 rounded-full bg-ink px-8 py-4 text-sm font-semibold text-paper shadow-[var(--shadow-lift)] transition-colors hover:bg-teal-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/30 disabled:opacity-70"
+            className="btn-shine group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-sm font-semibold text-paper shadow-[var(--shadow-lift)] transition-colors hover:bg-teal-deep focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/30 disabled:opacity-70 sm:px-8 sm:py-4"
           >
             {submitting ? (
               <>
@@ -469,16 +470,16 @@ const inputCls =
 
 function Summary({ label, value }: { label: string; value: string }) {
   return (
-    <div>
+    <div className="min-w-0">
       <dt className="text-xs text-slate">{label}</dt>
-      <dd className="mt-0.5 font-medium text-ink">{value}</dd>
+      <dd className="mt-0.5 font-medium text-ink [overflow-wrap:anywhere]">{value}</dd>
     </div>
   );
 }
 
 function Pill({ children }: { children: ReactNode }) {
   return (
-    <span className="rounded-full border border-line bg-paper-raised px-3 py-1 text-xs font-medium text-ink-soft">
+    <span className="max-w-full rounded-full border border-line bg-paper-raised px-3 py-1 text-xs font-medium text-ink-soft [overflow-wrap:anywhere]">
       {children}
     </span>
   );
@@ -524,7 +525,7 @@ function Field({
   const fid = `contact-${id}`;
   const eid = `${fid}-error`;
   return (
-    <div className={wide ? "sm:col-span-2" : ""}>
+    <div className={`min-w-0 ${wide ? "sm:col-span-2" : ""}`}>
       <label className={labelCls} htmlFor={fid}>
         {label}
         {required && <span className="text-teal-deep"> *</span>}
@@ -597,7 +598,7 @@ function ChipGroup({
           <button
             type="button"
             onClick={() => onChange("")}
-            className="text-xs font-medium text-slate transition-colors hover:text-teal-deep"
+            className="shrink-0 text-xs font-medium text-slate transition-colors hover:text-teal-deep"
           >
             Clear
           </button>
@@ -608,7 +609,7 @@ function ChipGroup({
         {options.map((o) => {
           const active = value === o;
           return (
-            <label key={o} className="relative cursor-pointer">
+            <label key={o} className="relative max-w-full cursor-pointer">
               <input
                 type="radio"
                 name={name}
@@ -626,7 +627,7 @@ function ChipGroup({
                       }`
                 }`}
               >
-                {active && <IconCheck className="h-3.5 w-3.5" />}
+                {active && <IconCheck className="h-3.5 w-3.5 shrink-0" />}
                 {o}
               </span>
             </label>

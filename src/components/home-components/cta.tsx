@@ -6,7 +6,7 @@ import { company } from "@/lib/data";
 
 export default function CTA() {
   return (
-    <section className="relative overflow-hidden border-t border-line bg-gradient-to-b from-paper to-mist py-20 text-ink md:py-28">
+    <section className="relative overflow-hidden border-t border-line bg-gradient-to-b from-paper to-mist py-10 text-ink md:py-20">
       <div className="mesh-hero">
         <div className="mesh-grid" />
         <div className="mesh-blob one" />
@@ -16,12 +16,12 @@ export default function CTA() {
       <Reveal className="wrap relative">
         <p className="mb-5 inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-ink-soft">
           <span aria-hidden="true" className="h-px w-8 bg-gradient-to-r from-teal-deep/60 to-transparent" />
-          Strategy | Creativity | Performance
+          Smarter strategies | Stronger presence | Bigger growth
         </p>
 
-        <h2 className="max-w-3xl font-display text-4xl font-semibold leading-[1.08] text-ink [text-wrap:balance] md:text-6xl">
-          Ready to build your brand and{" "}
-          <span className="text-gradient">grow with purpose?</span>
+        <h2 className="max-w-4xl font-display text-4xl font-semibold leading-[1.08] text-ink [text-wrap:balance] md:text-6xl">
+          It's Time To Elevate Your{" "}
+          <span className="text-gradient">Brand</span>
         </h2>
 
         <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">

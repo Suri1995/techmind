@@ -13,7 +13,8 @@ export default function ClientsPage() {
   return (
     <>
       <ClientsHero />
-      <section className="wrap py-16 md:py-24">
+      {/* overflow-x-clip: nothing inside can widen the page sideways (vertical overflow like dropdowns is unaffected) */}
+      <section className="wrap overflow-x-clip py-16 md:py-24">
         <ClientsExplorer />
         <p className="mt-12 text-sm leading-relaxed text-slate">
           Want to know more about the work behind any of these partnerships? Ask us and we will walk you through relevant examples.

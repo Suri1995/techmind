@@ -71,7 +71,12 @@ export default function Header() {
 
   return (
     <>
-      <header ref={headerRef} className="fixed inset-x-0 top-0 z-50">
+      {/* Pinned to both viewport edges and capped at the viewport width, so the header
+          can never be wider than the screen even if a page below it overflows. */}
+      <header
+        ref={headerRef}
+        className="fixed left-0 right-0 top-0 z-50 w-full max-w-[100vw]"
+      >
         {/* Utility strip — Blog / Careers. Collapses out of the way on scroll. */}
         <motion.div
           className="hidden overflow-hidden bg-gradient-to-r from-[#031416] to-[#123a3c] text-paper/65 lg:block"
@@ -102,7 +107,7 @@ export default function Header() {
 
         {/* Primary nav */}
         <div
-          className={`relative border-b transition-[background-color,box-shadow,border-color] duration-300 ${
+          className={`relative w-full max-w-full overflow-x-clip border-b transition-[background-color,box-shadow,border-color] duration-300 ${
             scrolled
               ? "border-[#123a3c]/10 bg-[#f4f8f7]/85 shadow-[0_8px_30px_-12px_rgba(3,20,22,0.35)] backdrop-blur-xl backdrop-saturate-150"
               : "border-transparent bg-[#f4f8f7]"
@@ -112,16 +117,21 @@ export default function Header() {
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#123a3c]/25 to-transparent" />
 
           <div
-            className={`wrap flex items-center justify-between transition-[height] duration-300 ${
+            className={`wrap box-border flex w-full min-w-0 max-w-full items-center justify-between gap-3 transition-[height] duration-300 ${
               scrolled ? "h-16" : "h-[4.5rem] md:h-20"
             }`}
           >
-            <Link href="/" className="flex items-center gap-2.5" aria-label={`${company.name} home`}>
+            {/* logo gives way first (min-w-0 + shrink) so the menu button is never pushed off-screen */}
+            <Link
+              href="/"
+              className="flex min-w-0 shrink items-center gap-2.5"
+              aria-label={`${company.name} home`}
+            >
               <motion.span
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                className="block"
+                className="block min-w-0"
               >
                 <Image
                   src="/techmind-logo.png"
@@ -129,12 +139,12 @@ export default function Header() {
                   width={180}
                   height={52}
                   priority
-                  className="h-16 w-auto transition-all duration-300 md:h-14"
+                  className="h-14 w-auto max-w-full object-contain transition-all duration-300 sm:h-16 md:h-14"
                 />
               </motion.span>
             </Link>
 
-            <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+            <nav className="hidden min-w-0 items-center gap-1 lg:flex" aria-label="Primary">
               {navLinks.map((link) => {
                 const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
                 return (
@@ -160,7 +170,7 @@ export default function Header() {
               })}
             </nav>
 
-            <div className="hidden items-center gap-3 lg:flex">
+            <div className="hidden shrink-0 items-center gap-3 lg:flex">
               <a
                 href={`tel:${company.phone.replace(/\s/g, "")}`}
                 className="flex items-center gap-2 rounded-full border border-[#123a3c]/15 bg-white/40 px-4 py-2.5 text-sm font-medium text-[#123a3c]/85 transition-colors hover:border-[#123a3c]/25 hover:bg-white/70"
@@ -181,10 +191,11 @@ export default function Header() {
               </Link>
             </div>
 
+            {/* shrink-0 keeps the 3-line button at full size, always visible below lg */}
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
-              className="flex h-10 w-10 items-center justify-center lg:hidden"
+              className="flex h-10 w-10 shrink-0 items-center justify-center lg:hidden"
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
             >
@@ -216,7 +227,7 @@ export default function Header() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-x-0 bottom-0 z-40 overflow-y-auto bg-[#f4f8f7]/95 backdrop-blur-2xl lg:hidden"
+              className="fixed inset-x-0 bottom-0 z-40 overflow-y-auto overflow-x-hidden bg-[#f4f8f7]/95 backdrop-blur-2xl lg:hidden"
               style={{ top: headerHeight || "4.5rem" }}
             >
               <motion.nav

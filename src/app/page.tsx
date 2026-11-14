@@ -15,10 +15,10 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <IndustryMarquee />
+      {/* <IndustryMarquee /> */}
       <Services />
-      <MeetOurTeam/>
       <ClientsSection />
+      <MeetOurTeam/>
       <Stats />
       <Process />
       <WhyTechMind />

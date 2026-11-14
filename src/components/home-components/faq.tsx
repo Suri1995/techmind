@@ -248,7 +248,7 @@ export default function FAQ({
       ref={sectionRef}
       id={id}
       aria-labelledby={headingId}
-      className="faq relative scroll-mt-32 overflow-clip border-t border-line bg-paper-raised py-16 text-ink md:py-24"
+      className="faq relative scroll-mt-32 overflow-clip border-t border-line bg-paper-raised py-10 text-ink md:py-20"
     >
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

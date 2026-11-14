@@ -195,7 +195,7 @@ export default function Testimonials() {
       aria-label="Client testimonials"
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
-      className="tm-root relative isolate overflow-hidden bg-gradient-to-b from-paper via-white to-paper px-5 py-24 text-ink sm:px-10 md:py-32 lg:px-16"
+      className="tm-root relative isolate overflow-hidden bg-gradient-to-b from-paper via-white to-paper px-5 py-10 text-ink sm:px-10 md:py-20 lg:px-16"
     >
       <style>{css}</style>
 

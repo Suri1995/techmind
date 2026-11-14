@@ -13,6 +13,13 @@ type Member = {
 
 const TEAM: Member[] = [
   {
+    id: "supraja",
+    name: "Supraja N",
+    role: "Founder of Tech.Mind",
+    img: "/supraja.png",
+    pos: "50% 30%",
+  },
+  {
     id: "ramu",
     name: "Ramu Eadunoori",
     role: "Senior Performance Marketing Manager",
@@ -40,13 +47,32 @@ const TEAM: Member[] = [
     img: "/sushanth.png",
     pos: "50% 30%",
   },
+  {
+    id: "vamshi",
+    name: "Vamshi Krishna",
+    role: "Senior Meta Ads Specialists",
+    img: "/vamshi.png",
+    pos: "50% 25%",
+  },
 ];
+
+const MOBILE_QUERY = "(max-width: 767px)";
+const isMobileViewport = () =>
+  typeof window !== "undefined" && window.matchMedia(MOBILE_QUERY).matches;
 
 export default function MeetOurTeam() {
   const [active, setActive] = useState<number>(0);
   const [seen, setSeen] = useState<boolean>(false);
   const sectionRef = useRef<HTMLElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
+
+  // Always-fresh active index (avoids stale closures in scroll handlers)
+  const activeRef = useRef<number>(0);
+  // While a programmatic (button / dot / key) scroll is animating, the scroll
+  // listener must NOT overwrite the active index, otherwise it fights the animation.
+  const lockRef = useRef<boolean>(false);
+  const lockTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rafRef = useRef<number | null>(null);
 
   // Orchestrated entrance
   useEffect(() => {
@@ -65,51 +91,115 @@ export default function MeetOurTeam() {
     return () => io.disconnect();
   }, []);
 
-  // Mobile: scroll the active card into view (one card at a time)
+  const unlock = useCallback(() => {
+    lockRef.current = false;
+    if (lockTimer.current) {
+      clearTimeout(lockTimer.current);
+      lockTimer.current = null;
+    }
+  }, []);
+
+  // Center a card inside the mobile track
+  const scrollToCard = useCallback(
+    (i: number, behavior: ScrollBehavior = "smooth") => {
+      const track = trackRef.current;
+      const card = track?.children[i] as HTMLElement | undefined;
+      if (!track || !card) return;
+      const t = track.getBoundingClientRect();
+      const c = card.getBoundingClientRect();
+      const left = track.scrollLeft + (c.left + c.width / 2) - (t.left + t.width / 2);
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      track.scrollTo({ left, behavior: reduced ? "auto" : behavior });
+    },
+    []
+  );
+
+  // Single entry point to change the active member
+  const selectIndex = useCallback(
+    (i: number, scroll: boolean) => {
+      const next = ((i % TEAM.length) + TEAM.length) % TEAM.length;
+      activeRef.current = next;
+      setActive(next);
+      if (scroll && isMobileViewport()) {
+        lockRef.current = true;
+        if (lockTimer.current) clearTimeout(lockTimer.current);
+        // Safety net in case `scrollend` is not supported
+        lockTimer.current = setTimeout(unlock, 800);
+        scrollToCard(next);
+      }
+    },
+    [scrollToCard, unlock]
+  );
+
+  // Release the lock when the animated scroll finishes (where supported),
+  // and when the user touches the track again (their gesture takes over).
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-    if (window.matchMedia("(max-width: 767px)").matches) {
-      const card = track.children[active] as HTMLElement | undefined;
-      if (card) {
-        track.scrollTo({
-          left: card.offsetLeft - track.offsetLeft,
-          behavior: "smooth",
-        });
-      }
-    }
-  }, [active]);
+    const onEnd = () => unlock();
+    track.addEventListener("scrollend", onEnd);
+    track.addEventListener("touchstart", onEnd, { passive: true });
+    track.addEventListener("pointerdown", onEnd, { passive: true });
+    return () => {
+      track.removeEventListener("scrollend", onEnd);
+      track.removeEventListener("touchstart", onEnd);
+      track.removeEventListener("pointerdown", onEnd);
+      if (lockTimer.current) clearTimeout(lockTimer.current);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [unlock]);
 
-  // Track the card most in view during mobile scroll
+  // Keep the active card centered on rotate / resize
+  useEffect(() => {
+    const onResize = () => {
+      if (isMobileViewport()) scrollToCard(activeRef.current, "auto");
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [scrollToCard]);
+
+  // Swiping: track the card closest to the center (rAF-throttled)
   const handleScroll = useCallback(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const center = track.scrollLeft + track.clientWidth / 2;
-    let closest = 0;
-    let min = Infinity;
-    Array.from(track.children).forEach((child, i) => {
-      const el = child as HTMLElement;
-      const cardCenter = el.offsetLeft + el.clientWidth / 2 - track.offsetLeft;
-      const dist = Math.abs(cardCenter - center);
-      if (dist < min) {
-        min = dist;
-        closest = i;
+    if (lockRef.current || !isMobileViewport()) return;
+    if (rafRef.current) return;
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      const track = trackRef.current;
+      if (!track) return;
+      const t = track.getBoundingClientRect();
+      const center = t.left + t.width / 2;
+      let closest = 0;
+      let min = Infinity;
+      Array.from(track.children).forEach((child, i) => {
+        const r = (child as HTMLElement).getBoundingClientRect();
+        const dist = Math.abs(r.left + r.width / 2 - center);
+        if (dist < min) {
+          min = dist;
+          closest = i;
+        }
+      });
+      if (closest !== activeRef.current) {
+        activeRef.current = closest;
+        setActive(closest);
       }
     });
-    if (closest !== active) setActive(closest);
-  }, [active]);
+  }, []);
 
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "ArrowRight" || e.key === "ArrowDown") {
       e.preventDefault();
-      setActive((i) => (i + 1) % TEAM.length);
+      selectIndex(activeRef.current + 1, true);
     } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
       e.preventDefault();
-      setActive((i) => (i - 1 + TEAM.length) % TEAM.length);
+      selectIndex(activeRef.current - 1, true);
     }
   };
 
-  const goTo = (i: number) => setActive(i);
+  // Hover / focus drive the desktop accordion only. On mobile, touch
+  // emulates mouseenter/focus on tap, which would fight the carousel.
+  const onCardHover = (i: number) => {
+    if (!isMobileViewport()) selectIndex(i, false);
+  };
 
   return (
     <section
@@ -158,9 +248,9 @@ export default function MeetOurTeam() {
                 data-active={isActive}
                 className="tm-card"
                 style={{ "--i": i } as CSSProperties}
-                onMouseEnter={() => setActive(i)}
-                onFocus={() => setActive(i)}
-                onClick={() => setActive(i)}
+                onMouseEnter={() => onCardHover(i)}
+                onFocus={() => onCardHover(i)}
+                onClick={() => selectIndex(i, true)}
               >
                 <img
                   src={m.img}
@@ -190,22 +280,21 @@ export default function MeetOurTeam() {
             type="button"
             className="tm-arrow"
             aria-label="Previous team member"
-            onClick={() => goTo((active - 1 + TEAM.length) % TEAM.length)}
+            onClick={() => selectIndex(activeRef.current - 1, true)}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
 
-          <div className="tm-dots" role="tablist" aria-label="Team member pagination">
+          <div className="tm-dots" role="group" aria-label="Team member pagination">
             {TEAM.map((m, i) => (
               <button
                 key={m.id}
                 type="button"
-                role="tab"
-                aria-selected={i === active}
+                aria-current={i === active ? "true" : undefined}
                 aria-label={`Go to ${m.name}`}
-                onClick={() => goTo(i)}
+                onClick={() => selectIndex(i, true)}
                 data-active={i === active}
                 className="tm-dot-btn"
               >
@@ -218,7 +307,7 @@ export default function MeetOurTeam() {
             type="button"
             className="tm-arrow"
             aria-label="Next team member"
-            onClick={() => goTo((active + 1) % TEAM.length)}
+            onClick={() => selectIndex(activeRef.current + 1, true)}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -234,12 +323,12 @@ export default function MeetOurTeam() {
           isolation: isolate;
           background: linear-gradient(180deg, var(--paper) 0%, var(--mist) 100%);
           color: var(--ink);
-          padding-block: clamp(4rem, 9vw, 7.5rem);
+          padding-block: clamp(1.5rem, 9vw, 5rem);
         }
         .tm-inner { position: relative; z-index: 1; }
 
         .tm-head {
-          max-width: 46rem;
+          max-width: 80rem;
           margin-bottom: clamp(2rem, 5vw, 3.5rem);
         }
         .tm-title {
@@ -252,7 +341,7 @@ export default function MeetOurTeam() {
         }
         .tm-lede {
           margin: 1rem 0 0;
-          max-width: 34rem;
+          max-width: 80rem;
           color: var(--ink-soft);
           font-size: 1.05rem;
           line-height: 1.65;
@@ -277,6 +366,7 @@ export default function MeetOurTeam() {
           border-radius: 1.75rem;
           background: var(--paper-raised);
           box-shadow: var(--shadow-soft);
+          -webkit-tap-highlight-color: transparent;
           transition:
             flex-grow 0.8s cubic-bezier(0.22, 1, 0.36, 1),
             box-shadow 0.6s ease,
@@ -312,6 +402,7 @@ export default function MeetOurTeam() {
             filter 0.9s ease,
             transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
           user-select: none;
+          -webkit-user-drag: none;
         }
         .tm-card[data-active="true"] .tm-photo {
           filter: none;
@@ -419,16 +510,20 @@ export default function MeetOurTeam() {
         .tm-arrow {
           display: grid;
           place-items: center;
-          width: 2.5rem;
-          height: 2.5rem;
+          width: 2.75rem;
+          height: 2.75rem;
+          flex: 0 0 auto;
           border-radius: 999px;
           border: 1px solid var(--line);
           background: var(--paper-raised);
           color: var(--ink);
           cursor: pointer;
-          transition: border-color 0.25s ease, box-shadow 0.25s ease;
+          touch-action: manipulation;
+          -webkit-tap-highlight-color: transparent;
+          transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
         }
         .tm-arrow:hover { border-color: var(--teal-deep); box-shadow: var(--shadow-soft); }
+        .tm-arrow:active { transform: scale(0.94); }
         .tm-arrow:focus-visible { outline-offset: 3px; }
 
         /* ---------- Mobile: carousel (no marquee) ---------- */
@@ -436,23 +531,26 @@ export default function MeetOurTeam() {
           .tm-carousel-nav {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
+            justify-content: center;
+            gap: 0.75rem;
             margin-top: 1.5rem;
           }
           .tm-dots {
             display: flex;
-            gap: 0.5rem;
-            flex: 1;
+            gap: 0.15rem;
+            flex: 0 0 auto;
             justify-content: center;
+            align-items: center;
           }
           .tm-dot-btn {
             appearance: none;
             border: none;
             background: transparent;
-            padding: 0.4rem;
+            padding: 0.85rem 0.4rem; /* comfortable tap target */
             cursor: pointer;
             line-height: 0;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
           }
           .tm-dot-btn:focus-visible { outline-offset: 2px; }
           .tm-dot {
@@ -468,7 +566,8 @@ export default function MeetOurTeam() {
             background: var(--teal-deep);
           }
 
-          /* Horizontal snap carousel — one card at a time, no infinite loop */
+          /* Horizontal snap carousel: one card at a time, no infinite loop.
+             Smooth scrolling is driven from JS so it never fights the snap. */
           .tm-row {
             flex-direction: row;
             flex-wrap: nowrap;
@@ -477,7 +576,9 @@ export default function MeetOurTeam() {
             overflow-x: auto;
             overflow-y: hidden;
             scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
+            scroll-behavior: auto;
+            overscroll-behavior-x: contain;
+            touch-action: pan-x pan-y;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
             margin-inline: calc(var(--gutter, 1rem) * -1);

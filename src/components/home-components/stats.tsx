@@ -4,7 +4,7 @@ import { stats } from "@/lib/data";
 
 export default function Stats() {
   return (
-    <section className="wrap py-16 md:py-24">
+    <section className="wrap py-10 md:py-20">
       <RevealGroup
         className="grid grid-cols-2 overflow-hidden rounded-[28px] border border-line bg-paper-raised shadow-[var(--shadow-soft)] md:grid-cols-4"
         stagger={0.12}

@@ -143,7 +143,7 @@ export default function WhyTechMind() {
     <section
       ref={sectionRef}
       aria-labelledby={headingId}
-      className="wt relative overflow-hidden border-t border-line bg-paper-raised py-16 md:py-24"
+      className="wt relative overflow-hidden border-t border-line bg-paper-raised py-10 md:py-20"
     >
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
       <div aria-hidden="true" className="wt-glow pointer-events-none absolute inset-0" />

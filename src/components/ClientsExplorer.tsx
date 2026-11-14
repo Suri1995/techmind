@@ -355,7 +355,7 @@ function IndustryMenu({
             exit={{ opacity: 0, y: reduce ? 0 : -6, scale: reduce ? 1 : 0.98, transition: { duration: 0.15 } }}
             transition={{ duration: 0.3, ease: EASE }}
             style={{ transformOrigin: "top right" }}
-            className="absolute right-0 top-full z-30 mt-3 w-full min-w-[16rem] overflow-hidden rounded-3xl border border-line bg-paper shadow-[0_24px_60px_-20px_rgba(15,60,56,0.35)]"
+            className="absolute right-0 top-full z-30 mt-3 w-full min-w-[16rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-3xl border border-line bg-paper shadow-[0_24px_60px_-20px_rgba(15,60,56,0.35)]"
           >
             <motion.div
               ref={list}
@@ -544,15 +544,15 @@ export default function ClientsExplorer() {
   };
 
   return (
-    <motion.div variants={shell} initial="hidden" animate="show">
+    <motion.div variants={shell} initial="hidden" animate="show" className="max-w-full">
       {/* ---------------- Search + industry ---------------- */}
       <motion.div variants={rise} className="relative z-20 flex flex-col gap-3 md:flex-row md:items-center">
-        <div className="flex-1">
+        <div className="min-w-0 flex-1">
           <SearchField value={query} onChange={setQuery} />
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex-1 md:w-64 md:flex-none">
+          <div className="min-w-0 flex-1 md:w-64 md:flex-none">
             <IndustryMenu value={sector} options={sectors} onChange={setSector} />
           </div>
           <AnimatePresence initial={false}>
@@ -564,7 +564,7 @@ export default function ClientsExplorer() {
                 animate={{ opacity: 1, width: "auto" }}
                 exit={{ opacity: 0, width: 0 }}
                 transition={{ duration: 0.4, ease: EASE }}
-                className="overflow-hidden whitespace-nowrap rounded-full text-sm font-medium text-slate underline-offset-4 transition-colors hover:text-teal-deep hover:underline"
+                className="shrink-0 overflow-hidden whitespace-nowrap rounded-full text-sm font-medium text-slate underline-offset-4 transition-colors hover:text-teal-deep hover:underline"
               >
                 <span className="px-2">Clear all</span>
               </motion.button>
@@ -575,11 +575,14 @@ export default function ClientsExplorer() {
 
       {/* ---------------- Grid ---------------- */}
       <motion.div variants={rise} className="relative isolate mt-12" onPointerMove={onGridMove}>
+        {/* FIX: bleed vertically only (-inset-y-10). The old -inset-10 pushed this
+            element 40px past the grid on the left/right, which on mobile stuck out
+            of the viewport and made the whole page scroll sideways. */}
         {!reduce && (
           <motion.div
             aria-hidden
             style={{ background: ambient }}
-            className="pointer-events-none absolute -inset-10 -z-10"
+            className="pointer-events-none absolute inset-x-0 -inset-y-10 -z-10"
           />
         )}
 
@@ -596,6 +599,7 @@ export default function ClientsExplorer() {
                 viewport={{ once: true, amount: 0.15 }}
                 exit="exit"
                 transition={{ layout: reduce ? { duration: 0 } : SPRING }}
+                className="min-w-0"
               >
                 <TiltCard>
                   <ClientCard client={c} />
@@ -643,7 +647,7 @@ export default function ClientsExplorer() {
               </motion.div>
             </div>
 
-            <p className="relative font-display text-2xl text-ink">
+            <p className="relative font-display text-2xl text-ink [overflow-wrap:anywhere]">
               {query.trim() ? `Nothing found for “${query.trim()}”.` : "No clients in this industry yet."}
             </p>
             <p className="relative mx-auto mt-2 max-w-sm text-sm text-slate">

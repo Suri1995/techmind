@@ -328,7 +328,7 @@ export default function Services() {
       `}</style>
       <section
         ref={sectionRef}
-        className="relative overflow-hidden bg-gradient-to-b from-paper via-[#eef8f5] to-paper py-12 text-ink sm:py-16 md:py-24"
+        className="relative overflow-hidden bg-gradient-to-b from-paper via-[#eef8f5] to-paper py-10 text-ink sm:py-16 md:py-20"
       >
         <div className="mesh-hero pointer-events-none opacity-60">
           <div className="mesh-grid" />

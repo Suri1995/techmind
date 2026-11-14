@@ -66,10 +66,13 @@ export default function ContactPage() {
     <>
       <ContactHero />
 
-      {/* ───────── Contact details + form ───────── */}
-      <section className="wrap grid gap-14 pb-16 pt-16 md:grid-cols-[0.95fr_1.15fr] md:items-start md:gap-20 md:pb-24 md:pt-28">
+      {/* ───────── Contact details + form ─────────
+          grid-cols-1 + minmax(0, …) columns + min-w-0 children: grid tracks can no longer
+          grow to fit long text (email, address), which was what pushed the page wider
+          than the viewport on phones. */}
+      <section className="wrap grid grid-cols-1 gap-14 overflow-x-clip pb-16 pt-16 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.15fr)] md:items-start md:gap-20 md:pb-24 md:pt-28">
         {/* Info column */}
-        <Reveal>
+        <Reveal className="min-w-0">
           <div className="md:sticky md:top-28">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-deep">
               Get in touch
@@ -89,7 +92,7 @@ export default function ContactPage() {
                   href={DIRECTIONS_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-4 rounded-2xl border border-line bg-paper-raised p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-teal-deep/40 hover:shadow-[var(--shadow-soft)]"
+                  className="group flex items-center gap-4 rounded-2xl border border-line bg-paper-raised p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-teal-deep/40 hover:shadow-[var(--shadow-soft)] sm:p-5"
                 >
                   <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-teal-deep/10 text-teal-deep transition-colors duration-300 group-hover:bg-teal-deep group-hover:text-white">
                     <IconPin className="h-5 w-5" />
@@ -98,7 +101,7 @@ export default function ContactPage() {
                     <span className="block text-xs font-medium uppercase tracking-wider text-slate">
                       Office address
                     </span>
-                    <span className="mt-1 block text-base leading-snug text-ink">
+                    <span className="mt-1 block text-base leading-snug text-ink [overflow-wrap:anywhere]">
                       {company.address}
                     </span>
                   </span>
@@ -110,7 +113,7 @@ export default function ContactPage() {
               <li>
                 <a
                   href={tel}
-                  className="group flex items-center gap-4 rounded-2xl border border-line bg-paper-raised p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-teal-deep/40 hover:shadow-[var(--shadow-soft)]"
+                  className="group flex items-center gap-4 rounded-2xl border border-line bg-paper-raised p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-teal-deep/40 hover:shadow-[var(--shadow-soft)] sm:p-5"
                 >
                   <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-teal-deep/10 text-teal-deep transition-colors duration-300 group-hover:bg-teal-deep group-hover:text-white">
                     <IconPhone className="h-5 w-5" />
@@ -119,7 +122,7 @@ export default function ContactPage() {
                     <span className="block text-xs font-medium uppercase tracking-wider text-slate">
                       Phone
                     </span>
-                    <span className="mt-1 block text-lg text-ink">
+                    <span className="mt-1 block text-lg text-ink [overflow-wrap:anywhere]">
                       {company.phone}
                     </span>
                   </span>
@@ -131,7 +134,7 @@ export default function ContactPage() {
               <li>
                 <a
                   href={`mailto:${company.email}`}
-                  className="group flex items-center gap-4 rounded-2xl border border-line bg-paper-raised p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-teal-deep/40 hover:shadow-[var(--shadow-soft)]"
+                  className="group flex items-center gap-4 rounded-2xl border border-line bg-paper-raised p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-teal-deep/40 hover:shadow-[var(--shadow-soft)] sm:p-5"
                 >
                   <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-teal-deep/10 text-teal-deep transition-colors duration-300 group-hover:bg-teal-deep group-hover:text-white">
                     <IconMail className="h-5 w-5" />
@@ -140,7 +143,7 @@ export default function ContactPage() {
                     <span className="block text-xs font-medium uppercase tracking-wider text-slate">
                       Email
                     </span>
-                    <span className="mt-1 block truncate text-lg text-ink">
+                    <span className="mt-1 block truncate text-base text-ink sm:text-lg">
                       {company.email}
                     </span>
                   </span>
@@ -152,8 +155,8 @@ export default function ContactPage() {
         </Reveal>
 
         {/* Form column */}
-        <Reveal delay={0.1}>
-          <div className="rounded-3xl border border-line bg-paper-raised p-7 shadow-[var(--shadow-soft)] md:p-11">
+        <Reveal delay={0.1} className="min-w-0">
+          <div className="rounded-3xl border border-line bg-paper-raised p-5 shadow-[var(--shadow-soft)] sm:p-7 md:p-11">
             <h2 className="font-display text-2xl text-ink md:text-3xl">
               Tell us about the project
             </h2>
@@ -172,13 +175,13 @@ export default function ContactPage() {
       </section>
 
       {/* ───────── Map / Visit us ───────── */}
-      <section className="wrap pb-16 md:pb-28" aria-labelledby="visit-heading">
+      <section className="wrap overflow-x-clip pb-16 md:pb-28" aria-labelledby="visit-heading">
         <Reveal>
           <div className="relative overflow-hidden rounded-3xl border border-line shadow-[var(--shadow-soft)]">
             <iframe
               title={`${OFFICE_NAME} location`}
               src={MAP_EMBED}
-              className="block h-[480px] w-full md:h-[560px]"
+              className="block h-[480px] w-full max-w-full md:h-[560px]"
               style={{ border: 0, filter: "grayscale(0.2) contrast(1.03)" }}
               loading="lazy"
               allowFullScreen
@@ -187,9 +190,9 @@ export default function ContactPage() {
 
             {/* Floating info card: bottom sheet on mobile, top-left panel on desktop */}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 p-3 md:inset-auto md:left-8 md:top-8 md:w-[23rem] md:p-0">
-              <div className="pointer-events-auto rounded-2xl border border-line bg-paper-raised/95 p-6 shadow-[var(--shadow-soft)] backdrop-blur-md">
+              <div className="pointer-events-auto rounded-2xl border border-line bg-paper-raised/95 p-5 shadow-[var(--shadow-soft)] backdrop-blur-md sm:p-6">
                 <div className="flex items-center gap-3">
-                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-teal-deep text-white">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-teal-deep text-white">
                     <IconPin className="h-5 w-5" />
                   </span>
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-deep">
@@ -199,11 +202,11 @@ export default function ContactPage() {
 
                 <h2
                   id="visit-heading"
-                  className="mt-4 font-display text-xl leading-snug text-ink"
+                  className="mt-4 font-display text-xl leading-snug text-ink [overflow-wrap:anywhere]"
                 >
                   {OFFICE_NAME}
                 </h2>
-                <p className="mt-2 text-sm leading-relaxed text-slate">
+                <p className="mt-2 text-sm leading-relaxed text-slate [overflow-wrap:anywhere]">
                   {company.address}
                 </p>
 
