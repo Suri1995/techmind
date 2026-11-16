@@ -48,6 +48,14 @@ type Goal = {
 
 const goals: Goal[] = [
   {
+    title: "E-Commerce Sales Growth",
+    text: "Drive online store traffic and turn potential buyers into customers.",
+    image: "/ecommerce-growth.png",
+    from: "#f59e0b",
+    to: "#d97706",
+    bg: "linear-gradient(160deg, #fff1cc 0%, #fffaf0 50%, #e2e8f0 100%)",
+  },
+  {
     title: "Branding & Identity",
     text: "Build a strong brand identity that makes your business stand out.",
     image: "/branding-identity.png",
@@ -78,14 +86,6 @@ const goals: Goal[] = [
     from: "#0ea5e9",
     to: "#ec4899",
     bg: "linear-gradient(160deg, #e0f2fe 0%, #f0f9ff 50%, #fce7f3 100%)",
-  },
-  {
-    title: "E-Commerce Sales Growth",
-    text: "Drive online store traffic and turn potential buyers into customers.",
-    image: "/ecommerce-growth.png",
-    from: "#f59e0b",
-    to: "#d97706",
-    bg: "linear-gradient(160deg, #fff1cc 0%, #fffaf0 50%, #e2e8f0 100%)",
   },
 ];
 

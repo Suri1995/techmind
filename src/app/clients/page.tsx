@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function ClientsPage() {
   return (
     <>
-      <ClientsHero />
+      {/* <ClientsHero /> */}
       {/* overflow-x-clip: nothing inside can widen the page sideways (vertical overflow like dropdowns is unaffected) */}
       <section className="wrap overflow-x-clip py-16 md:py-24">
         <ClientsExplorer />

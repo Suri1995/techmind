@@ -72,16 +72,10 @@ export default function Hero() {
                 Desktop: larger version of the same, left-aligned. */}
             <div className="mb-6 grid grid-cols-2 gap-3 md:mb-0 md:mt-5 md:flex md:flex-wrap md:items-center md:gap-3 lg:mt-8 lg:gap-4">
               <Link
-                href="/about"
+                href="/contact"
                 className="inline-flex min-w-0 items-center justify-center rounded-2xl border border-teal-deep px-3 py-3 text-center text-[12px] font-semibold uppercase leading-tight tracking-[0.08em] text-teal-deep transition-colors hover:bg-teal-deep hover:text-paper focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/30 sm:text-xs md:border-teal-200 md:px-5 md:text-[11px] md:tracking-[0.1em] md:text-teal md:hover:bg-teal md:hover:text-ink md:focus-visible:ring-white/30 min-[900px]:text-xs lg:px-8 lg:py-3.5 lg:text-sm lg:tracking-[0.12em]"
               >
                 Learn More
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex min-w-0 items-center justify-center rounded-2xl border border-ink/70 px-3 py-3 text-center text-[12px] font-semibold uppercase leading-tight tracking-[0.08em] text-ink transition-colors hover:bg-ink hover:text-paper focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal/30 sm:text-xs md:border-white/80 md:px-5 md:text-[11px] md:tracking-[0.1em] md:text-white md:hover:bg-teal md:hover:text-ink md:focus-visible:ring-white/30 min-[900px]:text-xs lg:px-8 lg:py-3.5 lg:text-sm lg:tracking-[0.12em]"
-              >
-                Request a Consultation
               </Link>
             </div>
           </Reveal>
