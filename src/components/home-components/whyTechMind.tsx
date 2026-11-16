@@ -151,7 +151,7 @@ export default function WhyTechMind() {
 
       <div className="wrap relative">
         {/* Header */}
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-7xl">
           <p className="wt-reveal inline-flex items-center gap-3 text-sm font-semibold text-teal-deep">
             <span aria-hidden="true" className="h-px w-8 bg-gradient-to-r from-transparent to-teal-deep/50" />
             Why Tech Mind
@@ -179,7 +179,7 @@ export default function WhyTechMind() {
 
           <p
             style={{ "--d": "0.16s" } as CSSProperties}
-            className="wt-reveal mx-auto mt-6 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg"
+            className="wt-reveal mx-auto mt-6 text-base leading-relaxed text-ink-soft md:text-lg"
           >
             We bring strategy, creative thinking, and performance marketing together to grow your brand across digital
             channels.

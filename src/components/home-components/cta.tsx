@@ -19,7 +19,7 @@ export default function CTA() {
           Smarter strategies | Stronger presence | Bigger growth
         </p>
 
-        <h2 className="max-w-4xl font-display text-4xl font-semibold leading-[1.08] text-ink [text-wrap:balance] md:text-6xl">
+        <h2 className="max-w-7xl font-display text-4xl font-semibold leading-[1.08] text-ink [text-wrap:balance] md:text-6xl">
           It's Time To Elevate Your{" "}
           <span className="text-gradient">Brand</span>
         </h2>

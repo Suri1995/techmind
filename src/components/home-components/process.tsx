@@ -208,7 +208,7 @@ export default function Process() {
 
       <div className="wrap relative">
         {/* Header */}
-        <div className="max-w-2xl">
+        <div className="max-w-7xl">
           <p className="wp-reveal inline-flex items-center gap-3 text-sm font-semibold text-ink-soft">
             <span aria-hidden="true" className="h-px w-8 bg-gradient-to-r from-teal-deep/60 to-transparent" />
             Our Approach

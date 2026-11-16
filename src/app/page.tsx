@@ -1,3 +1,4 @@
+import GrowthGoals from "@/components/GrowthGoals";
 import ClientsSection from "@/components/home-components/clientsSection";
 import CTA from "@/components/home-components/cta";
 import FAQ from "@/components/home-components/faq";
@@ -16,6 +17,7 @@ export default function Home() {
     <>
       <Hero />
       {/* <IndustryMarquee /> */}
+      <GrowthGoals/>
       <Services />
       <ClientsSection />
       <MeetOurTeam/>
