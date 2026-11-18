@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { services } from "@/lib/data";
+import { submitLead } from "@/lib/submitLead";
 import { IconArrowRight } from "@/components/icons";
 
 /**
@@ -15,6 +16,8 @@ import { IconArrowRight } from "@/components/icons";
  *
  * idPrefix keeps input ids unique when two forms exist on one page.
  * Email is optional; phone is the one required way to reach the visitor.
+ *
+ * Submitting POSTs to /api/leads (saves to Neon, emails the team via Resend).
  */
 
 /* ---------------- form config ---------------- */
@@ -71,6 +74,7 @@ export default function LeadForm({
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -121,7 +125,7 @@ export default function LeadForm({
     return Object.keys(e).length === 0;
   }
 
-  function submit(e: FormEvent) {
+  async function submit(e: FormEvent) {
     e.preventDefault();
     if (!validate()) {
       // bring the first invalid field into view inside the scroll area
@@ -133,11 +137,18 @@ export default function LeadForm({
       return;
     }
     setSubmitting(true);
-    // Demo behaviour: replace this timeout with a POST to your API route or form service.
-    window.setTimeout(() => {
-      setSubmitting(false);
+    setSubmitError("");
+    try {
+      await submitLead({
+        ...data,
+        source: idPrefix === "hero" ? "hero" : "goals-popup",
+      });
       setSubmitted(true);
-    }, 900);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -277,6 +288,7 @@ export default function LeadForm({
                         <textarea
                           id={`${idPrefix}-message`}
                           rows={3}
+                          maxLength={600}
                           value={data.message}
                           onChange={(e) => set("message", e.target.value)}
                           placeholder="Your goals, target audience, location, deliverables, or any specific needs..."
@@ -288,6 +300,12 @@ export default function LeadForm({
                   {/* bottom fade hints that there is more to scroll */}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-paper-raised to-transparent" />
                 </div>
+
+                {submitError && (
+                  <p className="mt-3 shrink-0 text-center text-xs text-amber-700" role="alert">
+                    {submitError}
+                  </p>
+                )}
 
                 <button
                   type="submit"

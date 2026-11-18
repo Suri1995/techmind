@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "rea
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import { getService, services } from "@/lib/data";
+import { submitLead } from "@/lib/submitLead";
 import { IconArrowRight, IconCheck } from "./icons";
 
 /* ---------------- config (same inputs as the hero form) ---------------- */
@@ -75,6 +76,7 @@ export default function ContactForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [height, setHeight] = useState<number | undefined>(undefined);
 
   const last = steps.length - 1;
@@ -140,6 +142,7 @@ export default function ContactForm() {
     if (i >= step) return; // only completed steps are reachable
     setDir(-1);
     setErrors({});
+    setSubmitError("");
     setStep(i);
   }
 
@@ -147,7 +150,7 @@ export default function ContactForm() {
     goTo(step - 1);
   }
 
-  function submit(e: FormEvent) {
+  async function submit(e: FormEvent) {
     e.preventDefault();
     // Pressing Enter on an earlier step moves forward instead of submitting.
     if (step < last) {
@@ -156,16 +159,21 @@ export default function ContactForm() {
     }
     if (!validate(step)) return;
     setSubmitting(true);
-    // Demo behaviour: replace this timeout with a POST to your API route or form service.
-    window.setTimeout(() => {
-      setSubmitting(false);
+    setSubmitError("");
+    try {
+      await submitLead({ ...data, source: "contact" });
       setSubmitted(true);
-    }, 900);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   function reset() {
     setData({ ...empty, service: preset });
     setErrors({});
+    setSubmitError("");
     setStep(0);
     setDir(1);
     firstRender.current = true;
@@ -403,6 +411,13 @@ export default function ContactForm() {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Server error (save or network failure) */}
+      {submitError && (
+        <p className="mt-3 text-sm text-amber-700" role="alert">
+          {submitError}
+        </p>
+      )}
 
       {/* Actions: flex-wrap so Back + Submit drop onto two rows on narrow phones instead of overflowing */}
       <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-t border-line pt-6">
